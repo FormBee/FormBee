@@ -21,7 +21,7 @@ const env = process.env;
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: env.email,
+    user: env.user,
     pass: env.pass
   }
 });
@@ -33,11 +33,10 @@ app.use(bodyParser.json());
 // Define the route for the form submission
 app.post('/', (req, res) => {
   const { name, email, message1 } = req.body;
-  console.log(env.email);
   // Create a new message object
   const message = {
-    from: 'env.email',
-    // to: 'jdgmail.com',
+    from: env.user,
+    to: env.myemail,
     subject: 'New form submission',
     text: `Name: ${name}\nEmail: ${email}\nMessage: ${message1}`
   };
