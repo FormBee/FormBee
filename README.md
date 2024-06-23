@@ -7,6 +7,7 @@ Recieve form data on your email without writing a single line of server side cod
 optionally you can return a reply email to the sender.
 
 # TODO:
+- [] Toggle in admin panel for adding website URL for CORS to only allow requests from the clients domain.
 - [] Optional Captcha
 - [] User API keys w/ rate limiting
 - [] Formbee landing site
