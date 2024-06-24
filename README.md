@@ -11,6 +11,7 @@ optionally you can return a reply email to the sender.
 - [] Toggle in admin panel for adding website URL for CORS to only allow requests from the clients domain.
 - [] Optional Captcha
 - [] User API keys w/ rate limiting
+
 - [] Formbee landing site
 - [] Login auth
 - [] Admin user site for managing account and subscription
