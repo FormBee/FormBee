@@ -14,4 +14,5 @@ optionally you can return a reply email to the sender.
     - [] Seperate API token usage for localhost
 - [] Formbee landing site
 - [] Login auth
+    - [] Github login only I think is the route I want to go.
 - [] Admin user site for managing account and subscription
