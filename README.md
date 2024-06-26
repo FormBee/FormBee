@@ -10,6 +10,8 @@ optionally you can return a reply email to the sender.
 - [] Formbee landing site
 - [] Optional Captcha
     - [] implement ALCHA for captcha (self hosting to not make the user have to implement this themselves)
+    - [] Add source code for many different captcha options.
+    - [] Point out that traditional captcha's work based off of harvested data from the user's browser.
 - [] User API keys w/ rate limiting
     - [] Seperate API token usage for localhost.
 - [] Login auth
