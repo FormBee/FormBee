@@ -15,9 +15,10 @@ dotenv.config();
 const corsOptions = {
   origin: 'http://localhost:4200', // Allow from this origin
   methods: ['GET', 'POST'], // Allow only GET and POST requests
-  allowedHeaders: ['Content-Type'], // Allow only Content-Type header
+  allowedHeaders: ['Content-Type', 'x-altcha-spam-filter'], // Allow these headers
 };
 app.use(cors(corsOptions));
+
 
 // Set up the environment variables
 const env = process.env;
