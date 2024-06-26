@@ -1,19 +1,23 @@
 // Import the necessary modules
+import  createChallenge  from './Alcha/Challenge.js';
+import verifySolution from './Alcha/Solution.js';
 
-const dotenv = require('dotenv');
-// Set up the environment variables
-const express = require('express');
-const bodyParser = require('body-parser');
-const nodemailer = require('nodemailer');
+import dotenv from 'dotenv';
+import express from 'express';
+import bodyParser from 'body-parser';
+import nodemailer from 'nodemailer';
+import cors from 'cors'; // Import cors middleware
+const router = express.Router();
 const app = express();
 dotenv.config();
 
-// set up cors to allow all origins
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+// set up cors to allow requests from your frontend origin
+const corsOptions = {
+  origin: 'http://localhost:4200', // Allow from this origin
+  methods: ['GET', 'POST'], // Allow only GET and POST requests
+  allowedHeaders: ['Content-Type'], // Allow only Content-Type header
+};
+app.use(cors(corsOptions));
 
 // Set up the environment variables
 const env = process.env;
@@ -40,6 +44,11 @@ app.post('/', (req, res) => {
     subject: 'New form submission',
     text: `Name: ${name}\nEmail: ${email}\nMessage: ${message1}`
   };
+
+  app.get('/challenge', createChallenge);
+
+  app.post('/solution', verifySolution);
+
 
   // Send the message using the transporter
   transporter.sendMail(message, (error, info) => {

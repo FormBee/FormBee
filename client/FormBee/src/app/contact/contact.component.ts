@@ -4,11 +4,12 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {ReactiveFormsModule} from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import  'altcha';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [NgIf, ReactiveFormsModule],
+  imports: [ NgIf, ReactiveFormsModule],
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.scss'
 })
