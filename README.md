@@ -12,8 +12,9 @@ optionally you can return a reply email to the sender.
     - [] implement ALCHA for captcha (self hosting to not make the user have to implement this themselves)
     - [] Add source code for many different captcha options.
     - [] Point out that traditional captcha's work based off of harvested data from the user's browser.
+    - [] Check legality of the shadiness of Googles reCaptcha
 - [] User API keys w/ rate limiting
-    - [] Seperate API token usage for localhost.
+    - [] Seperate API usage for localhost, so users can test without wasting API usage.
 - [] Login auth
     - [] Github login only I think is the route I want to go.
 - [] Admin page for managing account and subscription
