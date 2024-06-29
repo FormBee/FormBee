@@ -8,6 +8,7 @@ optionally you can return a reply email to the sender.
 
 # TODO:
 - [] Formbee landing site
+    - [] Hive background similar to how people have done a grid background thats subtle.
 - [] Optional Captcha
     - [] implement ALCHA for captcha (self hosting to not make the user have to implement this themselves)
     - [] Add source code for many different captcha options.
