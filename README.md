@@ -20,3 +20,4 @@ Optionally you can return a reply email to the sender.
     - [] Github login only I think is the route I want to go.
 - [] Admin page for managing account and subscription
     - [] Toggle in admin panel for adding website URL for CORS to only allow requests from the clients domain.
+- [] Subscription plans, inplemented with stripe.
