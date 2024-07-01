@@ -1,13 +1,11 @@
 // Import the necessary modules
 import  createChallenge  from './Alcha/Challenge.js';
 import verifySolution from './Alcha/Solution.js';
-
 import dotenv from 'dotenv';
 import express from 'express';
 import bodyParser from 'body-parser';
 import nodemailer from 'nodemailer';
 import cors from 'cors'; // Import cors middleware
-const router = express.Router();
 const app = express();
 dotenv.config();
 
