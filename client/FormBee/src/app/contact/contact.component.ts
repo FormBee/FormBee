@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import ngForm from '@angular/forms';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {ReactiveFormsModule} from '@angular/forms';
@@ -11,7 +11,8 @@ import  'altcha';
   standalone: true,
   imports: [ NgIf, ReactiveFormsModule],
   templateUrl: './contact.component.html',
-  styleUrl: './contact.component.scss'
+  styleUrl: './contact.component.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ContactComponent {
 
