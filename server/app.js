@@ -1,15 +1,16 @@
 // Import the necessary modules
-import  createChallenge  from './Alcha/Challenge.js';
+import createChallenge from './Alcha/Challenge.js';
 import verifySolution from './Alcha/Solution.js';
 import dotenv from 'dotenv';
 import express from 'express';
 import bodyParser from 'body-parser';
 import nodemailer from 'nodemailer';
 import cors from 'cors'; // Import cors middleware
+
 const app = express();
 dotenv.config();
 
-// set up cors to allow requests from your frontend origin
+// Set up CORS to allow requests from your frontend origin
 const corsOptions = {
   origin: 'http://localhost:4200', // Allow from this origin
   methods: ['GET', 'POST'], // Allow only GET and POST requests
@@ -17,37 +18,42 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-
 // Set up the environment variables
 const env = process.env;
+
 // Set up the email transport
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: env.user,
-    pass: env.pass
-  }
+    pass: env.pass,
+  },
 });
 
 // Set up the body parser middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// Define the challenge route
+app.get('/challenge', (req, res) => {
+  console.log("Challenge requested");
+  createChallenge(req, res);
+});
+
+// Define the solution route
+app.post('/solution', verifySolution);
+
 // Define the route for the form submission
 app.post('/', (req, res) => {
   const { name, email, message1 } = req.body;
+
   // Create a new message object
   const message = {
     from: env.user,
     to: env.myemail,
     subject: 'New form submission',
-    text: `Name: ${name}\nEmail: ${email}\nMessage: ${message1}`
+    text: `Name: ${name}\nEmail: ${email}\nMessage: ${message1}`,
   };
-
-  app.get('/challenge', createChallenge);
-
-  app.post('/solution', verifySolution);
-
 
   // Send the message using the transporter
   transporter.sendMail(message, (error, info) => {
