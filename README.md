@@ -21,3 +21,4 @@ Optionally you can return a reply email to the sender.
 - [] Admin page for managing account and subscription
     - [] Toggle in admin panel for adding website URL for CORS to only allow requests from the clients domain.
 - [] Subscription plans, inplemented with stripe.
+    - $5, 250 API calls per month.
