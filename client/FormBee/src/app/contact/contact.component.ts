@@ -15,7 +15,6 @@ import  'altcha';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ContactComponent {
-
   contactForm: FormGroup;
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
