@@ -1,6 +1,5 @@
 // Import the necessary modules
 import createChallenge from './Alcha/Challenge.js';
-import verifySolution from './Alcha/Solution.js';
 import dotenv from 'dotenv';
 import express from 'express';
 import bodyParser from 'body-parser';
@@ -39,9 +38,6 @@ app.get('/challenge', (req, res) => {
   console.log("Challenge requested");
   createChallenge(req, res);
 });
-
-// Define the solution route
-app.post('/solution', verifySolution);
 
 // Define the route for the form submission
 app.post('/', (req, res) => {
