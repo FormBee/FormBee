@@ -1,15 +1,16 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, OnInit, AfterViewInit, Renderer2 } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, OnInit, AfterViewInit, Renderer2, } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgIf, CommonModule } from '@angular/common'; // Imported CommonModule for NgIf
+import { NgIf, CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import 'altcha';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule, NgIf],
+  imports: [CommonModule, NgIf, ReactiveFormsModule],
   templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.scss'], // Corrected from styleUrl to styleUrls
+  styleUrls: ['./contact.component.scss'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ContactComponent implements OnInit, AfterViewInit {
@@ -21,9 +22,8 @@ export class ContactComponent implements OnInit, AfterViewInit {
     private fb: FormBuilder, 
     private http: HttpClient, 
     private elRef: ElementRef<HTMLElement>,
-    private renderer: Renderer2,
-    
-    ) {
+    private renderer: Renderer2
+  ) {
     this.contactForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -37,9 +37,11 @@ export class ContactComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     // Set up the event listener after the view has initialized
-    this.altchaElement = this.elRef.nativeElement.querySelector('#altcha');
+    this.altchaElement = this.elRef.nativeElement.querySelector('.altcha'); // Use the correct class name
+
     if (this.altchaElement) {
       this.renderer.listen(this.altchaElement, 'statechange', (ev) => {
+        console.log('State change event fired:', ev);
         console.log('state:', ev.detail.state);
         if (ev.detail.state === 'verified') {
           this.isVerified = true;
@@ -47,7 +49,10 @@ export class ContactComponent implements OnInit, AfterViewInit {
         } else {
           this.isVerified = false;
         }
+        console.log('isVerified state:', this.isVerified);
       });
+    } else {
+      console.error('altchaElement not found');
     }
     console.log("altcha element: ", this.altchaElement);
   }
