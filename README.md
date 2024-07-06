@@ -25,3 +25,5 @@ Optionally you can return a reply email to the sender.
         - 50 free API calls from localhost.
     - $Free, 50 API calls per month.
     - $5, 250 API calls per month.
+    - $20, 2000 API calls per month.
+    - $50, 20k API calls per month.
