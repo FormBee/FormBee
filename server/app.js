@@ -55,10 +55,10 @@ app.post('/', (req, res) => {
   transporter.sendMail(message, (error, info) => {
     if (error) {
       console.error(error);
-      res.status(500).send('Error sending email');
+      res.status(500).json('Error sending email');
     } else {
       console.log('Email sent successfully');
-      res.send('Email sent successfully');
+      res.json('Email sent successfully');
     }
   });
 });
