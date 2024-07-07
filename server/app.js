@@ -13,7 +13,7 @@ dotenv.config();
 const corsOptions = {
   origin: 'http://localhost:4200', // Allow from this origin
   methods: ['GET', 'POST'], // Allow only GET and POST requests
-  allowedHeaders: ['Content-Type', 'x-altcha-spam-filter'], // Allow these headers
+  allowedHeaders: ['Content-Type', 'x-altcha-spam-filter', 'x-api-key'], // Allow these headers
 };
 app.use(cors(corsOptions));
 
@@ -42,7 +42,14 @@ app.get('/challenge', (req, res) => {
 // Define the route for the form submission
 app.post('/', (req, res) => {
   const { name, email, message1 } = req.body;
-
+  //require an api key
+    if (req.headers['x-api-key'] !== "apikey") {
+      res.status(401).json('Unauthorized');
+      return;
+    }
+    else {
+      console.log("API key is valid");
+    }
   // Create a new message object
   const message = {
     from: env.user,
