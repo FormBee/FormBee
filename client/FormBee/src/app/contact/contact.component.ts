@@ -37,7 +37,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     // Set up the event listener after the view has initialized
-    this.altchaElement = this.elRef.nativeElement.querySelector('.altcha'); // Use the correct class name
+    this.altchaElement = this.elRef.nativeElement.querySelector('.altcha');
 
     if (this.altchaElement) {
       this.renderer.listen(this.altchaElement, 'statechange', (ev) => {
