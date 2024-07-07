@@ -1,0 +1,101 @@
+/* Styles for the navigation menu */
+.navbar {
+    width: 100%;
+    background: #fff;
+    border-bottom: 1px solid #eaeaea;
+    padding: 1rem 2rem;
+    box-sizing: border-box;
+  }
+  
+  .navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px; /* Set a max-width to contain the navbar */
+    margin: 0 auto; /* Center the navbar */
+    width: 100%; /* Ensure it takes the full width of the container */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  }
+  
+  .logo img {
+    height: 40px;
+  }
+  
+  .nav-links {
+    display: flex;
+    list-style: none;
+    margin-left: auto;
+  }
+  
+  .nav-links li {
+    margin: 0 1rem;
+  }
+  
+  .nav-links a,
+  .sign-in-btn {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+  }
+  
+  .hamburger span {
+    height: 2px;
+    width: 25px;
+    background: #333;
+    margin: 4px 0;
+    transition: all 0.3s ease;
+  }
+  
+  .mobile-menu {
+    display: none;
+    flex-direction: column;
+    list-style: none;
+    padding: 0;
+    background: #fff;
+    width: 100%;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    border-top: 1px solid #eaeaea;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  }
+  
+  .mobile-menu li {
+    padding: 1rem;
+    border-bottom: 1px solid #eaeaea;
+  }
+  
+  .mobile-menu a,
+  .mobile-menu .sign-in-btn {
+    color: #333;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .open {
+    display: flex;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .nav-links {
+      display: none;
+    }
+    .hamburger {
+      display: flex;
+    }
+  }
+  
