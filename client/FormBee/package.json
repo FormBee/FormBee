@@ -19,6 +19,8 @@
     "@angular/platform-browser-dynamic": "^17.3.0",
     "@angular/router": "^17.3.0",
     "rxjs": "~7.8.0",
+    "save": "^2.9.0",
+    "three": "^0.166.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },
