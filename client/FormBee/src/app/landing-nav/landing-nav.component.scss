@@ -2,7 +2,6 @@
 .navbar {
     width: 100%;
     border-bottom: 1px solid #eaeaea;
-    padding: 1rem 2rem;
     box-sizing: border-box;
   }
   
@@ -11,7 +10,7 @@
     align-items: center;
     justify-content: space-between;
     max-width: 1200px; /* Set a max-width to contain the navbar */
-    margin: 0 auto; /* Center the navbar */
+    margin: auto; /* Center the navbar */
     width: 100%; /* Ensure it takes the full width of the container */
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
     max-height: 60px;
@@ -27,17 +26,20 @@
     display: flex;
     list-style: none;
     margin-left: auto;
+    align-items: center;
+    
   }
   
   .nav-links li {
     margin: 0 1rem;
+    padding-left:25px;
+
   }
   
   .nav-links a,
   .sign-in-btn {
     text-decoration: none;
     color: #333;
-    font-weight: 500;
     border: none;
     background: none;
     cursor: pointer;
@@ -99,4 +101,27 @@
     .hamburger {
       display: flex;
     }
+  }
+
+  .sign-in-btn {
+    background-color: #FFBD59;
+    color:#2a2624;
+
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color, box-shadow 0.3s ease-out;
+    overflow: hidden;
+    border: solid 1px #c69245;
+    box-shadow: rgba(204, 155, 39, 0.2) 1.95px 1.95px 2.6px;
+
+  }
+  
+  .sign-in-btn:hover {
+    background-color: #c69245;
+    border: solid 1px #FFBD59;
+    box-shadow: rgba(204, 155, 39, 0.4) 5px 5px, rgba(204, 155, 39, 0.3) 10px 10px, rgba(204, 155, 39, 0.2) 15px 15px, rgba(204, 155, 39, 0.1) 20px 20px, rgba(204, 155, 39, 0.05) 25px 25px;
+
   }
