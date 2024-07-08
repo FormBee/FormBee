@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    height: 200px;
+    height: 250px;
     position: relative;
   }
   
@@ -36,15 +36,6 @@
     border-radius: 50%;
   }
 
-.blured-background {
-    z-index: 1;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.973);
-}
 
 a {
   color: #FFBD59;

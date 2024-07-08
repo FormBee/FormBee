@@ -1,8 +1,9 @@
 /* Styles for the navigation menu */
 .navbar {
     width: 100%;
-    border-bottom: 1px solid #eaeaea;
     box-sizing: border-box;
+    z-index: 100;
+
   }
   
   .navbar-container {
@@ -14,7 +15,8 @@
     width: 100%; /* Ensure it takes the full width of the container */
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
     max-height: 60px;
-
+    z-index: 100;
+    background: linear-gradient(to bottom, rgb(255, 255, 255), rgba(255, 255, 255, 0.418), rgba(255, 255, 255, 0));
   }
   
   .logo img {
@@ -106,10 +108,9 @@
   .sign-in-btn {
     background-color: #FFBD59;
     color:#2a2624;
-
     padding: 10px;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 16px;
     transition: background-color, box-shadow 0.3s ease-out;
