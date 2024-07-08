@@ -15,10 +15,13 @@
     margin: 0 auto; /* Center the navbar */
     width: 100%; /* Ensure it takes the full width of the container */
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    max-height: 60px;
+
   }
   
   .logo img {
-    height: 40px;
+    height: 100px;
+    overflow: hidden;
   }
   
   .nav-links {
