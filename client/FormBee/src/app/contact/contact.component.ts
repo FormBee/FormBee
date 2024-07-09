@@ -69,14 +69,8 @@ export class ContactComponent implements OnInit, AfterViewInit {
   onSubmit() {
     console.log(this.contactForm.value);
 
-    if (this.isVerified && this.selectedFile) {
-      const formData = new FormData();
-      formData.append('name', this.contactForm.get('name')?.value);
-      formData.append('email', this.contactForm.get('email')?.value);
-      formData.append('message1', this.contactForm.get('message1')?.value);
-      formData.append('file', this.selectedFile); // Add selected file
-
-      this.http.post('http://localhost:3000/upload/apikey', formData).subscribe(res => {
+    if (this.isVerified) {
+      this.http.post('http://localhost:3000/apikey', this.contactForm.value).subscribe(res => {
         console.log(res);
       });
     } else {

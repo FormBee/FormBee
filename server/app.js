@@ -77,6 +77,7 @@ app.post('/:apikey', (req, res) => {
 // process the form submission
 function processMail(name, email, message1, image) {
   // Create a new message object
+  console.log(name, email, message1);
   if (image) {
     const message = {
       from: env.user,
@@ -93,6 +94,7 @@ function processMail(name, email, message1, image) {
     };
     return message;
   } else {
+    console.log("No image");
     const message = {
       from: env.user,
       to: env.myemail,
