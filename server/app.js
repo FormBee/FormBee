@@ -51,9 +51,7 @@ app.post('/upload/:apikey', upload.single('file'), (req, res) => {
 // Route for form submission without file
 app.post('/:apikey', upload.none(), (req, res) => {
   const { apikey } = req.params;
-  console.log("hi")
   const { name, email, message } = req.body;
-  console.log("ho")
 
   if (apikey !== 'apikey') {
     res.status(401).json('Unauthorized');
