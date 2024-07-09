@@ -13,6 +13,8 @@
   
     <label for="message1">Message:</label>
     <textarea id="message1" formControlName="message1"></textarea>
+    <label for="image">Image:</label>
+    <input type="file" id="image" formControlName="image" (change)="onFileSelected($event)">
     <div>
       Message is required.
     </div>

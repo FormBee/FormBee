@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, OnInit, AfterViewInit, Renderer2, } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, OnInit, AfterViewInit, Renderer2 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgIf, CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -17,6 +17,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
   contactForm: FormGroup;
   altchaElement: HTMLElement | null = null;
   isVerified = false; // Flag to track verification state
+  selectedFile: File | null = null;
 
   constructor(
     private fb: FormBuilder, 
@@ -57,13 +58,34 @@ export class ContactComponent implements OnInit, AfterViewInit {
     console.log("altcha element: ", this.altchaElement);
   }
 
+  // Handler for file input change
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0]; // Only take the first file
+    }
+  }
+
   onSubmit() {
-    if (this.isVerified) {
-      this.http.post('http://localhost:3000/apikey', this.contactForm.value,).subscribe(res => {
+    console.log(this.contactForm.value);
+
+    if (this.isVerified && this.selectedFile) {
+      const formData = new FormData();
+      formData.append('name', this.contactForm.get('name')?.value);
+      formData.append('email', this.contactForm.get('email')?.value);
+      formData.append('message1', this.contactForm.get('message1')?.value);
+      formData.append('file', this.selectedFile); // Add selected file
+
+      this.http.post('http://localhost:3000/upload/apikey', formData).subscribe(res => {
         console.log(res);
       });
     } else {
-      console.error('Cannot submit: Not verified.');
+      if (!this.isVerified) {
+        console.error('Cannot submit: Not verified.');
+      }
+      if (!this.selectedFile) {
+        console.error('No file selected.');
+      }
     }
   }
 }

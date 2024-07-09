@@ -5,10 +5,11 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import nodemailer from 'nodemailer';
 import cors from 'cors'; // Import cors middleware
-
+import multer from 'multer';
 const app = express();
 dotenv.config();
-
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 // Set up CORS to allow requests from your frontend origin
 const corsOptions = {
   origin: 'http://localhost:4200', // Allow from this origin
@@ -39,9 +40,27 @@ app.get('/challenge', (req, res) => {
   createChallenge(req, res);
 });
 
+// Route for form with file upload
+app.post('/upload/:apikey', upload.single('file'), (req, res) => {
+  let apikey = req.params.apikey;
+  const { name, email, message1} = req.body;
+  const image = req.file
+  console.log(image);
+  //require an api key
+    if (apikey !== "apikey") {
+      res.status(401).json('Unauthorized');
+      return;
+    }
+    else {
+      console.log("API key is valid");
+      sendMail(name, email, message1, image);
+    }
+
+});
+
 // Define the route for the form submission
 app.post('/:apikey', (req, res) => {
-  const { name, email, message1 } = req.body;
+  const { name, email, message1} = req.body;
   let apikey = req.params.apikey;
   //require an api key
     if (apikey !== "apikey") {
@@ -50,16 +69,44 @@ app.post('/:apikey', (req, res) => {
     }
     else {
       console.log("API key is valid");
+      sendMail(name, email, message1);
     }
+
+});
+
+// process the form submission
+function processMail(name, email, message1, image) {
   // Create a new message object
-  const message = {
-    from: env.user,
-    to: env.myemail,
-    subject: 'New form submission',
-    text: `Name: ${name}\nEmail: ${email}\nMessage: ${message1}`,
-  };
+  if (image) {
+    const message = {
+      from: env.user,
+      to: env.myemail,
+      subject: 'New form submission',
+      attachments: [
+        {
+          filename: image,
+          path: image,
+          cid: 'image',
+        },
+      ],
+      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message1}\nImage: ${image}`,
+    };
+    return message;
+  } else {
+    const message = {
+      from: env.user,
+      to: env.myemail,
+      subject: 'New form submission',
+      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message1}`,
+    };
+    return message;
+  }
 
   // Send the message using the transporter
+}
+
+function sendMail(name, email, message1, image) { 
+  const message = processMail(name, email, message1, image);
   transporter.sendMail(message, (error, info) => {
     if (error) {
       console.error(error);
@@ -69,7 +116,7 @@ app.post('/:apikey', (req, res) => {
       res.json('Email sent successfully');
     }
   });
-});
+}
 
 // Start the server
 app.listen(3000, () => {
