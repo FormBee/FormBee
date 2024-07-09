@@ -17,12 +17,16 @@
     font-size: 3rem;
     margin: 0;
     line-height: 3rem;
+    text-shadow:2px whitesmoke ;
   }
   
   p {
     font-size: 1rem;
     margin: 0;
     margin-top: 2rem;
+    text-shadow:1px 1px whitesmoke ;
+
+    
   }
   
   img {
@@ -39,4 +43,26 @@
 
 a {
   color: #FFBD59;
+}
+
+.button {
+  background-color: #FFBD59;
+  color:#2a2624;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color, box-shadow 0.3s ease-out;
+  overflow: hidden;
+  border: solid 1px #c69245;
+  box-shadow: rgba(204, 155, 39, 0.2) 1.95px 1.95px 2.6px;
+  margin-top: 2rem;
+}
+
+.button:hover {
+  background-color: #c69245;
+  border: solid 1px #FFBD59;
+  box-shadow: rgba(204, 155, 39, 0.4) 5px 5px, rgba(204, 155, 39, 0.3) 10px 10px, rgba(204, 155, 39, 0.2) 15px 15px, rgba(204, 155, 39, 0.1) 20px 20px, rgba(204, 155, 39, 0.05) 25px 25px;
+
 }
