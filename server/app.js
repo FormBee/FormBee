@@ -40,10 +40,11 @@ app.get('/challenge', (req, res) => {
 });
 
 // Define the route for the form submission
-app.post('/', (req, res) => {
+app.post('/:apikey', (req, res) => {
   const { name, email, message1 } = req.body;
+  let apikey = req.params.apikey;
   //require an api key
-    if (req.headers['x-api-key'] !== "apikey") {
+    if (apikey !== "apikey") {
       res.status(401).json('Unauthorized');
       return;
     }

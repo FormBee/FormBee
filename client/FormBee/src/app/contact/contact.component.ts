@@ -59,7 +59,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
 
   onSubmit() {
     if (this.isVerified) {
-      this.http.post('http://localhost:3000/', this.contactForm.value, {headers: {'x-api-key': 'apikey'}}).subscribe(res => {
+      this.http.post('http://localhost:3000/apikey', this.contactForm.value,).subscribe(res => {
         console.log(res);
       });
     } else {
