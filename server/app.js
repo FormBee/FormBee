@@ -74,6 +74,19 @@ app.post('/:apikey', (req, res) => {
 
 });
 
+function sendMail(name, email, message1, image) { 
+  const message = processMail(name, email, message1, image);
+  transporter.sendMail(message, (error, info) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json('Error sending email');
+    } else {
+      console.log('Email sent successfully');
+      res.json('Email sent successfully');
+    }
+  });
+}
+
 // process the form submission
 function processMail(name, email, message1, image) {
   // Create a new message object
@@ -107,18 +120,6 @@ function processMail(name, email, message1, image) {
   // Send the message using the transporter
 }
 
-function sendMail(name, email, message1, image) { 
-  const message = processMail(name, email, message1, image);
-  transporter.sendMail(message, (error, info) => {
-    if (error) {
-      console.error(error);
-      res.status(500).json('Error sending email');
-    } else {
-      console.log('Email sent successfully');
-      res.json('Email sent successfully');
-    }
-  });
-}
 
 // Start the server
 app.listen(3000, () => {
