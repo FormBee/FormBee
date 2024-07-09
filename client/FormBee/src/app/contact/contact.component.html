@@ -1,18 +1,18 @@
 <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
     <label for="name">Name:</label>
-    <input id="name" formControlName="name">
+    <input id="name" formControlName="name" name="name">
     <div>
       Name is required.
     </div>
   
     <label for="email">Email:</label>
-    <input id="email" formControlName="email">
+    <input id="email" formControlName="email" name="email">
     <div>
       Enter a valid email.
     </div>
   
-    <label for="message1">Message:</label>
-    <textarea id="message1" formControlName="message1"></textarea>
+    <label for="message">Message:</label>
+    <textarea id="message" formControlName="message" name="message"></textarea>
     <label for="image">Image:</label>
     <input type="file" id="image" formControlName="image" (change)="onFileSelected($event)">
     <div>

@@ -1,0 +1,21 @@
+<form id="myForm" action="http://localhost:3000/apikey" method="post" enctype="multipart/form-data">
+    <input type="text" name="name" value="test">
+    <input type="email" name="email" value="test@test.com">
+    <textarea name="message">test</textarea>
+    <input type="submit" value="Submit">
+</form>
+
+<script>
+const submitForm = async (event) => {
+    event.preventDefault();
+    const form = document.querySelector('#myForm');
+    const response = await fetch(form.action, {
+        method: form.method,
+        body: new FormData(form)
+    });
+    console.log(response);
+    console.log("Response: ", response);
+};
+
+document.querySelector('#myForm').addEventListener('submit', submitForm);
+</script>
