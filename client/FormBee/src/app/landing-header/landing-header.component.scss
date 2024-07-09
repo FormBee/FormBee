@@ -3,14 +3,14 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    height: 250px;
+    height: fit-content;
     position: relative;
   }
   
   .header-content {
     z-index: 2;
     max-width: 45rem;
-    margin-top: 15rem;
+    margin-top: 9rem;
   }
   
   h1 {
