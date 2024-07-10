@@ -1,13 +1,20 @@
 import { Component } from '@angular/core';
+import { NgFor } from '@angular/common';
+import { OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-landing-code-examples',
   standalone: true,
-  imports: [],
+  imports: [NgFor],
   templateUrl: './landing-code-examples.component.html',
   styleUrls: ['./landing-code-examples.component.scss']
 })
-export class LandingCodeExamplesComponent {
+export class LandingCodeExamplesComponent implements OnInit {
+
+  ngOnInit(): void {
+    this.setCurrentFramework('vanilla');
+  }
+
   frameworks: Record<'vanilla' | 'angular' | 'react' , string[]> = {
     angular: ['app.component.ts', 'app.module.ts'],
     react: ['App.js', 'index.js'],
