@@ -46,13 +46,6 @@
     box-sizing: border-box;
   }
 
-  button {
-    background-color: #504538;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-  }
 }
 
 html, body {
@@ -150,4 +143,23 @@ padding-bottom: 20px;
   opacity: 0.8;
   cursor: pointer;
   box-shadow: rgba(#43a0df, 0.3) 2px 2px;
+}
+
+.file-button {
+  background-color: #343434;
+  border: none;
+  border-radius: 5px;
+  color: #ffbd59;
+  cursor: pointer;
+  padding: 5px 10px;
+  margin: 5px;
+}
+
+.file-button:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.file-tabs {
+  margin-left: 10px;
 }

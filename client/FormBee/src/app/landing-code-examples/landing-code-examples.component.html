@@ -11,7 +11,7 @@
       <div class="fw-nav">
         <div class="file-tabs">
           <ng-container *ngFor="let file of currentFrameworkFiles">
-            <button (click)="setCurrentFile(file)">{{ file }}</button>
+            <button class="file-button" (click)="setCurrentFile(file)">{{ file }}</button>
           </ng-container>
         </div>
       </div>
