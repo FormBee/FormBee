@@ -18,10 +18,6 @@
 
   }
 
-.framework-tabs button {
-  box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
-
-}
 
 .code-examples-container {
   z-index: 10000;
@@ -31,7 +27,7 @@
   justify-content: center;
   width: 60vw;
   height: 40vh;
-  background-color: #343434e4;
+  background-color: #343434;
   color: #000000;
   margin: auto;
   border-radius: 10px;
@@ -56,7 +52,6 @@
     border-radius: 5px;
     color: white;
     cursor: pointer;
-    padding: 5px 10px;
   }
 }
 
@@ -65,12 +60,10 @@ html, body {
 }
 
 .framework-tabs {
-  justify-content: start;
   width: fit-content;
-  margin: 10px;
-  margin-left: 17vw;
   padding: 5px;
-  
+  margin:auto;
+  margin-bottom:10px;
 }
 
 
@@ -90,13 +83,71 @@ padding-bottom: 20px;
 .fw-nav {
   width: 100%;
   height: 40px;
-  background-color: white;
+  background-color: #343434;
+
   z-index: 1000;
+  border-bottom: solid 1px #000000;
+  border-radius: 20px;
 }
 
 .copy-button {
   position: absolute;
-  top: 10px;
+  bottom: 10px;
   right: 10px;
   z-index: 1000;
+}
+
+.vanilla-button {
+  position: relative;
+  background: linear-gradient(to top right, #f0db4f, #ffec8b);
+  border: solid 1px #000000;
+  outline: none;
+  transition: opacity .4s ease-in-out;
+  transition: box-shadow .4s ease-in-out;
+  color: black;
+  box-shadow: rgba(#f0db4f, 0.4) -5px 5px, rgba(#f0db4f, 0.3) -10px 10px, rgba(#f0db4f, 0.2) -15px 15px, rgba(#f0db4f, 0.1) -20px 20px, rgba(#f0db4f, 0.05) -25px 25px;
+
+  border-radius: 20px;
+}
+.vanilla-button:hover {
+  opacity: 0.8;
+  cursor: pointer;
+  box-shadow: rgba(#f0db4f, 0.3) -2px 2px;
+
+}
+
+.angular-button {
+  position: relative;
+  background: linear-gradient(to top right, #dd0031, #a60bcc8f);
+  border: solid 1px #000000;
+  outline: none;
+  transition: opacity .4s ease-in-out;
+  transition: box-shadow .4s ease-in-out;
+  color: black;
+  box-shadow: rgba(#dd0031, 0.4) 0px 5px, rgba(#dd0031, 0.3) 0px 10px, rgba(#dd0031, 0.2) 0px 15px, rgba(#dd0031, 0.1) 0px 20px, rgba(#dd0031, 0.05) 0px 25px; 
+
+  border-radius: 20px;
+}
+.angular-button:hover {
+  opacity: 0.8;
+  cursor: pointer;
+  box-shadow: rgba(#dd0031, 0.3) 0px 2px;
+
+}
+
+.react-button {
+  position: relative;
+  background: linear-gradient(to top right, #43a0df, #43a0df);
+  border: solid 1px #000000;
+  outline: none;
+  transition: opacity .4s ease-in-out;
+  transition: box-shadow .4s ease-in-out;
+  color: black;
+  box-shadow: rgba(#43a0df, 0.4) 5px 5px, rgba(#43a0df, 0.3) 10px 10px, rgba(#43a0df, 0.2) 15px 15px, rgba(#43a0df, 0.1) 20px 20px, rgba(#43a0df, 0.05) 25px 25px; 
+  border-radius: 20px;
+}
+.react-button:hover {
+  opacity: 0.8;
+  cursor: pointer;
+  box-shadow: rgba(#43a0df, 0.3) 2px 2px;
 }
