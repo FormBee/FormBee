@@ -1,1 +1,17 @@
-<p>landing-code-examples works!</p>
+<div class="section-container">
+    <h3>Basic usage, with different frameworks</h3>
+    <div class="framework-tabs">
+      <button (click)="setCurrentFramework('vanilla')">Vanilla</button>
+      <button (click)="setCurrentFramework('angular')">Angular</button>
+      <button (click)="setCurrentFramework('react')">React</button>
+    </div>
+    <div class="file-tabs">
+      <ng-container *ngFor="let file of currentFrameworkFiles">
+        <button (click)="setCurrentFile(file)">{{ file }}</button>
+      </ng-container>
+    </div>
+    <div class="code-examples-container">
+      <pre>{{ currentCode }}</pre>
+      <button (click)="copyToClipboard()">Copy Text</button>
+    </div>
+  </div>

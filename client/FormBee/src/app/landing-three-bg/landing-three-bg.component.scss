@@ -47,8 +47,9 @@
 .transparent-layer {
   position: relative;
   z-index: 5;
-  backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.453);
+  backdrop-filter: blur(5px);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0),rgba(255,255,255,0.7), rgba(255, 255, 255, 0.93), rgb(255, 255, 255));
+
   padding: 20px;
   height: 100vh;
 }
