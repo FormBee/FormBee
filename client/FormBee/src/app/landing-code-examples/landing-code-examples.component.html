@@ -11,13 +11,18 @@
       <div class="fw-nav">
         <div class="file-tabs">
           <ng-container *ngFor="let file of currentFrameworkFiles">
-            <button class="file-button" (click)="setCurrentFile(file)">{{ file }}</button>
+            <button class="file-button" 
+                    (click)="setCurrentFile(file)" 
+                    [ngClass]="{'underline': file === currentFile}">
+              {{ file }}
+            </button>
           </ng-container>
         </div>
       </div>
 
       <pre><code [innerHTML]="currentCode"></code></pre>
-      <button class="copy-button" (click)="copyToClipboard()">Copy Text</button>
+      <button class="copy-button" (click)="copyToClipboard()">Copy Code</button>
+      <div class="copied" [ngClass]="{'copy-fade': !isCopied}" *ngIf="isCopied"><p>copied!</p></div>
     </div>
   </div>
 </div>

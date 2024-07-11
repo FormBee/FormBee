@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { NgClass } from '@angular/common';
 import * as Prism from 'prismjs';
 import 'prismjs/components/prism-typescript';
 import 'prismjs/components/prism-jsx';
@@ -11,7 +12,7 @@ import 'prismjs/components/prism-markup'; // Includes HTML
   selector: 'app-landing-code-examples',
   encapsulation: ViewEncapsulation.ShadowDom,
   standalone: true,
-  imports: [NgFor],
+  imports: [NgFor, NgClass, NgIf],
   templateUrl: './landing-code-examples.component.html',
   styleUrls: ['./landing-code-examples.component.scss', '../../../node_modules/prismjs/themes/prism-tomorrow.css'] 
 })
@@ -20,6 +21,7 @@ export class LandingCodeExamplesComponent implements OnInit{
   constructor(private sanitizer: DomSanitizer) {}
 
   currentCode: SafeHtml = '';
+  isCopied: boolean = false; // add this line
 
   ngOnInit(): void {
     this.setCurrentFramework('vanilla');
@@ -90,5 +92,7 @@ document.querySelector('#form').addEventListener('submit', submitForm);`, langua
 
   copyToClipboard() {
     navigator.clipboard.writeText(this.codeSnippets[this.currentFramework][this.currentFile].content);
+    this.isCopied = true; // show the copied message
+    setTimeout(() => this.isCopied = false, 1000); // hide after 1 second
   }
 }
