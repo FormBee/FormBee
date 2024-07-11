@@ -4,6 +4,8 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import * as Prism from 'prismjs';
 import 'prismjs/components/prism-typescript';
 import 'prismjs/components/prism-jsx';
+import 'prismjs/components/prism-javascript';
+import 'prismjs/components/prism-markup'; // Includes HTML
 
 @Component({
   selector: 'app-landing-code-examples',
@@ -29,22 +31,22 @@ export class LandingCodeExamplesComponent implements OnInit{
     vanilla: ['form.html', 'main.js']
   };
 
-  codeSnippets: Record<'vanilla' | 'angular' | 'react', Record<string, string>> = {
+  codeSnippets: Record<'vanilla' | 'angular' | 'react', Record<string, { content: string, language: string }>> = {
     angular: {
-      'app.component.ts': 'console.log("Angular app.component.ts code here")',
-      'app.module.ts': '/* Angular app.module.ts code here */',
+      'app.component.ts': { content: 'console.log("Angular app.component.ts code here")', language: 'typescript' },
+      'app.module.ts': { content: '/* Angular app.module.ts code here */', language: 'typescript' },
     },
     react: {
-      'App.js': '/* React App.js code here */',
-      'index.js': '/* React index.js code here */',
+      'App.js': { content: '/* React App.js code here */', language: 'jsx' },
+      'index.js': { content: '/* React index.js code here */', language: 'jsx' },
     },
     vanilla: {
-      'form.html': `<form id="form" action="https://formbee.dev/[APIKEY]" method="post" enctype="multipart/form-data">
+'form.html': { content: `<form id="form" action="https://formbee.dev/[APIKEY]" method="post" enctype="multipart/form-data">
     <input type="email" name="email">
     <textarea name="message"></textarea>
     <input type="submit" value="Submit">
-</form>`,
-      'main.js': '/* main.js code here */',
+</form>`, language: 'markup' },
+      'main.js': { content: `const submitForm = async (event) => {`, language: 'javascript' }
     }
   };
 
@@ -65,21 +67,12 @@ export class LandingCodeExamplesComponent implements OnInit{
   }
 
   updateCode() {
-    const rawCode = this.codeSnippets[this.currentFramework][this.currentFile];
-    const language = this.getLanguage(this.currentFramework);
+    const rawCode = this.codeSnippets[this.currentFramework][this.currentFile].content;
+    const language = this.codeSnippets[this.currentFramework][this.currentFile].language;
     this.currentCode = this.sanitizer.bypassSecurityTrustHtml(Prism.highlight(rawCode, Prism.languages[language], language));
   }
 
-  getLanguage(framework: 'vanilla' | 'angular' | 'react'): string {
-    switch (framework) {
-      case 'angular': return 'ts';
-      case 'react': return 'jsx';
-      case 'vanilla': return 'html';
-      default: return 'markup';
-    }
-  }
-
   copyToClipboard() {
-    navigator.clipboard.writeText(this.codeSnippets[this.currentFramework][this.currentFile]);
+    navigator.clipboard.writeText(this.codeSnippets[this.currentFramework][this.currentFile].content);
   }
 }

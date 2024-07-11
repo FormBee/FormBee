@@ -1,5 +1,5 @@
 <div class="background-color">
-<div class="section-container">
+  <div class="section-container">
     <h3>Basic usage, with different frameworks</h3>
     <div class="framework-tabs">
       <button class="vanilla-button" (click)="setCurrentFramework('vanilla')">Vanilla</button>
@@ -16,7 +16,7 @@
         </div>
       </div>
 
-<pre><code [innerHTML]="currentCode" class="language-{{getLanguage(currentFramework)}}"></code></pre>
+      <pre><code [innerHTML]="currentCode"></code></pre>
       <button class="copy-button" (click)="copyToClipboard()">Copy Text</button>
     </div>
   </div>
