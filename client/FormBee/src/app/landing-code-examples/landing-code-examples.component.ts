@@ -48,34 +48,13 @@ export class LandingCodeExamplesComponent implements OnInit{
     <textarea name="message"></textarea>
     <input type="submit" value="Submit">
 </form>
-<!-- Just provide your API key -->
-<!-- with a post request to https://formbee.dev/ -->
-<!-- FormBee handles the rest. -->
+<!-- Just provide your API key
+with a post request to https://formbee.dev/
+FormBee sends the form data to your email address. -->
  `, language: 'markup' },
       'main.js': { content: 
-`const submitForm = async (event) => {
-    event.preventDefault();
-    const form = document.querySelector('#form');
-    const response = await fetch(form.action, {
-        method: form.method,
-        body: new FormData(form)
-    });
-};
+`// This code prevents the form from redirecting on submit.
 const submitForm = async (event) => {
-    event.preventDefault();
-    const form = document.querySelector('#form');
-    const response = await fetch(form.action, {
-        method: form.method,
-        body: new FormData(form)
-    });
-};const submitForm = async (event) => {
-    event.preventDefault();
-    const form = document.querySelector('#form');
-    const response = await fetch(form.action, {
-        method: form.method,
-        body: new FormData(form)
-    });
-};const submitForm = async (event) => {
     event.preventDefault();
     const form = document.querySelector('#form');
     const response = await fetch(form.action, {

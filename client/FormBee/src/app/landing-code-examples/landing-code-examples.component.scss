@@ -174,9 +174,14 @@ code {
   text-shadow:none;
 }
 
-// @media screen and (max-width: 768px) {
-//   .code-examples-container {
-//     width: 90vw;
-//     margin: auto;
-//   }
-// }
+@media screen and (max-width: 768px) {
+  .code-examples-container {
+    width: 90vw;
+    margin: auto;
+  }
+
+  .section-container {
+    padding: 10px;
+    margin: 10px;
+  }
+}
