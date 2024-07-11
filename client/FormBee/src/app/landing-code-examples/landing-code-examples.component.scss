@@ -6,7 +6,6 @@
   }
   padding: 20px;
   margin: 20px;
-
 }
 .framework-tabs,
   button {
@@ -19,7 +18,9 @@
 
   }
 
-
+  ::-webkit-scrollbar {
+    border-radius: 20px;
+}
 .code-examples-container {
   z-index: 10000;
   display: flex;
@@ -34,8 +35,7 @@
   border-radius: 10px;
   position: relative;
   box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
-
-
+  font-size: 1rem;
 
   pre {
     font-family: monospace;
@@ -45,8 +45,13 @@
     width: 100%;
     height: 100%;
     box-sizing: border-box;
+    // overflow-y: hidden;
+    scrollbar-width: 0px;
   }
 
+  ::-webkit-scrollbar {
+    width:0px;
+  }
 }
 
 html, body {
@@ -168,3 +173,10 @@ padding-bottom: 20px;
 code {
   text-shadow:none;
 }
+
+// @media screen and (max-width: 768px) {
+//   .code-examples-container {
+//     width: 90vw;
+//     margin: auto;
+//   }
+// }

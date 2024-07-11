@@ -13,7 +13,7 @@ import 'prismjs/components/prism-markup'; // Includes HTML
   standalone: true,
   imports: [NgFor],
   templateUrl: './landing-code-examples.component.html',
-  styleUrls: ['./landing-code-examples.component.scss', '../../../node_modules/prismjs/themes/prism-okaidia.min.css']
+  styleUrls: ['./landing-code-examples.component.scss', '../../../node_modules/prismjs/themes/prism-tomorrow.css'] 
 })
 export class LandingCodeExamplesComponent implements OnInit{
   
@@ -41,12 +41,49 @@ export class LandingCodeExamplesComponent implements OnInit{
       'index.js': { content: '/* React index.js code here */', language: 'jsx' },
     },
     vanilla: {
-'form.html': { content: `<form id="form" action="https://formbee.dev/[APIKEY]" method="post" enctype="multipart/form-data">
+'form.html': { content: 
+  `<!-- Simple form markup -->
+<form id="form" action="https://formbee.dev/[APIKEY]" method="post" enctype="multipart/form-data">
     <input type="email" name="email">
     <textarea name="message"></textarea>
     <input type="submit" value="Submit">
-</form>`, language: 'markup' },
-      'main.js': { content: `const submitForm = async (event) => {`, language: 'javascript' }
+</form>
+<!-- Just provide your API key -->
+<!-- with a post request to https://formbee.dev/ -->
+<!-- FormBee handles the rest. -->
+ `, language: 'markup' },
+      'main.js': { content: 
+`const submitForm = async (event) => {
+    event.preventDefault();
+    const form = document.querySelector('#form');
+    const response = await fetch(form.action, {
+        method: form.method,
+        body: new FormData(form)
+    });
+};
+const submitForm = async (event) => {
+    event.preventDefault();
+    const form = document.querySelector('#form');
+    const response = await fetch(form.action, {
+        method: form.method,
+        body: new FormData(form)
+    });
+};const submitForm = async (event) => {
+    event.preventDefault();
+    const form = document.querySelector('#form');
+    const response = await fetch(form.action, {
+        method: form.method,
+        body: new FormData(form)
+    });
+};const submitForm = async (event) => {
+    event.preventDefault();
+    const form = document.querySelector('#form');
+    const response = await fetch(form.action, {
+        method: form.method,
+        body: new FormData(form)
+    });
+};
+document.querySelector('#form').addEventListener('submit', submitForm);`, language: 'javascript' }
     }
   };
 
