@@ -1,14 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { NgFor } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import * as Prism from 'prismjs';
+import 'prismjs/components/prism-typescript';
+import 'prismjs/components/prism-jsx';
+
 @Component({
   selector: 'app-landing-code-examples',
+  encapsulation: ViewEncapsulation.ShadowDom,
   standalone: true,
   imports: [NgFor],
   templateUrl: './landing-code-examples.component.html',
-  styleUrls: ['./landing-code-examples.component.scss']
+  styleUrls: ['./landing-code-examples.component.scss', '../../../node_modules/prismjs/themes/prism-okaidia.min.css']
 })
 export class LandingCodeExamplesComponent implements OnInit{
   
+  constructor(private sanitizer: DomSanitizer) {}
+
+  currentCode: SafeHtml = '';
+
   ngOnInit(): void {
     this.setCurrentFramework('vanilla');
   }
@@ -19,9 +29,9 @@ export class LandingCodeExamplesComponent implements OnInit{
     vanilla: ['form.html', 'main.js']
   };
 
-  codeSnippets: Record<'vanilla' | 'angular' | 'react' , Record<string, string>> = {
+  codeSnippets: Record<'vanilla' | 'angular' | 'react', Record<string, string>> = {
     angular: {
-      'app.component.ts': '/* Angular app.component.ts code here */',
+      'app.component.ts': 'console.log("Angular app.component.ts code here")',
       'app.module.ts': '/* Angular app.module.ts code here */',
     },
     react: {
@@ -29,18 +39,21 @@ export class LandingCodeExamplesComponent implements OnInit{
       'index.js': '/* React index.js code here */',
     },
     vanilla: {
-      'form.html': '<span class="keyword">/*</span> <span class="comment">Vue App.vue code here</span> <span class="keyword">*/</span>',
-      'main.js': '<span class="keyword">/*</span> <span class="comment">Vue App.vue code here</span> <span class="keyword">*/</span>',
+      'form.html': `<form id="form" action="https://formbee.dev/[APIKEY]" method="post" enctype="multipart/form-data">
+    <input type="email" name="email">
+    <textarea name="message"></textarea>
+    <input type="submit" value="Submit">
+</form>`,
+      'main.js': '/* main.js code here */',
     }
   };
 
-  currentFramework:'vanilla' | 'angular' | 'react' = 'vanilla';
+  currentFramework: 'vanilla' | 'angular' | 'react' = 'vanilla';
   currentFile: string = 'app.component.ts';
   currentFrameworkFiles: string[] = this.frameworks[this.currentFramework];
-  currentCode: string = this.codeSnippets[this.currentFramework][this.currentFile];
 
   setCurrentFramework(framework: 'vanilla' | 'angular' | 'react') {
-    this.currentFramework = framework;
+    this.currentFramework = framework;    
     this.currentFrameworkFiles = this.frameworks[framework];
     this.currentFile = this.frameworks[framework][0];
     this.updateCode();
@@ -52,10 +65,21 @@ export class LandingCodeExamplesComponent implements OnInit{
   }
 
   updateCode() {
-    this.currentCode = this.codeSnippets[this.currentFramework][this.currentFile];
+    const rawCode = this.codeSnippets[this.currentFramework][this.currentFile];
+    const language = this.getLanguage(this.currentFramework);
+    this.currentCode = this.sanitizer.bypassSecurityTrustHtml(Prism.highlight(rawCode, Prism.languages[language], language));
+  }
+
+  getLanguage(framework: 'vanilla' | 'angular' | 'react'): string {
+    switch (framework) {
+      case 'angular': return 'ts';
+      case 'react': return 'jsx';
+      case 'vanilla': return 'html';
+      default: return 'markup';
+    }
   }
 
   copyToClipboard() {
-    navigator.clipboard.writeText(this.currentCode);
+    navigator.clipboard.writeText(this.codeSnippets[this.currentFramework][this.currentFile]);
   }
 }

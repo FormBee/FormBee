@@ -1,7 +1,7 @@
-<form id="myForm" action="http://localhost:3000/apikey" method="post" enctype="multipart/form-data">
+<form action="http://localhost:3000/apikey" method="post" enctype="multipart/form-data">
     <input type="text" name="name" value="test">
     <input type="email" name="email" value="test@test.com">
-    <textarea name="message">test</textarea>
+    <textarea name="message"></textarea>
     <input type="submit" value="Submit">
 </form>
 
@@ -13,9 +13,6 @@ const submitForm = async (event) => {
         method: form.method,
         body: new FormData(form)
     });
-    console.log(response);
-    console.log("Response: ", response);
 };
-
 document.querySelector('#myForm').addEventListener('submit', submitForm);
 </script>
