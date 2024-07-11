@@ -1,7 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgFor } from '@angular/common';
-import { OnInit } from '@angular/core';
-
 @Component({
   selector: 'app-landing-code-examples',
   standalone: true,
@@ -9,8 +7,8 @@ import { OnInit } from '@angular/core';
   templateUrl: './landing-code-examples.component.html',
   styleUrls: ['./landing-code-examples.component.scss']
 })
-export class LandingCodeExamplesComponent implements OnInit {
-
+export class LandingCodeExamplesComponent implements OnInit{
+  
   ngOnInit(): void {
     this.setCurrentFramework('vanilla');
   }
@@ -18,7 +16,7 @@ export class LandingCodeExamplesComponent implements OnInit {
   frameworks: Record<'vanilla' | 'angular' | 'react' , string[]> = {
     angular: ['app.component.ts', 'app.module.ts'],
     react: ['App.js', 'index.js'],
-    vanilla: ['App.vue', 'main.js']
+    vanilla: ['form.html', 'main.js']
   };
 
   codeSnippets: Record<'vanilla' | 'angular' | 'react' , Record<string, string>> = {
@@ -31,8 +29,8 @@ export class LandingCodeExamplesComponent implements OnInit {
       'index.js': '/* React index.js code here */',
     },
     vanilla: {
-      'App.vue': '/* Vue App.vue code here */',
-      'main.js': '/* Vue main.js code here */',
+      'form.html': '<span class="keyword">/*</span> <span class="comment">Vue App.vue code here</span> <span class="keyword">*/</span>',
+      'main.js': '<span class="keyword">/*</span> <span class="comment">Vue App.vue code here</span> <span class="keyword">*/</span>',
     }
   };
 

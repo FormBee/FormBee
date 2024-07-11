@@ -16,7 +16,7 @@
         </div>
       </div>
 
-      <pre>{{ currentCode }}</pre>
+      <pre><code [innerHTML]="currentCode" class="language-{{currentFramework}}"></code></pre>
       <button class="copy-button" (click)="copyToClipboard()">Copy Text</button>
     </div>
   </div>
