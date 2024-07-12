@@ -5,6 +5,7 @@ import { LandingThreeBgComponent } from '../landing-three-bg/landing-three-bg.co
 import { LandingCodeExamplesComponent } from '../landing-code-examples/landing-code-examples.component';
 import { LandingOurWhyComponent } from '../landing-our-why/landing-our-why.component';
 import { LandingFeaturesComponent } from '../landing-features/landing-features.component';
+import { LandingWhatComponent } from '../landing-what/landing-what.component';
 @Component({
   selector: 'app-landing',
   standalone: true,
@@ -13,7 +14,9 @@ import { LandingFeaturesComponent } from '../landing-features/landing-features.c
     LandingThreeBgComponent, 
     LandingCodeExamplesComponent,
     LandingOurWhyComponent,
-    LandingFeaturesComponent],
+    LandingFeaturesComponent,
+    LandingWhatComponent,
+  ],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss'
 })
