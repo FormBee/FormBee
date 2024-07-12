@@ -1,0 +1,71 @@
+
+.landing-what {
+    height: 30vh;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: 30vh;
+    width: 100%;
+    align-items: center;
+    margin: auto;
+}
+
+.image-1 {
+    height: 100%;
+    display: flex;
+    // flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    max-width: 50%;
+}
+.image-2 {
+    height: 100%;
+
+    display: flex;
+    // flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    max-width: 50%;
+}
+
+p {
+    font-size: 1.5rem;
+    color: #000000;
+    text-align: center;
+    width: 70vw;
+    box-sizing: border-box;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.dia-image {
+    height: 90%;
+    width: auto;
+}
+
+@media screen and (max-width: 750px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+        margin: auto;
+    }
+    .landing-what {
+        height: 50vh;
+    }
+    .dia-image {
+        height: 50%;
+        width: auto;
+    }
+    .image-1, .image-2 {
+        max-width: 100%;
+    }
+}
