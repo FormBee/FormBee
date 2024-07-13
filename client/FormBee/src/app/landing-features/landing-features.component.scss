@@ -1,4 +1,74 @@
 .landing-features {
-    height: 50vh;
-    background-image: linear-gradient(to bottom, #ffbd59, #ffb341);
+    height: fit-content;
+    background-image: linear-gradient(to bottom, #ffbd59, #ffffff);
+    padding-top: 20vh;
+    z-index: -10;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    height: 100%;
+    width: 100%;
+
+    .feature-1, .feature-2, .feature-3, .feature-4 {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        background-image: radial-gradient(
+            farthest-corner at 40px 40px,
+            #ff77596b 40%,
+            rgba(241, 180, 26, 0.501) 100%
+          );
+        backdrop-filter: blur(10px);
+
+        height:250px;
+        width: 40%;
+        margin: 20px;
+        padding: 20px;
+        border-radius: 30px;
+        box-shadow: rgb(46, 36, 5) 3px 3px 6px 0px inset, rgba(34, 28, 8, 0.5) -3px -3px 6px 1px inset;
+        border: solid 1px #000000;
+    }
+    button {
+        background-color: #FFBD59;
+        color:#2a2624;
+        padding: 10px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color, box-shadow 0.3s ease-out;
+        overflow: hidden;
+        border: solid 1px #c69245;
+        box-shadow: rgba(204, 155, 39, 0.2) 1.95px 1.95px 2.6px;
+      }
+      
+      button:hover {
+        background-color: #c69245;
+        border: solid 1px #FFBD59;
+        box-shadow: rgba(204, 155, 39, 0.4) 5px 5px, rgba(204, 155, 39, 0.3) 10px 10px, rgba(204, 155, 39, 0.2) 15px 15px, rgba(204, 155, 39, 0.1) 20px 20px, rgba(204, 155, 39, 0.05) 25px 25px;
+    
+      }
+      .top {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+      }
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        .feature-1, .feature-2, .feature-3, .feature-4 {
+            width: 100%;
+            margin: 10px;
+        }
+    }
+
 }
