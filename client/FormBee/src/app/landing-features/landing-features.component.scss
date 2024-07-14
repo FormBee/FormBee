@@ -1,10 +1,38 @@
+// CSS animation to rotate the images
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+
+  }
+  25% {
+    transform: rotate(10deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(-10deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+
 .landing-features {
     height: fit-content;
     background-image: linear-gradient(to bottom, #ffbd59, #ffffff);
     padding-top: 20vh;
     z-index: -10;
 }
-
+.backdrop {
+    background-image: linear-gradient(75deg, #2b2b2b76, #78336743);
+    // backdrop-filter: blur(10px);
+    margin: 10px;
+    border-radius: 40px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    
+}
 .container {
     display: flex;
     flex-wrap: wrap;
@@ -23,8 +51,6 @@
         //     #ff77590b 40%,
         //     rgba(241, 180, 26, 0.103) 100%
         //   );
-        backdrop-filter: blur(10px);
-
         min-height: 250px;
         width: 45%;
         margin: 20px;
@@ -56,7 +82,7 @@
       .top {
         display: flex;
         flex-direction: row;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         width: 100%;
         height: 100%;
@@ -64,6 +90,16 @@
       img {
         height: 100px;
         width: auto;
+        will-change: transform;
+        // animation: rotate 5s linear infinite;
+      }
+      .content {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        height: 100%;
       }
 }
 
@@ -75,4 +111,10 @@
         }
     }
 
+}
+
+.container:hover {
+    img {
+        animation: rotate 5s linear 1;
+    }
 }
