@@ -6,6 +6,7 @@ import { LandingCodeExamplesComponent } from '../landing-code-examples/landing-c
 import { LandingOurWhyComponent } from '../landing-our-why/landing-our-why.component';
 import { LandingFeaturesComponent } from '../landing-features/landing-features.component';
 import { LandingWhatComponent } from '../landing-what/landing-what.component';
+import { LandingPricingComponent } from '../landing-pricing/landing-pricing.component'; 
 @Component({
   selector: 'app-landing',
   standalone: true,
@@ -16,6 +17,8 @@ import { LandingWhatComponent } from '../landing-what/landing-what.component';
     LandingOurWhyComponent,
     LandingFeaturesComponent,
     LandingWhatComponent,
+    LandingPricingComponent,
+    
   ],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss'
