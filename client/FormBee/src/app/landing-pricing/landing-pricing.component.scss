@@ -1,0 +1,107 @@
+.pricing-section {
+    text-align: center;
+    padding: 50px;
+    padding-top: 0px;
+    background-image: linear-gradient(to bottom, #fefefe, #ffffff);
+    color: #333;
+    
+    h1 {
+        font-size: 36px;
+        margin-bottom: 10px;
+    }
+
+    p {
+        font-size: 16px;
+        margin-bottom: 40px;
+    }
+
+    .self-hosted {
+        margin-bottom: 40px;
+    }
+
+    .prices {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-start;
+        flex-wrap: wrap;
+
+        .price-card {
+            background: #fff;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(27,31,35,.12);
+            width: 300px;
+            margin: 10px;
+            padding: 20px;
+            transition: box-shadow 0.3s ease-in-out;
+
+            &:hover {
+                box-shadow: 0 4px 20px rgba(27,31,35,.25);
+            }
+
+            .price-header {
+                font-size: 24px;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+
+            .price-amount {
+                font-size: 32px;
+                color: #2188ff;
+                margin-bottom: 10px;
+            }
+
+            .price-description {
+                font-size: 14px;
+                color: #6a737d;
+                margin-bottom: 20px;
+            }
+
+            .price-features {
+                text-align: left;
+                list-style: none;
+                padding: 0;
+
+                li {
+                    margin-bottom: 10px;
+                    font-size: 14px;
+                }
+            }
+
+            .price-action {
+                margin-top: 20px;
+
+                button {
+                    background-color: #2188ff;
+                    color: white;
+                    font-size: 16px;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    transition: background-color 0.3s ease;
+
+                    &:hover {
+                        background-color: #0366d6;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .pricing-section {
+        padding: 20px;
+        
+        .prices {
+            flex-direction: column;
+            align-items: center;
+
+            .price-card {
+                margin: 0px;
+                margin-bottom: 20px;
+            }
+        }
+    }
+}
