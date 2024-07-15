@@ -124,11 +124,15 @@
             }
         }
     }
+    .self-hosted-tag {
+        flex-direction: column;
+    }
 }
 .self-hosted {
     display: flex;
     justify-content: center;
     margin-bottom: 40px;
+    margin-top: 40px;
 
     .self-hosted-tag {
         // background-image: radial-gradient(circle at center, #fefefe, #fbf5ff);
@@ -151,25 +155,25 @@
         }
 
         .self-hosted-action {
-            margin-left: 20px;
-
             button {
                 background-color: #FFBD59;
+
+                margin-top: 10px;
                 color:#2a2624;
                 padding: 4px;
-                border: none;
                 border-radius: 10px;
                 cursor: pointer;
                 font-size: 16px;
-                transition: background-color, box-shadow 0.3s ease-out;
+                transition: background-color 0.3s ease-out;
                 overflow: hidden;
-                border: solid 1px #c69245;
+                border: solid 1px #7b7a7b40;
                 box-shadow: rgba(204, 155, 39, 0.2) 1.95px 1.95px 2.6px;
             }
             button:hover {
-                background-color: #c69245;
-                border: solid 1px #FFBD59;
-                box-shadow: rgba(204, 155, 39, 0.4) 5px 5px, rgba(204, 155, 39, 0.3) 10px 10px, rgba(204, 155, 39, 0.2) 15px 15px, rgba(204, 155, 39, 0.1) 20px 20px, rgba(204, 155, 39, 0.05) 25px 25px;
+                background-color: #c69245a6;
+
+                border: solid 1px #acabaa54;
+                // box-shadow: rgba(204, 155, 39, 0.4) 5px 5px, rgba(204, 155, 39, 0.3) 10px 10px, rgba(204, 155, 39, 0.2) 15px 15px, rgba(204, 155, 39, 0.1) 20px 20px, rgba(204, 155, 39, 0.05) 25px 25px;
             
             }
         }
@@ -185,10 +189,12 @@
     border-radius: 20px;
     width: fit-content;
     margin: auto;
-    border: 1px solid #1a1a1a;
+    border: 1px solid #1a1a1a5a;
 
     button {
-        background-color: #a2a2a25f;
+        background-color: #FFBD59;
+
+
         margin-top: 10px;
         color:#2a2624;
         padding: 4px;
@@ -197,12 +203,12 @@
         font-size: 16px;
         transition: background-color 0.3s ease-out;
         overflow: hidden;
-        border: solid 1px #7b7b7a;
+        border: solid 1px #7b7b7a3e;
         box-shadow: rgba(204, 155, 39, 0.2) 1.95px 1.95px 2.6px;
     }
     button:hover {
-        background-color: #c692452e;
-        border: solid 1px #acabaa;
+        background-color: #c69245a6;
+        border: solid 1px #acabaa4e;
         // box-shadow: rgba(204, 155, 39, 0.4) 5px 5px, rgba(204, 155, 39, 0.3) 10px 10px, rgba(204, 155, 39, 0.2) 15px 15px, rgba(204, 155, 39, 0.1) 20px 20px, rgba(204, 155, 39, 0.05) 25px 25px;
     
     }
