@@ -22,8 +22,9 @@
     .prices {
         display: flex;
         justify-content: space-around;
-        align-items: flex-start;
+        align-items: stretch;  // Make sure all children are stretched to the same height
         flex-wrap: wrap;
+        height: fit-content;
 
         .price-card {
             background: #fff;
@@ -34,6 +35,8 @@
             margin: 10px;
             padding: 20px;
             transition: box-shadow 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;  // Ensure the internal content is stacked vertically
 
             &:hover {
                 box-shadow: 0 4px 20px rgba(27,31,35,.25);
@@ -47,7 +50,7 @@
 
             .price-amount {
                 font-size: 32px;
-                color: #2188ff;
+                color: #FFBD59;
                 margin-bottom: 10px;
             }
 
@@ -69,22 +72,29 @@
             }
 
             .price-action {
-                margin-top: 20px;
+                margin-top: auto;  // Push the action button to the bottom
+                display: flex;
+                justify-content: center;
 
                 button {
-                    background-color: #2188ff;
-                    color: white;
-                    font-size: 16px;
-                    padding: 10px 20px;
+                    background-color: #FFBD59;
+                    color:#2a2624;
+                    padding: 10px;
                     border: none;
-                    border-radius: 5px;
+                    border-radius: 10px;
                     cursor: pointer;
-                    transition: background-color 0.3s ease;
-
-                    &:hover {
-                        background-color: #0366d6;
-                    }
+                    font-size: 16px;
+                    transition: background-color, box-shadow 0.3s ease-out;
+                    overflow: hidden;
+                    border: solid 1px #c69245;
+                    box-shadow: rgba(204, 155, 39, 0.2) 1.95px 1.95px 2.6px;
                 }
+                button:hover {
+                    background-color: #c69245;
+                    border: solid 1px #FFBD59;
+                    box-shadow: rgba(204, 155, 39, 0.4) 5px 5px, rgba(204, 155, 39, 0.3) 10px 10px, rgba(204, 155, 39, 0.2) 15px 15px, rgba(204, 155, 39, 0.1) 20px 20px, rgba(204, 155, 39, 0.05) 25px 25px;
+                
+                  }
             }
         }
     }
@@ -132,18 +142,23 @@
             margin-left: 20px;
 
             button {
-                background-color: #2188ff;
-                color: white;
-                font-size: 16px;
-                padding: 10px 20px;
+                background-color: #FFBD59;
+                color:#2a2624;
+                padding: 10px;
                 border: none;
-                border-radius: 5px;
+                border-radius: 10px;
                 cursor: pointer;
-                transition: background-color 0.3s ease;
-
-                &:hover {
-                    background-color: #0366d6;
-                }
+                font-size: 16px;
+                transition: background-color, box-shadow 0.3s ease-out;
+                overflow: hidden;
+                border: solid 1px #c69245;
+                box-shadow: rgba(204, 155, 39, 0.2) 1.95px 1.95px 2.6px;
+            }
+            button:hover {
+                background-color: #c69245;
+                border: solid 1px #FFBD59;
+                box-shadow: rgba(204, 155, 39, 0.4) 5px 5px, rgba(204, 155, 39, 0.3) 10px 10px, rgba(204, 155, 39, 0.2) 15px 15px, rgba(204, 155, 39, 0.1) 20px 20px, rgba(204, 155, 39, 0.05) 25px 25px;
+            
             }
         }
     }
