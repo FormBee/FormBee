@@ -105,3 +105,46 @@
         }
     }
 }
+.self-hosted {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+
+    .self-hosted-tag {
+        background: #fff;
+        border: 1px solid #e1e4e8;
+        border-radius: 20px;
+        box-shadow: 0 1px 3px rgba(27,31,35,.12);
+        padding: 10px 30px;
+        font-size: 18px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 80%;
+        max-width: 800px;
+
+        .self-hosted-description {
+            flex-grow: 1;
+        }
+
+        .self-hosted-action {
+            margin-left: 20px;
+
+            button {
+                background-color: #2188ff;
+                color: white;
+                font-size: 16px;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+
+                &:hover {
+                    background-color: #0366d6;
+                }
+            }
+        }
+    }
+}
