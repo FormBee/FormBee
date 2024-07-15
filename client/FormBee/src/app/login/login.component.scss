@@ -9,40 +9,62 @@
 }
 
 .login-card {
-    background-color: #ae7f215c;
+    background-image: linear-gradient(to bottom, #eed5bb72, #f5a1226a);
     border-radius: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 40px;
+    padding: 10px 20px 30px 20px;
     width: 300px;
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
 }
 
 .logo img {
-    width: 100px;
+    width: 120px;
+    height: fit-content;
+    
+} 
+.logo img:hover {
+    cursor: pointer;
 }
 
 h1 {
     color: #000000;
     font-size: 24px;
+    margin: 0px;
 }
 
 p {
-    color: #fff;
+    color: #000000;
     font-size: 14px;
     margin-bottom: 20px;
 }
 
 .github-button {
-    background-color: #d8b366;
-    border: none;
-    border-radius: 30px;
-    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #45454500;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    color: #000000;
     cursor: pointer;
     font-size: 16px;
     padding: 10px 20px;
     text-align: center;
     margin: auto;
+    transition: background-color 0.3s ease;
 }
 
 .github-button:hover {
-    background-color: #cfa55a;
+    background-color: rgba(69, 69, 69, 0.24);
+}
+
+.github-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    fill: currentColor;
+}
+
+.button-text {
+    vertical-align: middle;
 }
