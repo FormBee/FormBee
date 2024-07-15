@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-landing-nav',
   standalone: true,
@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
 })
 export class LandingNavComponent {
   menuOpen = false;
-
+  constructor(private router: Router) {}
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
   }
@@ -17,4 +17,9 @@ export class LandingNavComponent {
   closeMenu() {
     this.menuOpen = false;
   }
+
+  signIn() {
+    this.router.navigate(['/login']);
+  }
 }
+

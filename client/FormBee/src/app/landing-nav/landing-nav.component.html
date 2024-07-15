@@ -6,7 +6,7 @@
       <ul class="nav-links">
         <li><a href="/docs">Docs</a></li>
         <li><a href="/pricing">Pricing</a></li>
-        <li><button class="sign-in-btn">Sign In</button></li>
+        <li><button (click)="signIn()" class="sign-in-btn">Sign In</button></li>
       </ul>
       <div class="hamburger" (click)="toggleMenu()">
         <span></span>
@@ -20,3 +20,4 @@
       <li><button class="sign-in-btn" (click)="closeMenu()">Sign In</button></li>
     </ul>
   </nav>
+  
