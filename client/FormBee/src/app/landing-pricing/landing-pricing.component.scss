@@ -41,7 +41,17 @@
             &:hover {
                 box-shadow: 0 4px 20px rgba(27,31,35,.25);
             }
+            &.free {
+                background-image: radial-gradient(circle at center, #fefefe, #fbf5ff);
+            }
+            &.tier-1 {
+                background-image: radial-gradient(circle at center, #fefefe, #fbf5ff);
 
+            }
+            &.tier-2 {
+                background-image: radial-gradient(circle at center, #fefefe, #fbf5ff);
+
+            }
             .price-header {
                 font-size: 24px;
                 font-weight: bold;
@@ -79,7 +89,7 @@
                 button {
                     background-color: #FFBD59;
                     color:#2a2624;
-                    padding: 10px;
+                    padding: 4px;
                     border: none;
                     border-radius: 10px;
                     cursor: pointer;
@@ -121,7 +131,9 @@
     margin-bottom: 40px;
 
     .self-hosted-tag {
-        background: #fff;
+        // background-image: radial-gradient(circle at center, #fefefe, #fbf5ff);
+        background-image: linear-gradient(to right top, #fefefe, #fbf5ff);
+
         border: 1px solid #e1e4e8;
         border-radius: 20px;
         box-shadow: 0 1px 3px rgba(27,31,35,.12);
@@ -144,7 +156,7 @@
             button {
                 background-color: #FFBD59;
                 color:#2a2624;
-                padding: 10px;
+                padding: 4px;
                 border: none;
                 border-radius: 10px;
                 cursor: pointer;
@@ -161,5 +173,37 @@
             
             }
         }
+    }
+}
+
+.learn-more {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+    background-image: linear-gradient(to right top, #fefefe, #fbf5ff);
+    padding: 20px;
+    border-radius: 20px;
+    width: fit-content;
+    margin: auto;
+    border: 1px solid #1a1a1a;
+
+    button {
+        background-color: #a2a2a25f;
+        margin-top: 10px;
+        color:#2a2624;
+        padding: 4px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease-out;
+        overflow: hidden;
+        border: solid 1px #7b7b7a;
+        box-shadow: rgba(204, 155, 39, 0.2) 1.95px 1.95px 2.6px;
+    }
+    button:hover {
+        background-color: #c692452e;
+        border: solid 1px #acabaa;
+        // box-shadow: rgba(204, 155, 39, 0.4) 5px 5px, rgba(204, 155, 39, 0.3) 10px 10px, rgba(204, 155, 39, 0.2) 15px 15px, rgba(204, 155, 39, 0.1) 20px 20px, rgba(204, 155, 39, 0.05) 25px 25px;
+    
     }
 }
