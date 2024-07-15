@@ -7,6 +7,7 @@ import { LandingOurWhyComponent } from '../landing-our-why/landing-our-why.compo
 import { LandingFeaturesComponent } from '../landing-features/landing-features.component';
 import { LandingWhatComponent } from '../landing-what/landing-what.component';
 import { LandingPricingComponent } from '../landing-pricing/landing-pricing.component'; 
+import { LandingFooterComponent } from '../landing-footer/landing-footer.component';
 @Component({
   selector: 'app-landing',
   standalone: true,
@@ -18,7 +19,7 @@ import { LandingPricingComponent } from '../landing-pricing/landing-pricing.comp
     LandingFeaturesComponent,
     LandingWhatComponent,
     LandingPricingComponent,
-    
+    LandingFooterComponent
   ],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss'
