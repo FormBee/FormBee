@@ -80,6 +80,32 @@ function sendMail(name, email, message, file, res) {
   });
 }
 
+
+app.get('/auth/github', (req, res) => {
+  const githubAuthUrl = 'https://github.com/login/oauth/authorize';
+  const clientId = process.env.GITHUB_CLIENT_ID;
+  res.redirect(`${githubAuthUrl}?client_id=${clientId}`);
+});
+
+app.get('/auth/github/callback', async (req, res) => {
+  const code = req.query.code;
+  const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify({
+      client_id: process.env.GITHUB_CLIENT_ID,
+      client_secret: process.env.GITHUB_CLIENT_SECRET,
+      code,
+    }),
+  });
+
+  const tokenData = await tokenResponse.json();
+  res.redirect(`http://localhost:4200/login?token=${tokenData.access_token}`);
+});
+
 app.listen(3000, () => {
   console.log('Server started on port 3000');
 });
