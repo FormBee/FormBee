@@ -11,6 +11,8 @@ import { Router, } from '@angular/router';
 export class LoginComponent {
 
   constructor(private router: Router) {}
+
+  // Linked to the Formbee Logo with (click) to send the user back to the home page
   landingPage() {
     this.router.navigate(['/home']);
   }
