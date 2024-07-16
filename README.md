@@ -1,10 +1,8 @@
 # FormBee
 
-Form submissions to email made easy.
+## Form submissions to email made easy.
 
-Recieve form data on your email without writing a single line of server side code.
-
-Optionally you can return a reply email to the sender.
+The open-source form solution for data privacy conscious developers.
 
 # TODO:
 - [] Optional Captcha
