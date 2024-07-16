@@ -103,6 +103,7 @@ app.get('/auth/github/callback', async (req, res) => {
   });
 
   const tokenData = await tokenResponse.json();
+  console.log(tokenData);
   res.redirect(`http://localhost:4200/login?token=${tokenData.access_token}`);
 });
 
