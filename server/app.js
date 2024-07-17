@@ -4,6 +4,7 @@ import express from 'express';
 import nodemailer from 'nodemailer';
 import cors from 'cors'; 
 import multer from 'multer';
+import jwt from 'jsonwebtoken'; // Import jsonwebtoken
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 app.use(express.json());
+
 // Set up the email transport
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -80,7 +82,6 @@ function sendMail(name, email, message, file, res) {
   });
 }
 
-
 app.get('/auth/github', (req, res) => {
   const githubAuthUrl = 'https://github.com/login/oauth/authorize';
   const clientId = process.env.GITHUB_CLIENT_ID;
@@ -88,23 +89,34 @@ app.get('/auth/github', (req, res) => {
 });
 
 app.get('/auth/github/callback', async (req, res) => {
-  const code = req.query.code;
-  const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: JSON.stringify({
-      client_id: process.env.GITHUB_CLIENT_ID,
-      client_secret: process.env.GITHUB_CLIENT_SECRET,
-      code,
-    }),
-  });
+  try {
+    const code = req.query.code;
+    const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        client_id: process.env.GITHUB_CLIENT_ID,
+        client_secret: process.env.GITHUB_CLIENT_SECRET,
+        code,
+      }),
+    });
+  
+    const tokenData = await tokenResponse.json();
+    console.log(tokenData);
 
-  const tokenData = await tokenResponse.json();
-  console.log(tokenData);
-  res.redirect(`http://localhost:4200/login?token=${tokenData.access_token}`);
+    // Create a JWT for the authenticated user
+    const jwtToken = jwt.sign({ access_token: tokenData.access_token }, process.env.JWT_SECRET, {
+      expiresIn: '1h', // Token expires in 1 hour
+    });
+
+    res.redirect(`http://localhost:4200/login?token=${jwtToken}`);
+  } catch (error) {
+    console.error('GitHub Callback Error: ', error);
+    res.status(500).json('Authentication failed');
+  }
 });
 
 app.listen(3000, () => {
