@@ -16,10 +16,8 @@ export class DashboardComponent implements OnInit {
   constructor(private Router: Router) {}
 
   ngOnInit(): void {
-    console.log("ngOnInit");
     const token = localStorage.getItem('Fb-pA4lBUfsqVAWFN78eWDF');
     if (!token) {
-      console.log("No token found");
       this.Router.navigate(['/login']);
       return;
     }
@@ -31,7 +29,6 @@ export class DashboardComponent implements OnInit {
     })
       .then((response) => {
         if (response.status === 401) {
-          console.log("Unauthorized");
           this.Router.navigate(['/login']);
           return;
         }
@@ -39,13 +36,12 @@ export class DashboardComponent implements OnInit {
       })
       .then((data) => {
         if (data) {
-          console.log("Data: ", data);
+          // console.log("Data: ", data);
           this.name = data.name;
           this.login = data.login;
         }
       })
       .catch((error) => {
-        console.error("Error fetching user data:", error);
       })
       .finally(() => {
         this.loading = false;

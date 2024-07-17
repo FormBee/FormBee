@@ -19,11 +19,8 @@ export class LoginComponent  implements OnInit {
     this.router.navigate(['/home']);
   }
   ngOnInit(): void {
-    console.log("ngOnInit");
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
-    console.log(token);
-    //access the github users name and email
       fetch('https://api.github.com/user', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -31,7 +28,7 @@ export class LoginComponent  implements OnInit {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
+          // console.log(data);
           this.name = data.name;
           this.email = data.email;
         });

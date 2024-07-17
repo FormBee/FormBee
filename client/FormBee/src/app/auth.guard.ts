@@ -13,7 +13,6 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
     const token = localStorage.getItem('Fb-pA4lBUfsqVAWFN78eWDF');
-    console.log(token);
 
     return fetch('https://api.github.com/user', {
       headers: {
@@ -34,7 +33,6 @@ export class AuthGuard implements CanActivate {
       })
       .catch((error) => {
         // Handle any errors that occurred during the fetch
-        console.error('Error during authentication:', error);
         this.router.navigate(['/login']);
         return false;
       });
