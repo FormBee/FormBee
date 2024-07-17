@@ -1,1 +1,8 @@
-<p>dashboard works!</p>
+<div *ngIf="loading">
+  <p>Loading...</p>
+</div>
+<div *ngIf="!loading">
+  <p>dashboard works!</p>
+    <p>Name: {{ name }}</p>
+    <p>User: {{ login }}</p>
+</div>
