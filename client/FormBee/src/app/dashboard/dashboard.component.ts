@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgIf } from '@angular/common';
+import { DashboardNavComponent } from '../dashboard-nav/dashboard-nav.component';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [ NgIf ],
+  imports: [ NgIf, DashboardNavComponent ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
