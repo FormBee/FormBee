@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
         console.error("Error fetching user data:", error);
       })
       .finally(() => {
-        this.loading = false; // Set loading to false after fetch is complete
+        this.loading = false;
       });
   }
 }
