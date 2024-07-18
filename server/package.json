@@ -21,7 +21,9 @@
     "pg": "^8.12.0",
     "reflect-metadata": "^0.2.2",
     "stream": "^0.0.3",
-    "typeorm": "^0.3.20"
+    "ts-node": "^10.9.2",
+    "typeorm": "^0.3.20",
+    "typescript": "^5.5.3"
   },
   "devDependencies": {
     "@types/node": "^20.14.11"

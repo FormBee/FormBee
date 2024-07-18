@@ -107,6 +107,7 @@ app.get('/auth/github/callback', async (req, res) => {
   res.redirect(`http://localhost:4200/login?token=${tokenData.access_token}`);
 });
 
+
 app.listen(3000, () => {
   console.log('Server started on port 3000');
 });
