@@ -5,7 +5,7 @@
 The open-source form solution for data privacy conscious developers.
 
 # TODO:
-    - [] Add source code for many different captcha options.
+- [] Add source code for many different captcha options.
 - [] User API keys w/ rate limiting
     - [] Seperate API usage for localhost, so users can test without wasting API usage.
 - [] Admin page for managing account and subscription
