@@ -37,7 +37,7 @@ export class DashboardComponent implements OnInit {
       })
       .then((data) => {
         if (data) {
-          // console.log("Data: ", data);
+          console.log("Data: ", data);
           this.name = data.name;
           this.login = data.login;
         }

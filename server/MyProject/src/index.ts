@@ -94,6 +94,21 @@ AppDataSource.initialize().then(async () => {
                 throw new Error('Access token not found in the response');
             }
             console.log(tokenData);
+            let githubdata = await axios.get(`https://api.github.com/user`, {
+                headers: {
+                    Authorization: `Bearer ${tokenData.access_token}`,
+                },
+            });
+            //access token to see if we see the user's github id
+            const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubdata.data.id } });
+            if (!user) {
+                await AppDataSource.manager.save(
+                    AppDataSource.manager.create(User, {
+                        name: githubdata.data.login,
+                        githubId: githubdata.data.id
+                    })
+                );
+            }
             res.redirect(`http://localhost:4200/login?token=${tokenData.access_token}`);
         } catch (error) {
             console.error('Error fetching access token:', error);
@@ -115,22 +130,25 @@ AppDataSource.initialize().then(async () => {
     // start express server
     app.listen(3000);
 
-    // insert new users for test
-    await AppDataSource.manager.save(
-        AppDataSource.manager.create(User, {
-            firstName: "Timber",
-            lastName: "Saw",
-            age: 27,
-        })
-    );
+    // delete all users
+    await AppDataSource.manager.clear(User);
 
-    await AppDataSource.manager.save(
-        AppDataSource.manager.create(User, {
-            firstName: "Phantom",
-            lastName: "Assassin",
-            age: 24,
-        })
-    );
+    // insert new users for test
+    // await AppDataSource.manager.save(
+    //     AppDataSource.manager.create(User, {
+    //         firstName: "Timber",
+    //         lastName: "Saw",
+    //         age: 27,
+    //     })
+    // );
+
+    // await AppDataSource.manager.save(
+    //     AppDataSource.manager.create(User, {
+    //         firstName: "Phantom",
+    //         lastName: "Assassin",
+    //         age: 24,
+    //     })
+    // );
 
     console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results");
 }).catch(error => console.log(error));

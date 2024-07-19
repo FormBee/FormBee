@@ -6,13 +6,14 @@ export class User {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
-    firstName: string
+    //can be null
+    @Column({ unique: true, nullable: true })
+    githubId: number | null
 
-    @Column()
-    lastName: string
+    @Column({nullable: true})
+    name: string | null
 
-    @Column()
-    age: number
+
+
 
 }

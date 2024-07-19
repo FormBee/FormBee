@@ -11,11 +11,11 @@ export class UserController {
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
-        const id = parseInt(request.params.id)
+        const githubId = parseInt(request.params.githubId)
 
 
         const user = await this.userRepository.findOne({
-            where: { id }
+            where: { githubId }
         })
 
         if (!user) {
