@@ -1,6 +1,6 @@
-import crypto from 'crypto';
-import { hmacKey } from './hmac.js';
-
+// import crypto from 'crypto';
+const crypto = require('crypto');
+const hmacKey = 'a5b8c3d7e4f6g1h9i2j0k4l8m7n3o5p9';
 const generateRandomString = () => crypto.randomBytes(10).toString('hex');
 const generateRandomInt = () => Math.floor(Math.random() * 1000000);
 
@@ -21,4 +21,5 @@ const createChallenge = (req, res) => {
   });
 };
 
-export default createChallenge;
+
+module.exports = createChallenge;
