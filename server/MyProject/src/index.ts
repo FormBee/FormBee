@@ -99,7 +99,7 @@ AppDataSource.initialize().then(async () => {
                     Authorization: `Bearer ${tokenData.access_token}`,
                 },
             });
-            //access token to see if we see the user's github id
+            //Check if the github id is already in our database. 
             const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubdata.data.id } });
             if (!user) {
                 await AppDataSource.manager.save(
@@ -108,8 +108,10 @@ AppDataSource.initialize().then(async () => {
                         githubId: githubdata.data.id
                     })
                 );
-            }
             res.redirect(`http://localhost:4200/login?token=${tokenData.access_token}`);
+            } else {
+                res.redirect(`http://localhost:4200/login?token=${tokenData.access_token}`);
+            }
         } catch (error) {
             console.error('Error fetching access token:', error);
             res.status(500).send('Internal Server Error');
@@ -127,28 +129,10 @@ AppDataSource.initialize().then(async () => {
         });
     });
 
-    // start express server
     app.listen(3000);
 
     // delete all users
-    await AppDataSource.manager.clear(User);
-
-    // insert new users for test
-    // await AppDataSource.manager.save(
-    //     AppDataSource.manager.create(User, {
-    //         firstName: "Timber",
-    //         lastName: "Saw",
-    //         age: 27,
-    //     })
-    // );
-
-    // await AppDataSource.manager.save(
-    //     AppDataSource.manager.create(User, {
-    //         firstName: "Phantom",
-    //         lastName: "Assassin",
-    //         age: 24,
-    //     })
-    // );
+    // await AppDataSource.manager.clear(User);
 
     console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results");
 }).catch(error => console.log(error));

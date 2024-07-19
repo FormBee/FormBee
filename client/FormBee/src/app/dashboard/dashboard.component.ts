@@ -13,6 +13,7 @@ import { DashboardNavComponent } from '../dashboard-nav/dashboard-nav.component'
 export class DashboardComponent implements OnInit {
   name: string | undefined;
   login: string | undefined;
+  profilePic: string | undefined;
   loading: boolean = true; // Add this line
   constructor(private Router: Router) {}
 
@@ -40,6 +41,7 @@ export class DashboardComponent implements OnInit {
           console.log("Data: ", data);
           this.name = data.name;
           this.login = data.login;
+          this.profilePic = data.avatar_url;
         }
       })
       .catch((error) => {
