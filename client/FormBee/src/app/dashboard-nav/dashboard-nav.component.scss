@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #4b4021;
+    // background-color: #4b4021;
     padding: 0.5rem 1rem;
     color: white;
     height: 60px;
@@ -53,8 +53,7 @@
   
   .user-details {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
   }
   
   .user-name {
