@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #4b4021;
+    // background-color: #4b4021;
     padding: 0.5rem 1rem;
     color: white;
     height: 60px;
@@ -14,8 +14,10 @@
   }
   
   .logo {
-    height: 40px;
+    height: 45px;
     cursor: pointer;
+    margin-left: 24px;
+    border-radius: 10px;
   }
   
   .nav-links {
@@ -54,15 +56,18 @@
   .user-details {
     display: flex;
     flex-direction: row;
-    background-color: rgba(255, 174, 0, 0.266);
+    background-color: rgba(255, 179, 0, 0.13);
     margin: 5px;
     margin-right: 1rem;
     align-items: center;
     padding: 0px;
-    height:50px;
+    height:30px;
     border-radius: 5px;
     p {
-      padding: 0px;
+      padding: 5px;
+      color: #c69245;
+    font-size: .9rem;
+
     }
   }
   
@@ -73,9 +78,11 @@
   .tier-button {
     background: none;
     border: none;
-    color: #4caf50;
+    color: #c69245;
     cursor: pointer;
     height: fit-content;
+    font-size: .9rem;
+
   }
   
   .tier-button:hover {
@@ -107,6 +114,7 @@
   .divider {
     width: 2px;
     height: 80%;
-    background-color: rgba(255, 255, 255, 0.256);
+    background-color: rgba(255, 179, 0, 0.066);
+
     border-radius : 5px;
   }
