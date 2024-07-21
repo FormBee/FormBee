@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    // background-color: #4b4021;
+    background-color: #4b4021;
     padding: 0.5rem 1rem;
     color: white;
     height: 60px;
@@ -54,6 +54,16 @@
   .user-details {
     display: flex;
     flex-direction: row;
+    background-color: rgba(255, 174, 0, 0.266);
+    margin: 5px;
+    margin-right: 1rem;
+    align-items: center;
+    padding: 0px;
+    height:50px;
+    border-radius: 5px;
+    p {
+      padding: 0px;
+    }
   }
   
   .user-name {
@@ -65,6 +75,7 @@
     border: none;
     color: #4caf50;
     cursor: pointer;
+    height: fit-content;
   }
   
   .tier-button:hover {
@@ -91,4 +102,11 @@
     background-color: #4caf50;
     height: 100%;
     border-radius: 5px;
+  }
+
+  .divider {
+    width: 2px;
+    height: 80%;
+    background-color: rgba(255, 255, 255, 0.256);
+    border-radius : 5px;
   }
