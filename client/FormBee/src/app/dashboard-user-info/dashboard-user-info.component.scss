@@ -1,3 +1,60 @@
 p {
     color: white;
 }
+
+.user-info {
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.Section {
+    background-color: rgba(255, 179, 0, 0.13);
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    height: 20vh;
+    margin: 2rem;
+    padding: 0.5rem;
+    border-radius: 20px;
+}
+
+.usage-bar {
+    background-color: #333;
+    border-radius: 5px;
+    height: 8px;
+    width: 100px;
+}
+
+.usage-progress {
+    background-color: #4caf50;
+    height: 100%;
+    border-radius: 5px;
+}
+
+.usage-text {
+    margin-right: 0.5rem;
+}
+
+.divider {
+    width: 2px;
+    height: 80%;
+    background-color: rgba(255, 179, 0, 0.066);
+
+    border-radius : 5px;
+}
+
+.dropdown {
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 0 0.5rem;
+
+    position: relative;
+}

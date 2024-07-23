@@ -168,6 +168,26 @@ AppDataSource.initialize().then(async () => {
             });
     });
 
+    // Fetch the user by their github id
+    app.get('/api/user/:githubId', (req: Request, res: Response) => {
+        const githubId = parseInt(req.params.githubId, 10);
+        if (isNaN(githubId)) {
+            res.status(400).json('Invalid GitHub ID');
+            return;
+        }
+        AppDataSource.manager.findOne(User, { where: { githubId } })
+            .then(user => {
+                if (user) {
+                    res.json(user);
+                } else {
+                    res.status(404).json('User not found');
+                }
+            })
+            .catch(error => {
+                res.status(500).json('Internal Server Error');
+            });
+    });
+
 
 
     // register express routes from defined application routes

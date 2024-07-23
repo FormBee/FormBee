@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './dashboard-user-info.component.scss'
 })
 export class DashboardUserInfoComponent {
-
+  usagePercent = 50;
 }

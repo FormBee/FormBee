@@ -1,1 +1,12 @@
-<p>dashboard-user-info works!</p>
+
+<div class="user-info">
+  <div class="Section">
+    <div class="usage-info">
+    <p>Current API Usage</p>
+    <div class="usage-bar">
+      <div class="usage-progress" [style.width]="usagePercent + '%'"></div>
+    </div>
+    <p class="usage-text">{{ usagePercent }}%</p>
+  </div>
+  </div>
+</div>
