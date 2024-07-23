@@ -82,11 +82,11 @@
     cursor: pointer;
     height: fit-content;
     font-size: .9rem;
-
+    transition: color 0.2s ease-in-out;
   }
   
   .tier-button:hover {
-    color: #81c784;
+    color: #c7b781;
   }
   
   .usage-info {
@@ -117,4 +117,17 @@
     background-color: rgba(255, 179, 0, 0.066);
 
     border-radius : 5px;
+  }
+
+  .dropdown {
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 0 0.5rem;
+
+    position: relative;
   }
