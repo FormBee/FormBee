@@ -127,7 +127,16 @@
 
     align-items: center;
 
-    padding: 0 0.5rem;
+    padding: 5px;
 
     position: relative;
+
+    border-radius: 5px;
+
+    transition: background-color 0.3s ease;
   }
+
+.dropdown:hover {
+  background-color: rgba(255, 179, 0, 0.13);
+
+}

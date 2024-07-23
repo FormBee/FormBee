@@ -41,8 +41,26 @@ AppDataSource.initialize().then(async () => {
             res.status(401).json('Unauthorized');
             return;
         }
-
-        sendMail(name, email, message, null, res);
+        // Find the user in the database with API key, then increment the current submissions
+        AppDataSource.manager.findOne(User, { where: { apiKey: apikey } })
+            .then(user => {
+                if (!user) {
+                    res.status(401).json('Unauthorized');
+                    return;
+                } else if (user.maxSubmissions && user.currentSubmissions >= user.maxSubmissions) {
+                    res.status(403).json('You have reached your submission limit');
+                    return;
+                } else {
+                    user.currentSubmissions++;
+                    return AppDataSource.manager.save(user);
+                }
+            })
+            .then(() => {
+                sendMail(name, email, message, null, res);
+            })
+            .catch(error => {
+                res.status(500).json('Internal Server Error');
+            });
     });
 
     function sendMail(name, email, message, file, res) {
@@ -117,6 +135,41 @@ AppDataSource.initialize().then(async () => {
             res.status(500).send('Internal Server Error');
         }
     });
+
+    //Route for creating a new API key for the user
+    app.post('/create-api-key', (req, res) => {
+        const githubId = parseInt(req.body.githubId);
+        const userPromise = AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+        userPromise.then(user => {
+            if (!user) {
+                res.status(401).json('Unauthorized');
+                return;
+            }
+            if (user.apiKey) {
+                res.status(401).json('Cannot create a new API key, if you wish to change your API key, press the regenerate button');
+                return;
+            }
+            const { v4: uuidv4 } = require('uuid');
+            user.apiKey = uuidv4();
+            AppDataSource.manager.save(user)
+                .then(() => {
+                    res.json('API key created successfully');
+                })
+                .catch(error => {
+                    res.status(500).json('Internal Server Error');
+                });
+        });
+        AppDataSource.manager.save(User)
+            .then(() => {
+                res.json('API key created successfully');
+            })
+            .catch(error => {
+                res.status(500).json('Internal Server Error');
+            });
+    });
+
+
+
     // register express routes from defined application routes
     Routes.forEach(route => {
         (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {

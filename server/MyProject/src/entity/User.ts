@@ -13,7 +13,14 @@ export class User {
     @Column({nullable: true})
     name: string | null
 
+    @Column({nullable: true})
+    apiKey: string | null
 
+    @Column({nullable: true})
+    maxSubmissions: number | null
 
-
+    @Column({nullable: true})
+    currentSubmissions: number | null
 }
+
+    
