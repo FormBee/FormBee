@@ -137,35 +137,30 @@ AppDataSource.initialize().then(async () => {
     });
 
     //Route for creating a new API key for the user
-    app.post('/create-api-key', (req, res) => {
-        const githubId = parseInt(req.body.githubId);
+    app.post('/create-api-key/:githubId', (req, res) => {
+        console.log("here")
+        const githubId = parseInt(req.params.githubId);
+        console.log(githubId)
         const userPromise = AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
         userPromise.then(user => {
             if (!user) {
                 res.status(401).json('Unauthorized');
                 return;
             }
-            if (user.apiKey) {
-                res.status(401).json('Cannot create a new API key, if you wish to change your API key, press the regenerate button');
-                return;
-            }
+            //add if back in for production
+
+            // if (user.apiKey) {
+            //     res.status(401).json('Cannot create a new API key, if you wish to change your API key, press the regenerate button');
+            //     return;
+            // }
+            console.log("Creating new API key");
             const { v4: uuidv4 } = require('uuid');
+            // real
             user.apiKey = uuidv4();
+            // fake
+            // user.apiKey = null;
             AppDataSource.manager.save(user)
-                .then(() => {
-                    res.json('API key created successfully');
-                })
-                .catch(error => {
-                    res.status(500).json('Internal Server Error');
-                });
         });
-        AppDataSource.manager.save(User)
-            .then(() => {
-                res.json('API key created successfully');
-            })
-            .catch(error => {
-                res.status(500).json('Internal Server Error');
-            });
     });
 
     // Fetch the user by their github id

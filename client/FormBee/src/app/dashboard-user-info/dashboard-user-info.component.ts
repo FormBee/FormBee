@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard-user-info',
@@ -8,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './dashboard-user-info.component.scss'
 })
 export class DashboardUserInfoComponent {
+  @Input() apiKey: string | undefined;
   usagePercent = 50;
 }
