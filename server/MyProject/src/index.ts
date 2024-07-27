@@ -160,6 +160,12 @@ AppDataSource.initialize().then(async () => {
             // fake
             // user.apiKey = null;
             AppDataSource.manager.save(user)
+            .then(() => {
+                res.json({ apiKey: user.apiKey });
+            })
+            .catch(error => {
+                res.status(500).json('Internal Server Error');
+            });
         });
     });
 

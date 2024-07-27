@@ -19,7 +19,6 @@ export class DashboardComponent implements OnInit {
   login: string | undefined;
   profilePic: string | undefined;
   githubId: string | undefined;
-  apiKey: string | undefined;
   loading: boolean = true;
   constructor(private Router: Router) {}
 
@@ -50,28 +49,6 @@ export class DashboardComponent implements OnInit {
           this.profilePic = data.avatar_url;
           this.githubId = data.id;
         }
-      })
-      .then(() => {
-        fetch('http://localhost:3000/api/user/' + this.githubId)
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-            if (!data.apiKey) {
-              console.log("No API key found");
-              fetch('http://localhost:3000/create-api-key/' + this.githubId, {
-                method: 'POST',
-              })
-                .then((response) => response.json())
-                .then((data) => {
-                  console.log(data);
-                  this.apiKey = data.apiKey;
-                });
-            } else {
-              console.log("API key found");
-            }
-            this.apiKey = data.apiKey;
-            console.log(this.apiKey);
-          });
       })
       .finally(() => {
         this.loading = false;

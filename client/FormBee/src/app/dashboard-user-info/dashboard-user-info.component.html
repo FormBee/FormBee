@@ -11,6 +11,7 @@
   </div>
     <div class="api-key-handling">
       <p>Current API Key</p>
-      <p>{{ apiKey }}</p>
+      <p *ngIf="!apiKey">loading API key...</p>
+      <p *ngIf="apiKey">{{ apiKey }}</p>
     </div>
 </div>
