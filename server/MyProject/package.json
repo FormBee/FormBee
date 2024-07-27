@@ -1,5 +1,5 @@
 {
-   "name": "MyProject",
+   "name": "myproject",
    "version": "0.0.1",
    "description": "Awesome project developed with TypeORM.",
    "type": "commonjs",
@@ -20,7 +20,7 @@
       "uuid": "^10.0.0"
    },
    "scripts": {
-      "start": "ts-node src/index.ts",
+      "dev": "ts-node src/index.ts",
       "typeorm": "typeorm-ts-node-commonjs"
    }
 }

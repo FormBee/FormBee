@@ -20,7 +20,7 @@ export class DashboardComponent implements OnInit {
   profilePic: string | undefined;
   githubId: string | undefined;
   apiKey: string | undefined;
-  loading: boolean = true; // Add this line
+  loading: boolean = true;
   constructor(private Router: Router) {}
 
   ngOnInit(): void {
