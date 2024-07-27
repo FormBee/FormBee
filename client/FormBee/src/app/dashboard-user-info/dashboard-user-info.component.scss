@@ -1,5 +1,7 @@
 p {
     color: white;
+    margin-top: 0px;
+    padding-top: 0px;
 }
 
 .user-info {
@@ -7,17 +9,19 @@ p {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    align-items: center;
+    align-items:flex-start;
+    margin-top: 60px;
 }
 
 .Section {
-    background-color: rgba(255, 179, 0, 0.13);
-    display: flex;
-    align-items: center;
+    // background-color: rgba(255, 179, 0, 0.13);
     width: fit-content;
     height: 20vh;
     margin: 2rem;
+    margin-top: 0px;
     padding: 0.5rem;
+
+    padding-top: 0px;
     border-radius: 20px;
 }
 
@@ -57,4 +61,17 @@ p {
     padding: 0 0.5rem;
 
     position: relative;
+}
+
+.name-text {
+    color: #c69245;
+
+    font-size: 2rem;
+    margin-top: 4rem;
+    margin-left: 40px;
+}
+
+.api-key-handling {
+    margin-top: 0px;
+    padding-top: 0px;
 }

@@ -10,6 +10,7 @@ import { NgIf } from '@angular/common';
 })
 export class DashboardUserInfoComponent implements OnInit {
   @Input() githubId: string | undefined;
+  @Input() name: string | undefined;
   apiKey: string | undefined;
   usagePercent = 50;
   fetchApiKey = async (githubId: string) => {

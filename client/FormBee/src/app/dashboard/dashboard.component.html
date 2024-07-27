@@ -3,5 +3,5 @@
 </div>
 <div *ngIf="!loading" class="dashboard">
   <app-dashboard-nav [name]="name" [login]="login" [profilePic]="profilePic"></app-dashboard-nav>
-  <app-dashboard-user-info [githubId]="githubId"></app-dashboard-user-info>
+  <app-dashboard-user-info [name]="name" [githubId]="githubId"></app-dashboard-user-info>
 </div>
