@@ -44,8 +44,11 @@ export class DashboardComponent implements OnInit {
       .then((data) => {
         if (data) {
           console.log("Data: ", data);
-          this.name = data.name;
-          this.login = data.login;
+          if (data.name) {
+            this.name = data.name;
+          } else {
+            this.name = data.login;
+          }
           this.profilePic = data.avatar_url;
           this.githubId = data.id;
         }
