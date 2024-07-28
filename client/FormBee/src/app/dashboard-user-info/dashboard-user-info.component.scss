@@ -83,3 +83,55 @@ p {
     height: 20vh;
     border-radius: 20px;
 }
+
+.api-key-display {
+    display: flex;
+    flex-direction: row;
+    position: relative; /* Make this element the containing block for absolutely positioned children */
+}
+
+.obfuscation {
+    position: absolute; /* Positioning it absolutely within the container */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10; /* Ensure obfuscation is above the text */
+    background-image: linear-gradient(to right, rgb(36, 28, 7),rgb(63, 50, 16), rgba(255, 179, 0, 0));
+    border-radius: 10px;
+    p {
+        margin-bottom: 0px;
+    }
+}
+
+.obfu {
+    position: relative; /* Ensure text is within relative context of .obfuscation */
+    z-index: 5; /* Ensure text is below the obfuscation */
+    p {
+        margin-bottom: 0px;
+    }
+}
+
+.api-buttons {
+    background-color: #FFBD59;
+    color:#2a2624;
+    padding: 5px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color, box-shadow 0.3s ease-out;
+    overflow: hidden;
+    border: solid 1px #c69245;
+    box-shadow: rgba(204, 155, 39, 0.2) 1.95px 1.95px 2.6px;
+    margin-left: 5px;
+}
+
+.api-buttons:hover {
+    background-color: #c69245;
+    border: solid 1px #FFBD59;
+    box-shadow: rgba(9, 8, 7, 0.4) 2px 2px, rgba(204, 155, 39, 0.3) 4px 4px, rgba(204, 155, 39, 0.2) 6px 6px, rgba(204, 155, 39, 0.1) 8px 8px, rgba(204, 155, 39, 0.05) 10px 10px;
+}
+
+.generate {
+    margin-top: 10px;
+}

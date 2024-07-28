@@ -13,7 +13,13 @@
   <div class="api-key-handling">
     <p>Current API Key</p>
     <p *ngIf="!apiKey">loading API key...</p>
-    <p *ngIf="apiKey">{{ apiKey }}</p>
-    <button>Generate new key</button>
+<div class="api-key-display">
+  <div class="obfu">
+    <div class="obfuscation"></div>
+    <p *ngIf="apiKey">{{ displayApiKey }}</p>
+  </div>
+  <button class="api-buttons" (click)="copyToClipboard()">Copy API Key</button>
+</div>
+    <button class="api-buttons generate" (click)="newApiKey()">Generate new key</button>
   </div>
 </div>

@@ -169,6 +169,31 @@ AppDataSource.initialize().then(async () => {
         });
     });
 
+    // Delete old API key, create new one
+    app.post('/regenerate-api-key/:githubId', (req, res) => {
+        const githubId = parseInt(req.params.githubId);
+        console.log(githubId)
+        const userPromise = AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+        userPromise.then(user => {
+            console.log("Regenerating API key: ", user);
+            if (!User) {
+                res.status(401).json('Unauthorized');
+                return;
+            }
+            console.log("Creating new API key");
+            const { v4: uuidv4 } = require('uuid');
+            // real
+            user.apiKey = uuidv4();
+            AppDataSource.manager.save(user)
+            .then(() => {
+                res.json({ apiKey: user.apiKey });
+            })
+            .catch(error => {
+                res.status(500).json('Internal Server Error');
+            });
+        });
+    });
+
     // Fetch the user by their github id
     app.get('/api/user/:githubId', (req: Request, res: Response) => {
         const githubId = parseInt(req.params.githubId, 10);

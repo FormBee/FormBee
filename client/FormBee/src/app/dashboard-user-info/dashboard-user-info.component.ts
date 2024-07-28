@@ -12,6 +12,7 @@ export class DashboardUserInfoComponent implements OnInit {
   @Input() githubId: string | undefined;
   @Input() name: string | undefined;
   apiKey: string | undefined;
+  displayApiKey: string | undefined;
   usagePercent = 50;
   fetchApiKey = async (githubId: string) => {
     console.log("Fetching API key");
@@ -25,17 +26,45 @@ export class DashboardUserInfoComponent implements OnInit {
       })
         .then((response) => response.json())
         .then((dataman) => {
-          console.log(dataman);
           if (dataman.apiKey) {
-            this.apiKey = dataman.apiKey.replace(/./g, "*");
+            this.apiKey = dataman.apiKey;
           }
+          console.log(dataman);
         });
     } else {
       console.log("API key found");
       if (data.apiKey) {
         this.apiKey = data.apiKey;
+        this.displayApiKey = this.apiKey;
+        if (this.apiKey) {
+          // Only show the last 4 characters of the API key
+          this.displayApiKey = '*'.repeat(this.apiKey.length - 4) + this.apiKey.slice(this.apiKey.length - 4);
+        }
       }
     }
+  }
+
+  copyToClipboard = () => {
+      if(this.apiKey) {
+        navigator.clipboard.writeText(this.apiKey);
+      }
+  }
+
+  newApiKey = () => {
+    fetch('http://localhost:3000/regenerate-api-key/' + this.githubId, {
+      method: 'post',
+    })
+    .then((response) => response.json())
+    .then((dataman) => {
+      if (dataman.apiKey) {
+        this.apiKey = dataman.apiKey;
+        this.displayApiKey = this.apiKey;
+        if (this.apiKey) {
+          // Only show the last 4 characters of the API key
+          this.displayApiKey = '*'.repeat(this.apiKey.length - 4) + this.apiKey.slice(this.apiKey.length - 4);
+        }
+      }
+     });
   }
 
   ngOnInit(): void {
