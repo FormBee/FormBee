@@ -26,11 +26,15 @@ export class DashboardUserInfoComponent implements OnInit {
         .then((response) => response.json())
         .then((dataman) => {
           console.log(dataman);
-          this.apiKey = dataman.apiKey;
+          if (dataman.apiKey) {
+            this.apiKey = dataman.apiKey.replace(/./g, "*");
+          }
         });
     } else {
       console.log("API key found");
-      this.apiKey = data.apiKey;
+      if (data.apiKey) {
+        this.apiKey = data.apiKey;
+      }
     }
   }
 

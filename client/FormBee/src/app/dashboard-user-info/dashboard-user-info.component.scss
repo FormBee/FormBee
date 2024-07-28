@@ -14,7 +14,7 @@ p {
 }
 
 .Section {
-    // background-color: rgba(255, 179, 0, 0.13);
+    background-color: rgba(255, 179, 0, 0.13);
     width: fit-content;
     height: 20vh;
     margin: 2rem;
@@ -72,6 +72,14 @@ p {
 }
 
 .api-key-handling {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin-top: 0px;
+    padding: 0.5rem;
+
     padding-top: 0px;
+    background-color: rgba(255, 179, 0, 0.13);
+    height: 20vh;
+    border-radius: 20px;
 }

@@ -10,9 +10,10 @@
     <p class="usage-text">{{ usagePercent }}%</p>
   </div>
   </div>
-    <div class="api-key-handling">
-      <p>Current API Key</p>
-      <p *ngIf="!apiKey">loading API key...</p>
-      <p *ngIf="apiKey">{{ apiKey }}</p>
-    </div>
+  <div class="api-key-handling">
+    <p>Current API Key</p>
+    <p *ngIf="!apiKey">loading API key...</p>
+    <p *ngIf="apiKey">{{ apiKey }}</p>
+    <button>Generate new key</button>
+  </div>
 </div>
