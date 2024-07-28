@@ -16,11 +16,20 @@ export class User {
     @Column({nullable: true})
     apiKey: string | null
 
-    @Column({nullable: true})
-    maxSubmissions: number | null
+    @Column({nullable: false, default: 250})
+    maxSubmissions: number;
 
-    @Column({nullable: true})
-    currentSubmissions: number | null
+    @Column({nullable: false, default: 0})
+    currentSubmissions: number;
+
+    @Column({nullable: false, default: 50})
+    localHostMaxSubmissions: number;
+
+    @Column({nullable: false, default: 0})
+    localHostCurrentSubmissions: number;
+
+    @Column({nullable: false, default: "Starter"})
+    subscriptionTier: string;
 }
 
     

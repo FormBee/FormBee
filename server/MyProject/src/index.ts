@@ -201,9 +201,11 @@ AppDataSource.initialize().then(async () => {
             res.status(400).json('Invalid GitHub ID');
             return;
         }
+        console.log("Github ID: ", githubId);
         AppDataSource.manager.findOne(User, { where: { githubId } })
             .then(user => {
-                if (user) {
+                console.log("User: ", user);
+                if (User) {
                     res.json(user);
                 } else {
                     res.status(404).json('User not found');

@@ -5,9 +5,9 @@
     <div class="user-section">
       <div class="user-info">
         <div class="user-details">
-          <button class="tier-button">Pro Plan</button>
+          <button class="tier-button">{{subscriptionTier}}</button>
           <div class="divider"></div>
-          <p>1/100</p>
+          <p>{{currentSubs}} / {{maxSubs}}</p>
         </div>
         <div class="dropdown">
         <img [src]="profilePic" alt="Profile Pic" class="profile-pic">
