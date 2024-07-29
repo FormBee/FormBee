@@ -30,6 +30,9 @@ export class User {
 
     @Column({nullable: false, default: "Starter"})
     subscriptionTier: string;
+
+    @Column({nullable: true})
+    email: string | null;
 }
 
     

@@ -66,7 +66,7 @@ AppDataSource.initialize().then(async () => {
     function sendMail(name, email, message, file, res) {
         const mailMessage = {
             from: process.env.user,
-            to: process.env.myemail,
+            to: [process.env.myemail,],
             subject: 'New form submission',
             text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
             attachments: file ? [{ filename: file.originalname, content: file.buffer }] : [],
