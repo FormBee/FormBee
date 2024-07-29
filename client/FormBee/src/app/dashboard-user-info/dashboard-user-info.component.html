@@ -5,9 +5,18 @@
     <div class="usage-info">
     <p>Current API Usage</p>
     <div class="usage-bar">
-      <div class="usage-progress" [style.width]="usagePercent + '%'"></div>
+      <div class="usage-progress" [style.width]="maxSubs > 0 ? currentSubs / maxSubs * 100 + '%' : '0%'"></div>
     </div>
-    <p class="usage-text">{{ usagePercent }}%</p>
+    <p class="usage-text">{{ currentSubs }} / {{ maxSubs }}</p>
+  </div>
+  </div>
+  <div class="Section">
+    <div class="usage-info">
+    <p>Current Localhost Submissions</p>
+    <div class="usage-bar">
+      <div class="usage-progress" [style.width]="localHostMaxSubs > 0 ? localHostCurrentSubs / localHostMaxSubs * 100 + '%' : '0%'"></div>
+    </div>
+    <p class="usage-text">{{ localHostCurrentSubs }} / {{ localHostMaxSubs }}</p>
   </div>
   </div>
   <div class="api-key-handling">

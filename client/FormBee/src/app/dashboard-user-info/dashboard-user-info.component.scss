@@ -11,29 +11,34 @@ p {
     flex-wrap: wrap;
     align-items:flex-start;
     margin-top: 60px;
+    justify-content: center;
 }
 
 .Section {
+    display: flex;
     background-color: rgba(255, 179, 0, 0.13);
-    width: fit-content;
+    width: 40vw;
     height: 20vh;
     margin: 2rem;
     margin-top: 0px;
+    margin-right: 0px;
     padding: 0.5rem;
 
     padding-top: 0px;
     border-radius: 20px;
+    justify-content: center;
+    align-items: center;
 }
 
 .usage-bar {
     background-color: #333;
     border-radius: 5px;
     height: 8px;
-    width: 100px;
+    width: 100%;
 }
 
 .usage-progress {
-    background-color: #4caf50;
+    background-color: #FFBD59;
     height: 100%;
     border-radius: 5px;
 }
@@ -77,11 +82,14 @@ p {
     align-items: center;
     margin-top: 0px;
     padding: 0.5rem;
-
+    align-items: center;
+    justify-content: center;
     padding-top: 0px;
     background-color: rgba(255, 179, 0, 0.13);
     height: 20vh;
     border-radius: 20px;
+    margin-left: 2rem;
+    width: 85vw;
 }
 
 .api-key-display {
@@ -134,4 +142,37 @@ p {
 
 .generate {
     margin-top: 10px;
+}
+
+.usage-info {
+    width: 100%;
+    p {
+        font-size: 1.1rem;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .api-key-handling {
+        width: 90vw;
+        margin-left: 0px;
+    }
+    .Section {
+        width: 90vw;
+        margin-left: 0px;
+
+    }
+    .api-key-display {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        button {
+            width: 50%;
+            margin-top: 10px;
+        }
+    }
+}
+
+p {
+    font-size: 1.3rem;
 }
