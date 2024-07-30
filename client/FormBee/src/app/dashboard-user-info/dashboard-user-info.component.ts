@@ -19,6 +19,7 @@ export class DashboardUserInfoComponent implements OnInit {
   localHostCurrentSubs: number = 0.0;
   localHostMaxSubs: number = 0.0;
   email: string = "Loading email...";
+  emailValid: boolean = false;
 
   fetchApiKey = async (githubId: string) => {
     console.log("Fetching API key");
@@ -78,10 +79,16 @@ export class DashboardUserInfoComponent implements OnInit {
      });
   }
 
+  isValidEmail(email: string) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
   updateEmail = () => {
     const emailInput = document.getElementById('email-input') as HTMLInputElement;
     if (emailInput) {
       const email = emailInput.value;
+      if (this.isValidEmail(email)) {
+      this.emailValid = false;
 
       fetch('http://localhost:3000/update-email/' + this.githubId, {
         method: 'post',
@@ -92,6 +99,10 @@ export class DashboardUserInfoComponent implements OnInit {
           email: email,
         }),
       });
+    } else {
+      console.error('Email input element is not found.');
+      this.emailValid = true;
+    }
     } else {
       console.error('Email input element is not found.');
     }
