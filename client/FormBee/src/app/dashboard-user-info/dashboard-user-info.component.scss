@@ -20,8 +20,6 @@ p {
     width: 40vw;
     height: 20vh;
     margin: 2rem;
-    margin-top: 0px;
-    margin-right: 0px;
     padding: 0.5rem;
 
     padding-top: 0px;
@@ -88,8 +86,9 @@ p {
     background-color: rgba(255, 179, 0, 0.13);
     height: 20vh;
     border-radius: 20px;
+    width: 90vw;
+    margin-right: 2rem;
     margin-left: 2rem;
-    width: 85vw;
 }
 
 .api-key-display {
@@ -159,7 +158,6 @@ p {
     }
     .Section {
         width: 90vw;
-        margin-left: 0px;
 
     }
     .api-key-display {
@@ -186,6 +184,7 @@ p {
     border-radius: 20px;
     height: 20vh;
     margin: 2rem;
+    margin-bottom: 0px;
     padding: 0.5rem;
     justify-content: center;
     input {
@@ -209,6 +208,12 @@ p {
     color: #c69245;
 }
 
-.email {
-    margin-bottom: 32px;
+
+@media screen and (max-width: 800px) {
+    .Section {
+        width: 90vw;
+    }
+    .local-host {
+        margin-top: 0px;
+    }
 }
