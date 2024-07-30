@@ -1,5 +1,5 @@
 p {
-    color: white;
+    color: #FFBD59;
     margin-top: 0px;
     padding-top: 0px;
 }
@@ -10,13 +10,18 @@ p {
     flex-direction: row;
     flex-wrap: wrap;
     align-items:flex-start;
-    margin-top: 60px;
+    margin-top: 1rem;
     justify-content: center;
+    p {
+        margin-bottom: 1rem;
+    }
 }
 
 .Section {
     display: flex;
-    background-color: rgba(255, 179, 0, 0.13);
+    // background-color: rgba(255, 179, 0, 0.13);
+    background-color: #2F4858;
+    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
     width: 40vw;
     height: 20vh;
     margin: 2rem;
@@ -26,6 +31,7 @@ p {
     border-radius: 20px;
     justify-content: center;
     align-items: center;
+    border: 1px ridge #FFBD59;
 }
 
 .usage-bar {
@@ -42,7 +48,8 @@ p {
 }
 
 .usage-text {
-    margin-right: 0.5rem;
+    // margin-right: 0.5rem;
+    margin-top: .5rem;
 }
 
 .divider {
@@ -71,7 +78,7 @@ p {
 
     font-size: 2rem;
     margin-top: 4rem;
-    margin-left: 40px;
+    margin-left: 3rem;
 }
 
 .api-key-handling {
@@ -82,13 +89,20 @@ p {
     padding: 0.5rem;
     align-items: center;
     justify-content: center;
-    padding-top: 0px;
-    background-color: rgba(255, 179, 0, 0.13);
+    // background-image: linear-gradient(to right, rgb(36, 28, 7),rgb(63, 50, 16), rgba(255, 179, 0, 0));
+    // background-image: linear-gradient(to right, rgb(53, 29, 53), rgba(59, 33, 61, 0.297));
+    background-color: #2F4858;
+    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+    border: 1px ridge #FFBD59;
     height: 20vh;
     border-radius: 20px;
     width: 90vw;
     margin-right: 2rem;
     margin-left: 2rem;
+    .email-text {
+        margin-bottom: 0px;
+    }
+    
 }
 
 .api-key-display {
@@ -104,7 +118,7 @@ p {
     right: 0;
     bottom: 0;
     z-index: 10; /* Ensure obfuscation is above the text */
-    background-image: linear-gradient(to right, rgb(36, 28, 7),rgb(63, 50, 16), rgba(255, 179, 0, 0));
+    background-image: linear-gradient(to right, #273b48,#2F4858, rgba(255, 179, 0, 0));
     border-radius: 10px;
     p {
         margin-bottom: 0px;
@@ -153,8 +167,10 @@ p {
 
 @media screen and (max-width: 480px) {
     .api-key-handling {
-        width: 90vw;
-        margin-left: 0px;
+        width: 80vw;
+        p {
+            font-size: 1rem;
+        }
     }
     .Section {
         width: 90vw;
@@ -180,7 +196,7 @@ p {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgba(255, 179, 0, 0.13);
+    // background-color: rgba(255, 179, 0, 0.13);
     border-radius: 20px;
     height: 20vh;
     margin: 2rem;
@@ -199,8 +215,8 @@ p {
 }
 
 .email p {
-    font-size: 1.1rem;
-    color: #fff;
+    font-size: 1.3rem;
+    color: #FFBD59;
     text-align: center;
 }
 
@@ -209,11 +225,15 @@ p {
 }
 
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 812px) {
     .Section {
         width: 90vw;
     }
     .local-host {
         margin-top: 0px;
     }
+}
+
+.email-btn {
+    margin: 10px;
 }

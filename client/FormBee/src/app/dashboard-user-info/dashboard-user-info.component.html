@@ -2,8 +2,9 @@
 
 <div class="user-info">
   <div class="api-key-handling email">
-    <p>Recipient Email</p>
-    <input type="text" placeholder="Enter email">
+    <p class="email-text">Recipient Email</p>
+    <input type="email" placeholder="Set email" value="{{ email }}" id="email-input">
+    <button class="api-buttons email-btn" (click)="updateEmail()">Update Email</button>
   </div>
   <div class="Section">
     <div class="usage-info">

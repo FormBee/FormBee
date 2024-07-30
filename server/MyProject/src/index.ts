@@ -216,7 +216,23 @@ AppDataSource.initialize().then(async () => {
             });
     });
 
-
+    // Update email
+    app.post('/update-email/:githubId', (req, res) => {
+        const githubId = parseInt(req.params.githubId);
+        console.log(githubId)
+        const userPromise = AppDataSource.manager.findOne(User, { where: { githubId } });
+        userPromise.then(user => {
+            console.log("User: ", user);
+            if (User) {
+                user.email = req.body.email;
+                return AppDataSource.manager.save(user)
+            }
+            res.status(404).json('User not found');
+        })
+        .catch(error => {
+            res.status(500).json('Internal Server Error');
+        });
+    });
 
     // register express routes from defined application routes
     Routes.forEach(route => {

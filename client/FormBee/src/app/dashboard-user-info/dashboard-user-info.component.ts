@@ -78,6 +78,24 @@ export class DashboardUserInfoComponent implements OnInit {
      });
   }
 
+  updateEmail = () => {
+    const emailInput = document.getElementById('email-input') as HTMLInputElement;
+    if (emailInput) {
+      const email = emailInput.value;
+
+      fetch('http://localhost:3000/update-email/' + this.githubId, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: email,
+        }),
+      });
+    } else {
+      console.error('Email input element is not found.');
+    }
+  }
   ngOnInit(): void {
     if (!this.githubId) {
       return;
