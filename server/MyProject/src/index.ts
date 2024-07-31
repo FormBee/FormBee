@@ -50,9 +50,10 @@ AppDataSource.initialize().then(async () => {
                     res.status(403).json('You have reached your submission limit');
                     return;
                 } else {
+                    const recEmail = user.email;
                     console.log("Sending email");
                     user.currentSubmissions++;
-                    sendMail(name, email, message, null, res);
+                    sendMail(recEmail, name, email, message, null, res);
                     return AppDataSource.manager.save(user);
                 }
             })
@@ -61,10 +62,10 @@ AppDataSource.initialize().then(async () => {
             });
     });
 
-    function sendMail(name, email, message, file, res) {
+    function sendMail(recEmail, name, email, message, file, res) {        
         const mailMessage = {
             from: process.env.user,
-            to: [process.env.myemail,],
+            to: [recEmail,],
             subject: 'New form submission',
             text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
             attachments: file ? [{ filename: file.originalname, content: file.buffer }] : [],
@@ -250,7 +251,7 @@ AppDataSource.initialize().then(async () => {
             res.status(500).json('Internal Server Error');
         });
     });
-    
+
 
     // register express routes from defined application routes
     Routes.forEach(route => {
