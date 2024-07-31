@@ -33,6 +33,9 @@ export class User {
 
     @Column({nullable: true})
     email: string | null;
+
+    @Column({nullable: true})
+    apiResetDate: Date | null;
 }
 
     

@@ -4,12 +4,14 @@ import * as multer from "multer";
 import * as nodemailer from "nodemailer";
 import * as cors from "cors";
 import * as dotenv from "dotenv";
+import * as cron from 'node-cron';
 import { Request, Response } from "express";
 import { AppDataSource } from "./data-source";
 import { Routes } from "./routes";
 import { User } from "./entity/User";
 import createChallenge = require("./Alcha/Challenge.js");
 import axios from 'axios';
+
 
 dotenv.config();
 
@@ -36,27 +38,23 @@ AppDataSource.initialize().then(async () => {
     app.post('/:apikey', upload.none(), (req, res) => {
         const { apikey } = req.params;
         const { name, email, message } = req.body;
-
-        if (apikey !== 'apikey') {
-            res.status(401).json('Unauthorized');
-            return;
-        }
         // Find the user in the database with API key, then increment the current submissions
         AppDataSource.manager.findOne(User, { where: { apiKey: apikey } })
             .then(user => {
                 if (!user) {
+                    console.log("User not found");
                     res.status(401).json('Unauthorized');
                     return;
                 } else if (user.maxSubmissions && user.currentSubmissions >= user.maxSubmissions) {
+                    console.log("Reached submission limit");
                     res.status(403).json('You have reached your submission limit');
                     return;
                 } else {
+                    console.log("Sending email");
                     user.currentSubmissions++;
+                    sendMail(name, email, message, null, res);
                     return AppDataSource.manager.save(user);
                 }
-            })
-            .then(() => {
-                sendMail(name, email, message, null, res);
             })
             .catch(error => {
                 res.status(500).json('Internal Server Error');
@@ -119,11 +117,24 @@ AppDataSource.initialize().then(async () => {
             });
             //Check if the github id is already in our database. 
             const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubdata.data.id } });
+            const getSameDayNextMonth = async (date: Date) => {
+                let nextMonth = new Date(date);
+                nextMonth.setMonth(nextMonth.getMonth() + 1);
+            
+                // Handle edge cases where the next month might have fewer days
+                if (nextMonth.getDate() < date.getDate()) {
+                    nextMonth.setDate(0); // Sets to the last day of the previous month
+                } 
+                return nextMonth;
+            }
+            let currentDate = new Date();
+            let sameDayNextMonth = await getSameDayNextMonth(currentDate);
             if (!user) {
                 await AppDataSource.manager.save(
                     AppDataSource.manager.create(User, {
                         name: githubdata.data.login,
-                        githubId: githubdata.data.id
+                        githubId: githubdata.data.id,
+                        apiResetDate: sameDayNextMonth,
                     })
                 );
             res.redirect(`http://localhost:4200/login?token=${tokenData.access_token}`);
@@ -138,7 +149,6 @@ AppDataSource.initialize().then(async () => {
 
     //Route for creating a new API key for the user
     app.post('/create-api-key/:githubId', (req, res) => {
-        console.log("here")
         const githubId = parseInt(req.params.githubId);
         console.log(githubId)
         const userPromise = AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
@@ -245,6 +255,38 @@ AppDataSource.initialize().then(async () => {
             }
         });
     });
+
+
+    cron.schedule('0 0 * * *', async () => { // Run the cron job every day at midnight
+        console.log("Running cron job to reset API usage");
+    
+        try {
+            const users = await AppDataSource.manager.find(User); // Fetch all users
+    
+            const today = new Date();
+    
+            for (const user of users) {
+                // Check if today is the user's API reset date
+                if (today >= user.apiResetDate) {
+                    user.currentSubmissions = 0;
+                    user.localHostCurrentSubmissions = 0;
+                    user.apiResetDate = addMonths(today, 1); // Set the next reset date to 1 month from now
+                    await AppDataSource.manager.save(user); // Save the updated user
+                    console.log(`Reset API usage for user with ID ${user.id}`);
+                } else {
+                    console.log("Not resetting API usage for user with ID ", user.id);
+                }
+            }
+        } catch (error) {
+            console.error('Error resetting API usage:', error);
+        }
+    });
+    // Helper function to add months to a date
+    function addMonths(date: Date, months: number): Date {
+        const newDate = new Date(date);
+        newDate.setMonth(newDate.getMonth() + months);
+        return newDate;
+    }
 
     app.listen(3000);
 
