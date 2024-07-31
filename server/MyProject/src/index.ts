@@ -40,7 +40,7 @@ AppDataSource.initialize().then(async () => {
         const { name, email, message } = req.body;
         // Find the user in the database with API key, then increment the current submissions
         AppDataSource.manager.findOne(User, { where: { apiKey: apikey } })
-            .then(user => {
+            .then(async user => {
                 if (!user) {
                     console.log("User not found");
                     res.status(401).json('Unauthorized');
@@ -52,9 +52,19 @@ AppDataSource.initialize().then(async () => {
                 } else {
                     const recEmail = user.email;
                     console.log("Sending email");
-                    user.currentSubmissions++;
-                    sendMail(recEmail, name, email, message, null, res);
-                    return AppDataSource.manager.save(user);
+                    // check if the users origin was from the local host
+                    if (req.headers.origin.includes("localhost")) {
+                        user.localHostCurrentSubmissions++;
+                        await sendMail(recEmail, name, email, message, null, res);
+                        return AppDataSource.manager.save(user);
+                    } else {
+                        user.currentSubmissions++;
+                        await sendMail(recEmail, name, email, message, null, res);
+                        return AppDataSource.manager.save(user);
+                    }
+                    // user.currentSubmissions++;
+                    // sendMail(recEmail, name, email, message, null, res);
+                    // return AppDataSource.manager.save(user);
                 }
             })
             .catch(error => {
@@ -62,7 +72,7 @@ AppDataSource.initialize().then(async () => {
             });
     });
 
-    function sendMail(recEmail, name, email, message, file, res) {        
+    async function sendMail(recEmail, name, email, message, file, res) {        
         const mailMessage = {
             from: process.env.user,
             to: [recEmail,],
