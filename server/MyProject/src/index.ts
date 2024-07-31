@@ -45,7 +45,7 @@ AppDataSource.initialize().then(async () => {
                     console.log("User not found");
                     res.status(401).json('Unauthorized');
                     return;
-                } else if (user.maxSubmissions && user.currentSubmissions >= user.maxSubmissions) {
+                } else if (user.maxSubmissions && user.currentSubmissions >= user.maxSubmissions || user.localHostMaxSubmissions && user.localHostCurrentSubmissions >= user.localHostMaxSubmissions) {
                     console.log("Reached submission limit");
                     res.status(403).json('You have reached your submission limit');
                     return;
