@@ -5,6 +5,4 @@
 The open-source form solution for data privacy conscious developers.
 
 # TODO
-- [] Seperate API usage for localhost, so users can test without wasting API usage.
 - [] Toggle in admin panel for adding website URL for CORS to only allow requests from the clients domain.
-- [] Multiple email recipients logic + frontend.
