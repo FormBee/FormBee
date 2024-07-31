@@ -80,15 +80,18 @@ AppDataSource.initialize().then(async () => {
         });
     }
 
+
     app.get('/challenge', (req, res) => {
         createChallenge(req, res);
     });
+
 
     app.get('/auth/github', (req, res) => {
         const githubAuthUrl = 'https://github.com/login/oauth/authorize';
         const clientId = process.env.GITHUB_CLIENT_ID;
         res.redirect(`${githubAuthUrl}?client_id=${clientId}`);
     });
+
     
     app.get('/auth/github/callback', async (req, res) => {
         const code = req.query.code;
@@ -147,6 +150,7 @@ AppDataSource.initialize().then(async () => {
         }
     });
 
+
     //Route for creating a new API key for the user
     app.post('/create-api-key/:githubId', (req, res) => {
         const githubId = parseInt(req.params.githubId);
@@ -179,6 +183,7 @@ AppDataSource.initialize().then(async () => {
         });
     });
 
+
     // Delete old API key, create new one
     app.post('/regenerate-api-key/:githubId', (req, res) => {
         const githubId = parseInt(req.params.githubId);
@@ -204,6 +209,7 @@ AppDataSource.initialize().then(async () => {
         });
     });
 
+
     // Fetch the user by their github id
     app.get('/api/user/:githubId', (req: Request, res: Response) => {
         const githubId = parseInt(req.params.githubId, 10);
@@ -226,6 +232,7 @@ AppDataSource.initialize().then(async () => {
             });
     });
 
+
     // Update email
     app.post('/update-email/:githubId', (req, res) => {
         const githubId = parseInt(req.params.githubId);
@@ -243,6 +250,7 @@ AppDataSource.initialize().then(async () => {
             res.status(500).json('Internal Server Error');
         });
     });
+    
 
     // register express routes from defined application routes
     Routes.forEach(route => {
