@@ -36,6 +36,15 @@ export class User {
 
     @Column({nullable: true})
     apiResetDate: Date | null;
+
+    @Column({nullable: true, default: false})
+    returnBoolean: boolean | null;
+
+    @Column({nullable: true})
+    returnMessage: string | null;
+
+    @Column({nullable: true})
+    emailPassword: string | null;
 }
 
     

@@ -56,6 +56,16 @@ AppDataSource.initialize().then(async () => {
                     if (req.headers.origin.includes("localhost")) {
                         user.localHostCurrentSubmissions++;
                         await sendMail(recEmail, name, email, message, null, res);
+                        if (user.returnBoolean) {
+                            axios.post('http://localhost:3000/return-email/' + user.githubId, {
+                                emailToReturnTo: email,
+                                password: user.emailPassword,
+                                message: user.returnMessage,
+                                usersEmail: user.email,
+                            });
+                        } else {
+                            return AppDataSource.manager.save(user);
+                        }
                         return AppDataSource.manager.save(user);
                     } else {
                         user.currentSubmissions++;
@@ -255,6 +265,48 @@ AppDataSource.initialize().then(async () => {
                 user.email = req.body.email;
                 return AppDataSource.manager.save(user)
             }
+            res.status(404).json('User not found');
+        })
+        .catch(error => {
+            res.status(500).json('Internal Server Error');
+        });
+    });
+
+    
+    // Send a return email to the form submitter.
+    app.post('/return-email/:githubId', (req, res) => {
+        const githubId = parseInt(req.params.githubId);
+        const { usersEmail  } = req.body;
+        console.log(githubId)
+        async function sendMail(emailToReturnTo, emailPassword, message) {      
+            const transporterForReturn = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: usersEmail,
+                    pass: emailPassword,
+                },
+            });
+            const mailMessage = {
+                from: usersEmail,
+                to: [emailToReturnTo,],
+                subject: 'New form submission',
+                text: `Message: ${message}`,
+            };
+
+            transporterForReturn.sendMail(mailMessage, (error) => {
+                if (error) {
+                    console.error(error);
+                    res.status(500).json('Error sending email');
+                } else {
+                    res.json('Email sent successfully');
+                }
+            });
+        }
+        const userPromise = AppDataSource.manager.findOne(User, { where: { githubId } });
+        userPromise.then(user => {
+            console.log("User: ", user);
+                sendMail(req.body.emailToReturnTo, req.body.password, req.body.message);
+                return AppDataSource.manager.save(user)
             res.status(404).json('User not found');
         })
         .catch(error => {
