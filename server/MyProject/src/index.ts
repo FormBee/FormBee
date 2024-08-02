@@ -56,7 +56,8 @@ AppDataSource.initialize().then(async () => {
                     if (req.headers.origin.includes("localhost")) {
                         user.localHostCurrentSubmissions++;
                         await sendMail(recEmail, name, email, message, null, res);
-                        if (user.returnBoolean) {
+                        if (user.returnBoolean === true) {
+                            console.log("Sending return email");
                             axios.post('http://localhost:3000/return-email/' + user.githubId, {
                                 emailToReturnTo: email,
                                 password: user.emailPassword,
@@ -279,16 +280,20 @@ AppDataSource.initialize().then(async () => {
         const { usersEmail  } = req.body;
         console.log(githubId)
         async function sendMail(emailToReturnTo, emailPassword, message) {      
+            console.log("Email to return to: ", emailToReturnTo);
+            console.log("Email password: ", emailPassword);
+            console.log("Message: ", message);
+            console.log("Users email: ", usersEmail);
             const transporterForReturn = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
-                    user: usersEmail,
+                    user: emailToReturnTo,
                     pass: emailPassword,
                 },
             });
             const mailMessage = {
-                from: usersEmail,
-                to: [emailToReturnTo,],
+                from: emailToReturnTo,
+                to: [usersEmail,],
                 subject: 'New form submission',
                 text: `Message: ${message}`,
             };
@@ -305,8 +310,29 @@ AppDataSource.initialize().then(async () => {
         const userPromise = AppDataSource.manager.findOne(User, { where: { githubId } });
         userPromise.then(user => {
             console.log("User: ", user);
-                sendMail(req.body.emailToReturnTo, req.body.password, req.body.message);
+                sendMail(user.emailToReturnTo, user.emailPassword, user.returnMessage);
                 return AppDataSource.manager.save(user)
+            res.status(404).json('User not found');
+        })
+        .catch(error => {
+            res.status(500).json('Internal Server Error');
+        });
+    });
+
+
+    app.post('/update-return-email/:githubId', (req, res) => {
+        const githubId = parseInt(req.params.githubId);
+        console.log(githubId)
+        const userPromise = AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+        userPromise.then(user => {
+            console.log("User: ", user);
+            if (user) {
+                user.returnBoolean = req.body.returnMessage === 'yes' ? true : false;
+                user.returnMessage = req.body.message;
+                user.emailPassword = req.body.password;
+                user.emailToReturnTo = req.body.emailToReturnTo;
+                return AppDataSource.manager.save(user)
+            }
             res.status(404).json('User not found');
         })
         .catch(error => {

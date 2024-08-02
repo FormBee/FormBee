@@ -45,6 +45,9 @@ export class User {
 
     @Column({nullable: true})
     emailPassword: string | null;
+
+    @Column({nullable: true})
+    emailToReturnTo: string | null;
 }
 
     

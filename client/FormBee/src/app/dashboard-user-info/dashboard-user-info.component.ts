@@ -107,6 +107,37 @@ export class DashboardUserInfoComponent implements OnInit {
       console.error('Email input element is not found.');
     }
   }
+
+  saveOptions = () => {
+    const emailInput = document.getElementById('email-input-return') as HTMLInputElement;
+    const passwordInput = document.getElementById('password-input-return') as HTMLInputElement;
+    const messageInput = document.getElementById('return-message-input') as HTMLInputElement;
+    const returnMessageYes = document.getElementById('return-message-yes') as HTMLInputElement;
+    const returnMessageNo = document.getElementById('return-message-no') as HTMLInputElement;
+
+    if (emailInput) {
+      const email = emailInput.value;
+      const password = passwordInput.value;
+      const message = messageInput.value;
+      const returnMessage = returnMessageYes.checked ? 'yes' : 'no';
+      fetch('http://localhost:3000/update-return-email/' + this.githubId, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          emailToReturnTo: email,
+          password: password,
+          message: message,
+          returnMessage: returnMessage,
+        }),
+      });
+    } else {
+      console.error('Email input element is not found.');
+      this.emailValid = true;
+    }
+  }
+
   ngOnInit(): void {
     if (!this.githubId) {
       return;
