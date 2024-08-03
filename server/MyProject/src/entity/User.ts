@@ -1,4 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { encrypt, decrypt } from "../miscUtils/encryption"
+
 
 @Entity()
 export class User {
@@ -31,7 +33,10 @@ export class User {
     @Column({nullable: false, default: "Starter"})
     subscriptionTier: string;
 
-    @Column({nullable: true})
+    @Column({nullable: true, transformer: {
+        to: (value: string | null) => encrypt(value),
+        from: (value: string | null) => decrypt(value),
+    }})
     email: string | null;
 
     @Column({nullable: true})
@@ -43,11 +48,15 @@ export class User {
     @Column({nullable: true})
     returnMessage: string | null;
 
-    @Column({nullable: true})
-    emailPassword: string | null;
-
-    @Column({nullable: true})
+    @Column({nullable: true, transformer: {
+        to: (value: string | null) => encrypt(value),
+        from: (value: string | null) => decrypt(value),
+    }})
+    fromEmailPassword: string | null;
+    @Column({nullable: true, transformer: {
+        to: (value: string | null) => encrypt(value),
+        from: (value: string | null) => decrypt(value),
+    }})
     emailToReturnFrom: string | null;
 }
-
     

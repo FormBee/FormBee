@@ -177,7 +177,7 @@ AppDataSource.initialize().then(async () => {
     //Route for creating a new API key for the user
     app.post('/create-api-key/:githubId', (req, res) => {
         const githubId = parseInt(req.params.githubId);
-        console.log(githubId)
+        console.log("in create-api-key: ", githubId)
         const userPromise = AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
         userPromise.then(user => {
             if (!user) {
@@ -210,7 +210,7 @@ AppDataSource.initialize().then(async () => {
     // Delete old API key, create new one
     app.post('/regenerate-api-key/:githubId', (req, res) => {
         const githubId = parseInt(req.params.githubId);
-        console.log(githubId)
+        console.log("in regenerate-api-key: ", githubId)
         const userPromise = AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
         userPromise.then(user => {
             console.log("Regenerating API key: ", user);
@@ -259,7 +259,7 @@ AppDataSource.initialize().then(async () => {
     // Update email
     app.post('/update-email/:githubId', (req, res) => {
         const githubId = parseInt(req.params.githubId);
-        console.log(githubId)
+        console.log("in updade-email: ", githubId)
         const userPromise = AppDataSource.manager.findOne(User, { where: { githubId } });
         userPromise.then(user => {
             console.log("User: ", user);
@@ -279,7 +279,7 @@ AppDataSource.initialize().then(async () => {
     app.post('/return-email/:githubId', (req, res) => {
         const githubId = parseInt(req.params.githubId);
         const { usersEmail  } = req.body;
-        console.log(githubId)
+        console.log("in return-email: ", githubId)
         async function sendMail(emailToReturnFrom, fromEmailPassword, message) {   
             const transporterForReturn = nodemailer.createTransport({
                 service: 'gmail',
@@ -319,7 +319,7 @@ AppDataSource.initialize().then(async () => {
 
     app.post('/update-return-email/:githubId', (req, res) => {
         const githubId = parseInt(req.params.githubId);
-        console.log(githubId)
+        console.log("in update-return-email: ", githubId)
         const userPromise = AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
         userPromise.then(user => {
             console.log("User: ", user);
