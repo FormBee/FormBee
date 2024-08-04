@@ -147,7 +147,7 @@ AppDataSource.initialize().then(async () => {
             if (!tokenData.access_token) {
                 throw new Error('Access token not found in the response');
             }
-            console.log(tokenData);
+            // console.log(tokenData);
             let githubdata = await axios.get(`https://api.github.com/user`, {
                 headers: {
                     Authorization: `Bearer ${tokenData.access_token}`,
@@ -252,10 +252,10 @@ AppDataSource.initialize().then(async () => {
             res.status(400).json('Invalid GitHub ID');
             return;
         }
-        console.log("Github ID: ", githubId);
+        // console.log("Github ID: ", githubId);
         AppDataSource.manager.findOne(User, { where: { githubId } })
             .then(user => {
-                console.log("User: ", user);
+                // console.log("User: ", user);
                 if (User) {
                     res.json(user);
                 } else {
@@ -271,10 +271,10 @@ AppDataSource.initialize().then(async () => {
     // Update email
     app.post('/update-email/:githubId', (req, res) => {
         const githubId = parseInt(req.params.githubId);
-        console.log("in updade-email: ", githubId)
+        // console.log("in updade-email: ", githubId)
         const userPromise = AppDataSource.manager.findOne(User, { where: { githubId } });
         userPromise.then(user => {
-            console.log("User: ", user);
+            // console.log("User: ", user);
             if (User) {
                 user.email = req.body.email;
                 return AppDataSource.manager.save(user)
@@ -287,46 +287,46 @@ AppDataSource.initialize().then(async () => {
     });
 
     
-    // // Send a return email to the form submitter.
-    // app.post('/return-email/:githubId', (req, res) => {
-    //     const githubId = parseInt(req.params.githubId);
-    //     const { usersEmail  } = req.body;
-    //     console.log("in return-email: ", githubId)
-    //     async function sendMail(emailToReturnFrom, fromEmailPassword, message) {   
-    //         const transporterForReturn = nodemailer.createTransport({
-    //             service: 'gmail',
-    //             auth: {
-    //                 user: emailToReturnFrom,
-    //                 pass: fromEmailPassword,
-    //             },
-    //         });
-    //         const mailMessage = {
-    //             from: emailToReturnFrom,
-    //             to: [usersEmail,],
-    //             subject: 'New form submission',
-    //             text: `Message: ${message}`,
-    //         };
+    // Send a return email to the form submitter.
+    app.post('/return-email/:githubId', (req, res) => {
+        const githubId = parseInt(req.params.githubId);
+        const { usersEmail  } = req.body;
+        console.log("in return-email: ", githubId)
+        async function sendMail(emailToReturnFrom, fromEmailPassword, message) {   
+            const transporterForReturn = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: emailToReturnFrom,
+                    pass: fromEmailPassword,
+                },
+            });
+            const mailMessage = {
+                from: emailToReturnFrom,
+                to: [usersEmail,],
+                subject: 'New form submission',
+                text: `Message: ${message}`,
+            };
 
-    //         transporterForReturn.sendMail(mailMessage, (error) => {
-    //             if (error) {
-    //                 console.error(error);
-    //                 res.status(500).json('Error sending email');
-    //             } else {
-    //                 res.json('Email sent successfully');
-    //             }
-    //         });
-    //     }
-    //     const userPromise = AppDataSource.manager.findOne(User, { where: { githubId } });
-    //     userPromise.then(user => {
-    //         console.log("User: ", user);
-    //             sendMail(user.emailToReturnFrom, user.fromEmailPassword, user.returnMessage);
-    //             return AppDataSource.manager.save(user)
-    //         res.status(404).json('User not found');
-    //     })
-    //     .catch(error => {
-    //         res.status(500).json('Internal Server Error');
-    //     });
-    // });
+            transporterForReturn.sendMail(mailMessage, (error) => {
+                if (error) {
+                    console.error(error);
+                    res.status(500).json('Error sending email');
+                } else {
+                    res.json('Email sent successfully');
+                }
+            });
+        }
+        // const userPromise = AppDataSource.manager.findOne(User, { where: { githubId } });
+        // userPromise.then(user => {
+        //     console.log("User: ", user);
+                sendMail(user.emailToReturnFrom, user.fromEmailPassword, user.returnMessage);
+        //         return AppDataSource.manager.save(user)
+        //     res.status(404).json('User not found');
+        // })
+        // .catch(error => {
+        //     res.status(500).json('Internal Server Error');
+        // });
+    });
 
 
     // app.post('/update-return-email/:githubId', (req, res) => {
@@ -350,6 +350,8 @@ AppDataSource.initialize().then(async () => {
     // });
 
 
+//________________________________________________________________________________
+
     //endpoint for google oauth
     app.get('/oauth/google/:githubId', (req, res) => {
         console.log("in google oauth");
@@ -357,11 +359,13 @@ AppDataSource.initialize().then(async () => {
         const oauth2Client = new google.auth.OAuth2(
             process.env.GOOGLE_CLIENT_ID,
             process.env.GOOGLE_CLIENT_SECRET,
-            "http://localhost:3000/auth/google/callback"
+            "http://localhost:3000/google/callback"
           );
           
           const scopes = [
-            'https://www.googleapis.com/auth/gmail.addons.current.action.compose'
+            'https://www.googleapis.com/auth/gmail.addons.current.action.compose',
+            'https://www.googleapis.com/auth/userinfo.email',
+            'https://www.googleapis.com/auth/gmail.compose',
           ];
           
           // Generate a secure random state value.
@@ -385,30 +389,63 @@ AppDataSource.initialize().then(async () => {
         res.redirect(authorizationUrl);
     });
 
-    app.get('/auth/google/callback', async (req, res) => {
-        const code = req.query.code;
-        console.log("in google callback: ", code);
-        const tokenResponse = await axios.post('https://oauth2.googleapis.com/token', {
+    
+    app.get("/google/callback", async (req, res) => {
+        try {
+          console.log(req.query);
+      
+          const { code } = req.query;
+      
+          const data = {
             code,
             client_id: process.env.GOOGLE_CLIENT_ID,
             client_secret: process.env.GOOGLE_CLIENT_SECRET,
-            redirect_uri: 'http://localhost:4200/dashboard',
-            grant_type: 'authorization_code',
-        }, {
+            redirect_uri: "http://localhost:3000/google/callback",
+            grant_type: "authorization_code",
+          };
+      
+          console.log("Data: ", data);
+      
+          // Exchange authorization code for access token & id_token
+          const response = await axios({
+            url: "https://oauth2.googleapis.com/token",
+            method: "POST",
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                Accept: 'application/json',
+              "Content-Type": "application/json",
+              Accept: "application/json",
             },
-        });
+            data: JSON.stringify(data),
+          });
 
-        const tokenData = tokenResponse.data;
-        if (!tokenData.access_token) {
-            throw new Error('Access token not found in the response');
+          const access_token_data = response.data;
+          const { access_token } = access_token_data;
+          console.log("Access token: ", access_token);
+    
+          // Fetch user profile with the access token
+          const userInfoResponse = await axios({
+            url: "https://www.googleapis.com/oauth2/v1/userinfo",
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+            },
+          });
+      
+          const userInfo = userInfoResponse.data;
+          console.log('User Info:', userInfo);
+      
+          // Extract email and other desired info
+          const userEmail = userInfo.email;
+          console.log('User Email:', userEmail);
+      
+          // Redirect to your application's dashboard or handle information as needed
+          res.redirect("http://localhost:4200/dashboard");
+        } catch (error) {
+          console.error('Error during OAuth callback:', error);
+          res.status(500).json({ error: 'An error occurred during the authentication process' });
         }
-        res.redirect('http://localhost:4200/dashboard');
+      });
 
-    });
-
+      // ______________________________________________________________________________________
 
     // register express routes from defined application routes
     Routes.forEach(route => {
