@@ -69,17 +69,13 @@ AppDataSource.initialize().then(async () => {
                     if (req.headers.origin.includes("localhost")) {
                         user.localHostCurrentSubmissions++;
                         await sendMail(recEmail, name, email, message, null, res);
-                        if (user.returnBoolean === true) {
                             console.log("Sending return email");
-                            axios.post('http://localhost:3000/return-email/' + user.githubId, {
-                                emailToReturnFrom: email,
-                                password: user.fromEmailPassword,
-                                message: user.returnMessage,
-                                usersEmail: email,
-                            });
-                        } else {
-                            return AppDataSource.manager.save(user);
-                        }
+                        axios.post('http://localhost:3000/return-email/' + user.githubId, {
+                            emailToReturnFrom: email,
+                            password: user.fromEmailPassword,
+                            message: user.returnMessage,
+                            usersEmail: email,
+                        });
                         return AppDataSource.manager.save(user);
                     } else {
                         user.currentSubmissions++;
@@ -285,23 +281,28 @@ AppDataSource.initialize().then(async () => {
             res.status(500).json('Internal Server Error');
         });
     });
-
     
     // Send a return email to the form submitter.
     app.post('/return-email/:githubId', (req, res) => {
         const githubId = parseInt(req.params.githubId);
         const { usersEmail  } = req.body;
         console.log("in return-email: ", githubId)
-        async function sendMail(emailToReturnFrom, fromEmailPassword, message) {   
-            const transporterForReturn = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: emailToReturnFrom,
-                    pass: fromEmailPassword,
-                },
-            });
+
+        const transporterForReturn = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: false,
+            auth: {
+                type: "OAuth2",
+                user: "formbee632@gmail.com",
+                accessToken: "",
+            },
+        });
+        
+        async function sendMail(message) {   
+            console.log("sendmail func");
             const mailMessage = {
-                from: emailToReturnFrom,
+                from: "formbee632@gmail.com",
                 to: [usersEmail,],
                 subject: 'New form submission',
                 text: `Message: ${message}`,
@@ -309,7 +310,7 @@ AppDataSource.initialize().then(async () => {
 
             transporterForReturn.sendMail(mailMessage, (error) => {
                 if (error) {
-                    console.error(error);
+                    // console.error(error);
                     res.status(500).json('Error sending email');
                 } else {
                     res.json('Email sent successfully');
@@ -319,7 +320,7 @@ AppDataSource.initialize().then(async () => {
         // const userPromise = AppDataSource.manager.findOne(User, { where: { githubId } });
         // userPromise.then(user => {
         //     console.log("User: ", user);
-                sendMail(user.emailToReturnFrom, user.fromEmailPassword, user.returnMessage);
+                sendMail("hi");
         //         return AppDataSource.manager.save(user)
         //     res.status(404).json('User not found');
         // })
@@ -418,8 +419,9 @@ AppDataSource.initialize().then(async () => {
           });
 
           const access_token_data = response.data;
-          const { access_token } = access_token_data;
+          const { access_token, refresh_token, } = access_token_data;
           console.log("Access token: ", access_token);
+          console.log("Refresh token: ", refresh_token);
     
           // Fetch user profile with the access token
           const userInfoResponse = await axios({
