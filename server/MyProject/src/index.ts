@@ -5,6 +5,9 @@ import * as nodemailer from "nodemailer";
 import * as cors from "cors";
 import * as dotenv from "dotenv";
 import * as cron from 'node-cron';
+import * as session from "express-session";
+const { google } = require('googleapis');
+import * as crypto from "crypto";
 import { Request, Response } from "express";
 import { AppDataSource } from "./data-source";
 import { Routes } from "./routes";
@@ -13,8 +16,8 @@ import createChallenge = require("./Alcha/Challenge.js");
 import axios from 'axios';
 
 
-dotenv.config();
 
+dotenv.config();
 AppDataSource.initialize().then(async () => {
     // create express app
     const app = express();
@@ -32,6 +35,15 @@ AppDataSource.initialize().then(async () => {
             pass: process.env.pass,
         },
     });
+
+    app.use(session({
+        secret: process.env.SECRET_KEY,
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+        },
+    }));
 
     const upload = multer(); // Initialize multer
 
@@ -275,66 +287,126 @@ AppDataSource.initialize().then(async () => {
     });
 
     
-    // Send a return email to the form submitter.
-    app.post('/return-email/:githubId', (req, res) => {
-        const githubId = parseInt(req.params.githubId);
-        const { usersEmail  } = req.body;
-        console.log("in return-email: ", githubId)
-        async function sendMail(emailToReturnFrom, fromEmailPassword, message) {   
-            const transporterForReturn = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: emailToReturnFrom,
-                    pass: fromEmailPassword,
-                },
-            });
-            const mailMessage = {
-                from: emailToReturnFrom,
-                to: [usersEmail,],
-                subject: 'New form submission',
-                text: `Message: ${message}`,
-            };
+    // // Send a return email to the form submitter.
+    // app.post('/return-email/:githubId', (req, res) => {
+    //     const githubId = parseInt(req.params.githubId);
+    //     const { usersEmail  } = req.body;
+    //     console.log("in return-email: ", githubId)
+    //     async function sendMail(emailToReturnFrom, fromEmailPassword, message) {   
+    //         const transporterForReturn = nodemailer.createTransport({
+    //             service: 'gmail',
+    //             auth: {
+    //                 user: emailToReturnFrom,
+    //                 pass: fromEmailPassword,
+    //             },
+    //         });
+    //         const mailMessage = {
+    //             from: emailToReturnFrom,
+    //             to: [usersEmail,],
+    //             subject: 'New form submission',
+    //             text: `Message: ${message}`,
+    //         };
 
-            transporterForReturn.sendMail(mailMessage, (error) => {
-                if (error) {
-                    console.error(error);
-                    res.status(500).json('Error sending email');
-                } else {
-                    res.json('Email sent successfully');
-                }
-            });
-        }
-        const userPromise = AppDataSource.manager.findOne(User, { where: { githubId } });
-        userPromise.then(user => {
-            console.log("User: ", user);
-                sendMail(user.emailToReturnFrom, user.fromEmailPassword, user.returnMessage);
-                return AppDataSource.manager.save(user)
-            res.status(404).json('User not found');
-        })
-        .catch(error => {
-            res.status(500).json('Internal Server Error');
-        });
+    //         transporterForReturn.sendMail(mailMessage, (error) => {
+    //             if (error) {
+    //                 console.error(error);
+    //                 res.status(500).json('Error sending email');
+    //             } else {
+    //                 res.json('Email sent successfully');
+    //             }
+    //         });
+    //     }
+    //     const userPromise = AppDataSource.manager.findOne(User, { where: { githubId } });
+    //     userPromise.then(user => {
+    //         console.log("User: ", user);
+    //             sendMail(user.emailToReturnFrom, user.fromEmailPassword, user.returnMessage);
+    //             return AppDataSource.manager.save(user)
+    //         res.status(404).json('User not found');
+    //     })
+    //     .catch(error => {
+    //         res.status(500).json('Internal Server Error');
+    //     });
+    // });
+
+
+    // app.post('/update-return-email/:githubId', (req, res) => {
+    //     const githubId = parseInt(req.params.githubId);
+    //     console.log("in update-return-email: ", githubId)
+    //     const userPromise = AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+    //     userPromise.then(user => {
+    //         console.log("User: ", user);
+    //         if (user) {
+    //             user.returnBoolean = req.body.returnMessage === 'yes' ? true : false;
+    //             user.returnMessage = req.body.message;
+    //             user.fromEmailPassword = req.body.password;
+    //             user.emailToReturnFrom = req.body.emailToReturnFrom;
+    //             return AppDataSource.manager.save(user)
+    //         }
+    //         res.status(404).json('User not found');
+    //     })
+    //     .catch(error => {
+    //         res.status(500).json('Internal Server Error');
+    //     });
+    // });
+
+
+    //endpoint for google oauth
+    app.get('/oauth/google/:githubId', (req, res) => {
+        console.log("in google oauth");
+        const githubId = parseInt(req.params.githubId);
+        const oauth2Client = new google.auth.OAuth2(
+            process.env.GOOGLE_CLIENT_ID,
+            process.env.GOOGLE_CLIENT_SECRET,
+            "http://localhost:3000/auth/google/callback"
+          );
+          
+          const scopes = [
+            'https://www.googleapis.com/auth/gmail.addons.current.action.compose'
+          ];
+          
+          // Generate a secure random state value.
+          const state = crypto.randomBytes(32).toString('hex');
+          
+          // Store state in the session (assumes session middleware is set up)
+          const session = (req as any).session; // Cast to any to bypass TypeScript error
+          if (session) {
+              session.state = state;
+          } else {
+              res.status(500).json('Session not available');
+          }
+          
+          // Generate a url that asks permissions for the Drive activity scope
+        const authorizationUrl = oauth2Client.generateAuthUrl({
+            access_type: 'offline',
+            scope: scopes,
+            include_granted_scopes: true,
+            state: state
+          });
+        res.redirect(authorizationUrl);
     });
 
-
-    app.post('/update-return-email/:githubId', (req, res) => {
-        const githubId = parseInt(req.params.githubId);
-        console.log("in update-return-email: ", githubId)
-        const userPromise = AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
-        userPromise.then(user => {
-            console.log("User: ", user);
-            if (user) {
-                user.returnBoolean = req.body.returnMessage === 'yes' ? true : false;
-                user.returnMessage = req.body.message;
-                user.fromEmailPassword = req.body.password;
-                user.emailToReturnFrom = req.body.emailToReturnFrom;
-                return AppDataSource.manager.save(user)
-            }
-            res.status(404).json('User not found');
-        })
-        .catch(error => {
-            res.status(500).json('Internal Server Error');
+    app.get('/auth/google/callback', async (req, res) => {
+        const code = req.query.code;
+        console.log("in google callback: ", code);
+        const tokenResponse = await axios.post('https://oauth2.googleapis.com/token', {
+            code,
+            client_id: process.env.GOOGLE_CLIENT_ID,
+            client_secret: process.env.GOOGLE_CLIENT_SECRET,
+            redirect_uri: 'http://localhost:4200/dashboard',
+            grant_type: 'authorization_code',
+        }, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                Accept: 'application/json',
+            },
         });
+
+        const tokenData = tokenResponse.data;
+        if (!tokenData.access_token) {
+            throw new Error('Access token not found in the response');
+        }
+        res.redirect('http://localhost:4200/dashboard');
+
     });
 
 
