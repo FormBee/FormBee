@@ -28,13 +28,20 @@ AppDataSource.initialize().then(async () => {
         allowedHeaders: ['Content-Type', 'x-altcha-spam-filter', 'x-api-key'],
     };
     app.use(cors(corsOptions));
+    
+
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
         auth: {
-            user: process.env.user,
-            pass: process.env.pass,
+            type: 'OAuth2',
+            user: 'formbee632@gmail.com',
+            //add access token back.
+            accessToken: "",
         },
     });
+
 
     app.use(session({
         secret: process.env.SECRET_KEY,
@@ -273,6 +280,101 @@ AppDataSource.initialize().then(async () => {
             res.status(500).json('Internal Server Error');
         });
     });
+
+    app.get('/oauth/google/:githubId', (req, res) => {
+        console.log("in google oauth");
+        const githubId = parseInt(req.params.githubId);
+        const oauth2Client = new google.auth.OAuth2(
+            process.env.GOOGLE_CLIENT_ID,
+            process.env.GOOGLE_CLIENT_SECRET,
+            "http://localhost:3000/google/callback"
+          );
+          
+          const scopes = [
+            'https://www.googleapis.com/auth/gmail.addons.current.action.compose',
+            'https://www.googleapis.com/auth/userinfo.email',
+            'https://www.googleapis.com/auth/gmail.compose',
+            "https://mail.google.com/"
+          ];
+          
+          // Generate a secure random state value.
+          const state = crypto.randomBytes(32).toString('hex');
+          
+          // Store state in the session (assumes session middleware is set up)
+          const session = (req as any).session; // Cast to any to bypass TypeScript error
+          if (session) {
+              session.state = state;
+          } else {
+              res.status(500).json('Session not available');
+          }
+          
+          // Generate a url that asks permissions for the Drive activity scope
+        const authorizationUrl = oauth2Client.generateAuthUrl({
+            access_type: 'offline',
+            scope: scopes,
+            include_granted_scopes: true,
+            state: state
+          });
+        res.redirect(authorizationUrl);
+    });
+    
+    app.get("/google/callback", async (req, res) => {
+        try {
+          console.log(req.query);
+      
+          const { code } = req.query;
+      
+          const data = {
+            code,
+            client_id: process.env.GOOGLE_CLIENT_ID,
+            client_secret: process.env.GOOGLE_CLIENT_SECRET,
+            redirect_uri: "http://localhost:3000/google/callback",
+            grant_type: "authorization_code",
+          };
+      
+          console.log("Data: ", data);
+      
+          // Exchange authorization code for access token & id_token
+          const response = await axios({
+            url: "https://oauth2.googleapis.com/token",
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            data: JSON.stringify(data),
+          });
+
+          const access_token_data = response.data;
+          const { access_token, refresh_token, } = access_token_data;
+          console.log("Access token: ", access_token);
+          console.log("Refresh token: ", refresh_token);
+
+          // Fetch user profile with the access token
+          const userInfoResponse = await axios({
+            url: "https://www.googleapis.com/oauth2/v1/userinfo",
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+            },
+          });
+      
+          const userInfo = userInfoResponse.data;
+          console.log('User Info:', userInfo);
+      
+          // Extract email and other desired info
+          const userEmail = userInfo.email;
+          console.log('User Email:', userEmail);
+      
+          // Redirect to your application's dashboard or handle information as needed
+          res.redirect("http://localhost:4200/dashboard");
+        } catch (error) {
+          console.error('Error during OAuth callback:', error);
+          res.status(500).json({ error: 'An error occurred during the authentication process' });
+        }
+      });
+      // ______________________________________________________________________________________
+
     
     // register express routes from defined application routes
     Routes.forEach(route => {

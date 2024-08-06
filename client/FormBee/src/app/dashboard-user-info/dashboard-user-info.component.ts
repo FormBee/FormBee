@@ -108,6 +108,10 @@ export class DashboardUserInfoComponent implements OnInit {
     }
   }
 
+  gmailLogin = () => {
+    window.location.href = "http://localhost:3000/oauth/google/" + this.githubId;
+  }
+
   saveOptions = () => {
     const emailInput = document.getElementById('email-input-return') as HTMLInputElement;
     const passwordInput = document.getElementById('password-input-return') as HTMLInputElement;
