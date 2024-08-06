@@ -20,6 +20,7 @@ export class DashboardUserInfoComponent implements OnInit {
   localHostMaxSubs: number = 0.0;
   email: string = "Loading email...";
   emailValid: boolean = false;
+  googleEmail: string | undefined;
 
   fetchApiKey = async (githubId: string) => {
     console.log("Fetching API key");
@@ -48,6 +49,8 @@ export class DashboardUserInfoComponent implements OnInit {
         this.localHostCurrentSubs = data.localHostCurrentSubmissions;
         this.localHostMaxSubs = data.localHostMaxSubmissions;
         this.email = data.email;
+        this.googleEmail = data.fromEmail;
+
         if (this.apiKey) {
           // Only show the last 4 characters of the API key
           this.displayApiKey = '*'.repeat(this.apiKey.length - 4) + this.apiKey.slice(this.apiKey.length - 4);
