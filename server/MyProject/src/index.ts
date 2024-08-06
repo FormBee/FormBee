@@ -124,10 +124,22 @@ AppDataSource.initialize().then(async () => {
     // Sends the return email to the user's client's.
     app.post('/formbee/return/:apikey', (req, res) => {
         try {
-            const { email, apikey } = req.body;
+            const { email } = req.body;
+            const apiKey = req.params.apikey
             console.log("Return email: ", email);
+            console.log("apiKey: ", apiKey);
             
             // Add any necessary email sending logic here
+            const transporter = nodemailer.createTransport({
+                host: 'smtp.gmail.com',
+                port: 465,
+                secure: true,
+                auth: {
+                    type: 'OAuth2',
+                    user: '',
+                    accessToken: '',
+                },
+            });
             
             res.json({ message: 'Email sent successfully' });
         } catch (error) {
@@ -307,98 +319,115 @@ AppDataSource.initialize().then(async () => {
         });
     });
 
+
+    // Github OAuth
     app.get('/oauth/google/:githubId', (req, res) => {
         console.log("in google oauth");
-        const githubId = parseInt(req.params.githubId);
+        const githubId = req.params.githubId;
         const oauth2Client = new google.auth.OAuth2(
             process.env.GOOGLE_CLIENT_ID,
             process.env.GOOGLE_CLIENT_SECRET,
             "http://localhost:3000/google/callback"
-          );
-          
-          const scopes = [
+        );
+        
+        const scopes = [
             'https://www.googleapis.com/auth/gmail.addons.current.action.compose',
             'https://www.googleapis.com/auth/userinfo.email',
             'https://www.googleapis.com/auth/gmail.compose',
             "https://mail.google.com/"
-          ];
-          
-          // Generate a secure random state value.
-          const state = crypto.randomBytes(32).toString('hex');
-          
-          // Store state in the session (assumes session middleware is set up)
-          const session = (req as any).session; // Cast to any to bypass TypeScript error
-          if (session) {
-              session.state = state;
-          } else {
-              res.status(500).json('Session not available');
-          }
-          
-          // Generate a url that asks permissions for the Drive activity scope
+        ];
+        
+        // Generate a secure random state value and include githubId
+        const stateValue = {
+            state: crypto.randomBytes(32).toString('hex'),
+            githubId
+        };
+        const state = Buffer.from(JSON.stringify(stateValue)).toString('base64');
+        
+        // Store state in the session (assumes session middleware is set up)
+        const session = (req as any).session; // Cast to any to bypass TypeScript error
+        if (session) {
+            session.state = state;
+        } else {
+            res.status(500).json('Session not available');
+        }
+        
+        // Generate a url that asks permissions for the Drive activity scope
         const authorizationUrl = oauth2Client.generateAuthUrl({
             access_type: 'offline',
             scope: scopes,
             include_granted_scopes: true,
             state: state
-          });
+        });
         res.redirect(authorizationUrl);
     });
-    
+
+    // Google OAuth callback
     app.get("/google/callback", async (req, res) => {
         try {
-          console.log(req.query);
-      
-          const { code } = req.query;
-      
-          const data = {
-            code,
-            client_id: process.env.GOOGLE_CLIENT_ID,
-            client_secret: process.env.GOOGLE_CLIENT_SECRET,
-            redirect_uri: "http://localhost:3000/google/callback",
-            grant_type: "authorization_code",
-          };
-      
-          console.log("Data: ", data);
-      
-          // Exchange authorization code for access token & id_token
-          const response = await axios({
-            url: "https://oauth2.googleapis.com/token",
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            data: JSON.stringify(data),
-          });
-
-          const access_token_data = response.data;
-          const { access_token, refresh_token, } = access_token_data;
-          console.log("Access token: ", access_token);
-          console.log("Refresh token: ", refresh_token);
-
-          // Fetch user profile with the access token
-          const userInfoResponse = await axios({
-            url: "https://www.googleapis.com/oauth2/v1/userinfo",
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${access_token}`,
-            },
-          });
-      
-          const userInfo = userInfoResponse.data;
-          console.log('User Info:', userInfo);
-      
-          // Extract email and other desired info
-          const userEmail = userInfo.email;
-          console.log('User Email:', userEmail);
-      
-          // Redirect to your application's dashboard or handle information as needed
-          res.redirect("http://localhost:4200/dashboard");
+            console.log(req.query);
+        
+            const { code, state } = req.query;
+            
+            if (typeof state !== 'string') {
+                res.status(400).send('Invalid state parameter');
+                return;
+            }
+            
+            // Decode state to retrieve the githubId
+            const stateValue = JSON.parse(Buffer.from(state, 'base64').toString('utf8'));
+            const { githubId } = stateValue;
+    
+            const data = {
+                code,
+                client_id: process.env.GOOGLE_CLIENT_ID,
+                client_secret: process.env.GOOGLE_CLIENT_SECRET,
+                redirect_uri: "http://localhost:3000/google/callback",
+                grant_type: "authorization_code",
+            };
+        
+            console.log("Data: ", data);
+        
+            // Exchange authorization code for access token & id_token
+            const response = await axios({
+                url: "https://oauth2.googleapis.com/token",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                data: JSON.stringify(data),
+            });
+    
+            const access_token_data = response.data;
+            const { access_token, refresh_token } = access_token_data;
+            console.log("Github ID: ", githubId);  // Use githubId as needed
+            console.log("Access token: ", access_token);
+            console.log("Refresh token: ", refresh_token);
+    
+            // Fetch user profile with the access token
+            const userInfoResponse = await axios({
+                url: "https://www.googleapis.com/oauth2/v1/userinfo",
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                },
+            });
+        
+            const userInfo = userInfoResponse.data;
+            console.log('User Info:', userInfo);
+        
+            // Extract email and other desired info
+            const userEmail = userInfo.email;
+            console.log('User Email:', userEmail);
+        
+            // Redirect to your application's dashboard or handle information as needed
+            res.redirect("http://localhost:4200/dashboard");
         } catch (error) {
-          console.error('Error during OAuth callback:', error);
-          res.status(500).json({ error: 'An error occurred during the authentication process' });
+            console.error('Error during OAuth callback:', error);
+            res.status(500).json({ error: 'An error occurred during the authentication process' });
         }
-      });
+    });
       // ______________________________________________________________________________________
 
     
