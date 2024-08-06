@@ -52,11 +52,18 @@ export class User {
         to: (value: string | null) => encrypt(value),
         from: (value: string | null) => decrypt(value),
     }})
-    fromEmailPassword: string | null;
+    fromEmailAccessToken: string | null;
+
     @Column({nullable: true, transformer: {
         to: (value: string | null) => encrypt(value),
         from: (value: string | null) => decrypt(value),
     }})
-    emailToReturnFrom: string | null;
+    fromEmail: string | null;
+
+    @Column({nullable: true, transformer: {
+        to: (value: string | null) => encrypt(value),
+        from: (value: string | null) => decrypt(value),
+    }})
+    fromEmailRefreshToken: string | null;
 }
     

@@ -14,6 +14,7 @@ import { Routes } from "./routes";
 import { User } from "./entity/User";
 import createChallenge = require("./Alcha/Challenge.js");
 import axios from 'axios';
+import MailMessage = require("nodemailer/lib/mailer/mail-message");
 
 
 
@@ -84,7 +85,7 @@ AppDataSource.initialize().then(async () => {
                         if (email) {
                             const returnEmail = email;
                             axios.post('http://localhost:3000/formbee/return/' + apikey, {
-                                email: returnEmail,
+                                emailToSendTo: returnEmail,
                             });
                             // For prod...
                             // return AppDataSource.manager.save(user);
@@ -122,24 +123,49 @@ AppDataSource.initialize().then(async () => {
 
 
     // Sends the return email to the user's client's.
-    app.post('/formbee/return/:apikey', (req, res) => {
+    app.post('/formbee/return/:apikey', async (req, res) => {
         try {
-            const { email } = req.body;
+            const { emailToSendTo } = req.body;
             const apiKey = req.params.apikey
-            console.log("Return email: ", email);
+            console.log("Return email: ", emailToSendTo);
             console.log("apiKey: ", apiKey);
+            const user = await AppDataSource.manager.findOne(User, { where: { apiKey } });
+            if (!user) {
+                res.status(400).send('User not found');
+                return;
+            } else {
+                const email = user.fromEmail;
+                const accessToken = user.fromEmailAccessToken;
+                const refreshToken = user.fromEmailRefreshToken;
+                const transporter = nodemailer.createTransport({
+                    host: 'smtp.gmail.com',
+                    port: 465,
+                    secure: true,
+                    auth: {
+                        type: 'OAuth2',
+                        user: email,
+                        accessToken: accessToken,
+                        refreshToken: refreshToken,
+                    },
+                });
+                const mailMessage = {
+                    from: email,
+                    to: emailToSendTo,
+                    subject: 'Return email',
+                    text: 'Return email',
+                }
+                transporter.sendMail(mailMessage, (error) => {
+                    if (error) {
+                        console.error(error);
+                        res.status(500).json('Error sending email');
+                    } else {
+                        res.json({ message: 'Email sent successfully' });
+                    }
+                });
+            }
             
             // Add any necessary email sending logic here
-            const transporter = nodemailer.createTransport({
-                host: 'smtp.gmail.com',
-                port: 465,
-                secure: true,
-                auth: {
-                    type: 'OAuth2',
-                    user: '',
-                    accessToken: '',
-                },
-            });
+
             
             res.json({ message: 'Email sent successfully' });
         } catch (error) {
@@ -321,45 +347,57 @@ AppDataSource.initialize().then(async () => {
 
 
     // Github OAuth
-    app.get('/oauth/google/:githubId', (req, res) => {
+    app.get('/oauth/google/:githubId', async(req, res) => {
         console.log("in google oauth");
-        const githubId = req.params.githubId;
-        const oauth2Client = new google.auth.OAuth2(
-            process.env.GOOGLE_CLIENT_ID,
-            process.env.GOOGLE_CLIENT_SECRET,
-            "http://localhost:3000/google/callback"
-        );
-        
-        const scopes = [
-            'https://www.googleapis.com/auth/gmail.addons.current.action.compose',
-            'https://www.googleapis.com/auth/userinfo.email',
-            'https://www.googleapis.com/auth/gmail.compose',
-            "https://mail.google.com/"
-        ];
-        
-        // Generate a secure random state value and include githubId
-        const stateValue = {
-            state: crypto.randomBytes(32).toString('hex'),
-            githubId
-        };
-        const state = Buffer.from(JSON.stringify(stateValue)).toString('base64');
-        
-        // Store state in the session (assumes session middleware is set up)
-        const session = (req as any).session; // Cast to any to bypass TypeScript error
-        if (session) {
-            session.state = state;
+        const githubId = parseInt(req.params.githubId);  // Convert githubId to integer
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else if (user.fromEmailAccessToken) {
+            console.log("already in boss:", user.fromEmailAccessToken);
+            console.log("already in boss:",user.fromEmailRefreshToken);
+            console.log("already in boss:",user.fromEmail);
+            res.redirect("http://localhost:4200/dashboard");
+            return;
         } else {
-            res.status(500).json('Session not available');
+            const oauth2Client = new google.auth.OAuth2(
+                process.env.GOOGLE_CLIENT_ID,
+                process.env.GOOGLE_CLIENT_SECRET,
+                "http://localhost:3000/google/callback"
+            );
+            
+            const scopes = [
+                'https://www.googleapis.com/auth/gmail.addons.current.action.compose',
+                'https://www.googleapis.com/auth/userinfo.email',
+                'https://www.googleapis.com/auth/gmail.compose',
+                "https://mail.google.com/"
+            ];
+            
+            // Generate a secure random state value and include githubId
+            const stateValue = {
+                state: crypto.randomBytes(32).toString('hex'),
+                githubId
+            };
+            const state = Buffer.from(JSON.stringify(stateValue)).toString('base64');
+            
+            // Store state in the session (assumes session middleware is set up)
+            const session = (req as any).session; // Cast to any to bypass TypeScript error
+            if (session) {
+                session.state = state;
+            } else {
+                res.status(500).json('Session not available');
+            }
+            
+            // Generate a url that asks permissions for the Drive activity scope
+            const authorizationUrl = oauth2Client.generateAuthUrl({
+                access_type: 'offline',
+                scope: scopes,
+                include_granted_scopes: true,
+                state: state
+            });
+            res.redirect(authorizationUrl);
         }
-        
-        // Generate a url that asks permissions for the Drive activity scope
-        const authorizationUrl = oauth2Client.generateAuthUrl({
-            access_type: 'offline',
-            scope: scopes,
-            include_granted_scopes: true,
-            state: state
-        });
-        res.redirect(authorizationUrl);
     });
 
     // Google OAuth callback
@@ -377,6 +415,8 @@ AppDataSource.initialize().then(async () => {
             // Decode state to retrieve the githubId
             const stateValue = JSON.parse(Buffer.from(state, 'base64').toString('utf8'));
             const { githubId } = stateValue;
+
+            // Get the user with the githubId
     
             const data = {
                 code,
@@ -404,7 +444,6 @@ AppDataSource.initialize().then(async () => {
             console.log("Github ID: ", githubId);  // Use githubId as needed
             console.log("Access token: ", access_token);
             console.log("Refresh token: ", refresh_token);
-    
             // Fetch user profile with the access token
             const userInfoResponse = await axios({
                 url: "https://www.googleapis.com/oauth2/v1/userinfo",
@@ -420,9 +459,20 @@ AppDataSource.initialize().then(async () => {
             // Extract email and other desired info
             const userEmail = userInfo.email;
             console.log('User Email:', userEmail);
+
+            const user = await AppDataSource.manager.findOne(User, { where: { githubId } });
+            if (!user) {
+                res.status(400).send('User not found');
+                return;
+            } else {
+                user.fromEmailAccessToken = access_token;
+                user.fromEmailRefreshToken = refresh_token;
+                user.fromEmail = userEmail;
+                await AppDataSource.manager.save(user);
+                res.redirect("http://localhost:4200/dashboard");
+            }
         
             // Redirect to your application's dashboard or handle information as needed
-            res.redirect("http://localhost:4200/dashboard");
         } catch (error) {
             console.error('Error during OAuth callback:', error);
             res.status(500).json({ error: 'An error occurred during the authentication process' });
