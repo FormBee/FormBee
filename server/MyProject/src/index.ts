@@ -23,7 +23,7 @@ AppDataSource.initialize().then(async () => {
     const app = express();
     app.use(bodyParser.json());
     const corsOptions = {
-        origin: 'http://localhost:4200',
+        origin: ['http://localhost:4200'],
         methods: ['GET', 'POST'],
         allowedHeaders: ['Content-Type', 'x-altcha-spam-filter', 'x-api-key'],
     };
@@ -36,11 +36,14 @@ AppDataSource.initialize().then(async () => {
         secure: true,
         auth: {
             type: 'OAuth2',
-            user: 'formbee632@gmail.com',
-            //add access token back.
-            accessToken: "",
+            user: process.env.USER,
+            accessToken: process.env.GOOGLE_ACCESS_TOKEN,
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
         },
     });
+    
 
 
     app.use(session({
@@ -54,7 +57,10 @@ AppDataSource.initialize().then(async () => {
 
     const upload = multer(); // Initialize multer
 
-    app.post('/:apikey', upload.none(), (req, res) => {
+
+
+    // Basic post route, sends form data to the users email.
+    app.post('/formbee/:apikey', upload.none(), (req, res) => {
         const { apikey } = req.params;
         const { name, email, message } = req.body;
         console.log(req.body);
@@ -62,7 +68,7 @@ AppDataSource.initialize().then(async () => {
         AppDataSource.manager.findOne(User, { where: { apiKey: apikey } })
             .then(async user => {
                 if (!user) {
-                    console.log("User not found");
+                    console.log("User not found!");
                     res.status(401).json('Unauthorized');
                     return;
                 } else if (user.maxSubmissions && user.currentSubmissions >= user.maxSubmissions || user.localHostMaxSubmissions && user.localHostCurrentSubmissions >= user.localHostMaxSubmissions) {
@@ -71,45 +77,64 @@ AppDataSource.initialize().then(async () => {
                     return;
                 } else {
                     const recEmail = user.email;
-                    console.log("Sending email");
                     // check if the users origin was from the local host
                     if (req.headers.origin.includes("localhost")) {
                         user.localHostCurrentSubmissions++;
                         await sendMail(recEmail, name, email, message, null, res);
-                            console.log("Sending return email");
-                        return AppDataSource.manager.save(user);
+                        if (email) {
+                            const returnEmail = email;
+                            axios.post('http://localhost:3000/formbee/return/' + apikey, {
+                                email: returnEmail,
+                            });
+                            // For prod...
+                            // return AppDataSource.manager.save(user);
+                        }
                     } else {
                         user.currentSubmissions++;
                         sendMail(recEmail, name, email, message, null, res);
                         return AppDataSource.manager.save(user);
                     }
-
                 }
             })
             .catch(error => {
                 res.status(500).json('Internal Server Error');
             });
+
+        async function sendMail(recEmail, name, email, message, file, res) {        
+            const mailMessage = {
+                from: process.env.user,
+                to: [recEmail,],
+                subject: 'New form submission',
+                text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+                attachments: file ? [{ filename: file.originalname, content: file.buffer }] : [],
+            };
+
+            transporter.sendMail(mailMessage, (error) => {
+                if (error) {
+                    console.error(error);
+                    res.status(500).json('Error sending email');
+                } else {
+                    res.json('Email sent successfully');
+                }
+            });
+        }
     });
 
-    async function sendMail(recEmail, name, email, message, file, res) {        
-        const mailMessage = {
-            from: process.env.user,
-            to: [recEmail,],
-            subject: 'New form submission',
-            text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
-            attachments: file ? [{ filename: file.originalname, content: file.buffer }] : [],
-        };
 
-        transporter.sendMail(mailMessage, (error) => {
-            if (error) {
-                console.error(error);
-                res.status(500).json('Error sending email');
-            } else {
-                res.json('Email sent successfully');
-            }
-        });
-    }
-
+    // Sends the return email to the user's client's.
+    app.post('/formbee/return/:apikey', (req, res) => {
+        try {
+            const { email, apikey } = req.body;
+            console.log("Return email: ", email);
+            
+            // Add any necessary email sending logic here
+            
+            res.json({ message: 'Email sent successfully' });
+        } catch (error) {
+            console.error("Error in /hi:", error);
+            res.status(500).json({ error: 'Failed to send email' });
+        }
+    });
 
     app.get('/challenge', (req, res) => {
         createChallenge(req, res);
@@ -254,6 +279,7 @@ AppDataSource.initialize().then(async () => {
                 if (User) {
                     res.json(user);
                 } else {
+                    console.log("user: ", user);
                     res.status(404).json('User not found');
                 }
             })

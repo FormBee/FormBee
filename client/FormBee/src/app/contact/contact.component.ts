@@ -70,7 +70,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
     console.log(this.contactForm.value);
 
     if (this.isVerified) {
-      this.http.post('http://localhost:3000/480b4617-0dd1-48d6-b10b-b45a33e24f75', this.contactForm.value).subscribe(res => {
+      this.http.post('http://localhost:3000/formbee/480b4617-0dd1-48d6-b10b-b45a33e24f75', this.contactForm.value).subscribe(res => {
         console.log(this.contactForm.value.email);
         console.log(res);
       });
