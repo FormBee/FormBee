@@ -11,7 +11,6 @@ export const encrypt = (text: string): string => {
     const cipher = crypto.createCipheriv(algorithm, key, iv);
     let encrypted = cipher.update(text, 'utf8', 'hex');
     encrypted += cipher.final('hex');
-    console.log("Encrypted: ", encrypted);
     return `${iv.toString('hex')}:${encrypted}`;
 };
 
@@ -22,6 +21,5 @@ export const decrypt = (hash: string): string => {
     const decipher = crypto.createDecipheriv(algorithm, key, iv);
     let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
-    console.log(decrypted);
     return decrypted;
 };

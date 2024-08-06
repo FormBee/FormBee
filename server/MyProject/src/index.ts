@@ -64,7 +64,6 @@ AppDataSource.initialize().then(async () => {
     app.post('/formbee/:apikey', upload.none(), (req, res) => {
         const { apikey } = req.params;
         const { name, email, message } = req.body;
-        console.log(req.body);
         // Find the user in the database with API key, then increment the current submissions
         AppDataSource.manager.findOne(User, { where: { apiKey: apikey } })
             .then(async user => {
@@ -126,9 +125,7 @@ AppDataSource.initialize().then(async () => {
     app.post('/formbee/return/:apikey', async (req, res) => {
         try {
             const { emailToSendTo } = req.body;
-            const apiKey = req.params.apikey
-            console.log("Return email: ", emailToSendTo);
-            console.log("apiKey: ", apiKey);
+            const apiKey = req.params.apikey;
             const user = await AppDataSource.manager.findOne(User, { where: { apiKey } });
             if (!user) {
                 res.status(400).send('User not found');
@@ -146,6 +143,8 @@ AppDataSource.initialize().then(async () => {
                         user: email,
                         accessToken: accessToken,
                         refreshToken: refreshToken,
+                        clientId: process.env.GOOGLE_CLIENT_ID,
+                        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
                     },
                 });
                 const mailMessage = {
@@ -205,7 +204,6 @@ AppDataSource.initialize().then(async () => {
             if (!tokenData.access_token) {
                 throw new Error('Access token not found in the response');
             }
-            // console.log(tokenData);
             let githubdata = await axios.get(`https://api.github.com/user`, {
                 headers: {
                     Authorization: `Bearer ${tokenData.access_token}`,
@@ -330,10 +328,8 @@ AppDataSource.initialize().then(async () => {
     // // Update email
     app.post('/update-email/:githubId', (req, res) => {
         const githubId = parseInt(req.params.githubId);
-        // console.log("in updade-email: ", githubId)
         const userPromise = AppDataSource.manager.findOne(User, { where: { githubId } });
         userPromise.then(user => {
-            // console.log("User: ", user);
             if (User) {
                 user.email = req.body.email;
                 return AppDataSource.manager.save(user)
@@ -355,9 +351,6 @@ AppDataSource.initialize().then(async () => {
             res.status(400).send('User not found');
             return;
         } else if (user.fromEmailAccessToken) {
-            console.log("already in boss:", user.fromEmailAccessToken);
-            console.log("already in boss:",user.fromEmailRefreshToken);
-            console.log("already in boss:",user.fromEmail);
             res.redirect("http://localhost:4200/dashboard");
             return;
         } else {
@@ -403,7 +396,6 @@ AppDataSource.initialize().then(async () => {
     // Google OAuth callback
     app.get("/google/callback", async (req, res) => {
         try {
-            console.log(req.query);
         
             const { code, state } = req.query;
             
@@ -426,7 +418,6 @@ AppDataSource.initialize().then(async () => {
                 grant_type: "authorization_code",
             };
         
-            console.log("Data: ", data);
         
             // Exchange authorization code for access token & id_token
             const response = await axios({
@@ -441,9 +432,6 @@ AppDataSource.initialize().then(async () => {
     
             const access_token_data = response.data;
             const { access_token, refresh_token } = access_token_data;
-            console.log("Github ID: ", githubId);  // Use githubId as needed
-            console.log("Access token: ", access_token);
-            console.log("Refresh token: ", refresh_token);
             // Fetch user profile with the access token
             const userInfoResponse = await axios({
                 url: "https://www.googleapis.com/oauth2/v1/userinfo",
@@ -454,11 +442,9 @@ AppDataSource.initialize().then(async () => {
             });
         
             const userInfo = userInfoResponse.data;
-            console.log('User Info:', userInfo);
         
             // Extract email and other desired info
             const userEmail = userInfo.email;
-            console.log('User Email:', userEmail);
 
             const user = await AppDataSource.manager.findOne(User, { where: { githubId } });
             if (!user) {
