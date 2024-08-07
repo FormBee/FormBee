@@ -5,7 +5,7 @@
         <div class="modal-header">
             <h2 class="modal-header-text">Return Email Settings</h2>
         </div>
-        <p class="modal-p">Customize the address, and email that will be sent to users who submit your forms.</p>
+        <p class="modal-p">Customize the address, and the email that will be sent to users who submit your forms.</p>
 
         <div class="modal-header-switch">
             <div class="stacked-div">
@@ -33,6 +33,20 @@
               <span style="display: none;">Use Gmail as your Return Email</span>
             </div>
           </button>
+            <div class="smpt-container">
+                <div class="smtp-header">
+                    <h2 class="modal-header-text smtp-head">Custom SMTP Settings</h2>
+                    <p class="modal-p">Have an email with a custom SMTP server? Configure it here.</p>
+                </div>
+                <div class="smtp-input-container">
+                    <p class="modal-p">SMTP Host</p>
+                    <input type="text" class="smtp-input" placeholder="SMTP Host">
+                </div>
+                <input type="text" class="smtp-input" placeholder="SMTP Port">
+                <input type="text" class="smtp-input" placeholder="Username">
+                <input type="text" class="smtp-input" placeholder="Password">
+            </div>
+            
         <div class="modal-footer">
             <button class="modal-button" (click)="closeModal()">Cancel</button>
             <button class="modal-button" (click)="closeModal()">Save</button>

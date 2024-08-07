@@ -23,7 +23,9 @@
     border: 1px ridge #FFBD59;
     box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
     animation: fadeIn 0.5s forwards;
-    overflow: hidden;
+    overflow: scroll;
+    overflow-x: hidden;
+
 }
 
 .modal-header {
@@ -99,7 +101,7 @@
 }
 
 .modal-header-text {
-    color: #c69245;
+    color: #FFBD59;
 
     font-size: 1.5rem;
     margin-bottom: 0px;
@@ -209,7 +211,7 @@
   }
 
   .gsi-material-button {
-    background-color: #212120;
+    background-color: #2a2a2a;
     background-image: none;
     border: 1px solid #747775;
     -webkit-border-radius: 4px;
@@ -232,9 +234,11 @@
     vertical-align: middle;
     white-space: nowrap;
     width: auto;
-    min-width: 90%;
+    min-width: 100%;
     border-color: #8e918f;
     margin: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
   }
   
   .gsi-material-button .gsi-material-button-icon {
@@ -313,3 +317,42 @@
     opacity: 8%;
   }
   
+  .smtp-header {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .smtp-head {
+    color: #FFBD59;
+    font-size: 1.2rem;
+    margin-top: 0px;
+  }
+
+  .smpt-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    width: 100%;
+  }
+
+  .smtp-input {
+    width: 50%;
+    padding: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #2a2624;
+    color: white;
+  }
+
+  .smtp-input-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 1rem;
+    width: 100%;
+    justify-content: space-between;
+  }
