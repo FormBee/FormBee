@@ -1,0 +1,99 @@
+.modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to right, #273b48a8,#273b487c, #273b487c);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal {
+    background-color: #2F4858;
+    border-radius: 20px;
+    width: 40vw;
+    height: 40vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    border: 1px ridge #FFBD59;
+    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+    animation: fadeIn 0.5s forwards;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.modal-body {
+    margin-bottom: 2rem;
+}
+
+.modal-input {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #2a2624;
+    color: white;
+}
+
+.modal-button {
+    background-color: #FFBD59;
+    color: #2a2624;
+    padding: 5px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color, box-shadow 0.3s ease-out;
+    overflow: hidden;
+    border: solid 1px #c69245;
+    box-shadow: rgba(204, 155, 39, 0.2) 1.95px 1.95px 2.6px;
+    margin-left: 5px;
+}
+
+.modal-button:hover {
+    background-color: #c69245;
+    border: solid 1px #FFBD59;
+    box-shadow: rgba(9, 8, 7, 0.4) 2px 2px, rgba(204, 155, 39, 0.3) 4px 4px, rgba(204, 155, 39, 0.2) 6px 6px, rgba(204, 155, 39, 0.1) 8px 8px, rgba(204, 155, 39, 0.05) 10px 10px;
+}
+
+.close-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 2rem;
+    transition: color 0.2s ease-out;
+}
+
+.close-button:hover {
+    color: #FFBD59;
+}
+
+@keyframes fadeIn {0%{transform:translateY(-600px) rotateX(-30deg) scale(0);transform-origin:50% 100%;opacity:0}100%{transform:translateY(0) rotateX(0) scale(1);transform-origin:50% 1400px;opacity:1}}
+
+
+@keyframes scale-out-center {0%{transform:translateY(0) rotateX(0) scale(1);transform-origin:50% 1400px;opacity:1}100%{transform:translateY(-600px) rotateX(-30deg) scale(0);transform-origin:50% 100%;opacity:1}}
+
+.modal {
+    animation: fadeIn 0.5s forwards;
+}
+
+.modal-container {
+    animation: fadeIn 0.5s forwards;
+}
+
+.scale-out-center {
+    animation: scale-out-center 0.5s forwards;
+}

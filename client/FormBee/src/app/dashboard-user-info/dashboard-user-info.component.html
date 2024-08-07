@@ -40,8 +40,15 @@
     <button class="api-buttons generate" (click)="newApiKey()">Generate new key</button>
   </div>
 
-  <div class="Section">
-    <p>Current return email: {{ googleEmail }}</p>
-    <button class="api-buttons gmail-login" (click)="gmailLogin()">Login with Gmail</button>
+  <div class="api-key-handling returnEmails">
+    <p *ngIf="googleEmail">Current return email: {{ googleEmail }}</p>
+    <p *ngIf="!googleEmail">Set up return email to return an email to users who submit your forms.</p>
+
+    <button *ngIf="googleEmail" class="api-buttons gmail-login" (click)="openReturnEmailModal()">Change return email</button>
+    <button *ngIf="!googleEmail" class="api-buttons gmail-login" (click)="openReturnEmailModal()">Sign into return email</button>
+  </div>
+
+  <div>
   </div>
 </div>
+<app-dashboard-return-modal *ngIf="returnEmailModal"  (returnEmailModal)="closeReturnEmailModal()"></app-dashboard-return-modal>

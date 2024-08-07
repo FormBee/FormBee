@@ -1,10 +1,15 @@
 import { Component, Input } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { NgIf } from '@angular/common';
+import { DashboardReturnModalComponent } from '../dashboard-return-modal/dashboard-return-modal.component';
+
 @Component({
   selector: 'app-dashboard-user-info',
   standalone: true,
-  imports: [ NgIf ],
+  imports: [ 
+    NgIf,
+    DashboardReturnModalComponent,
+   ],
   templateUrl: './dashboard-user-info.component.html',
   styleUrl: './dashboard-user-info.component.scss'
 })
@@ -21,6 +26,7 @@ export class DashboardUserInfoComponent implements OnInit {
   email: string = "Loading email...";
   emailValid: boolean = false;
   googleEmail: string | undefined;
+  returnEmailModal: boolean = false;
 
   fetchApiKey = async (githubId: string) => {
     console.log("Fetching API key");
@@ -80,6 +86,14 @@ export class DashboardUserInfoComponent implements OnInit {
         }
       }
      });
+  }
+
+  openReturnEmailModal = () => {
+    this.returnEmailModal = true;
+  }
+
+  closeReturnEmailModal = () => {
+    this.returnEmailModal = false;
   }
 
   isValidEmail(email: string) {
