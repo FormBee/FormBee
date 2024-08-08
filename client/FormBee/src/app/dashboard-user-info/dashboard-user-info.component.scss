@@ -1,7 +1,16 @@
+$primary-color: #2b2d42;
+$secondary-color: #ffba2fd7;
+$accent-color: #ffb700;
+$text-color: #fff875;
+$background-color: #2f4858;
+$border-color: #1e8576;
+$shadow-color: rgba(0, 0, 0, 0.2);
+
 p {
-    color: #FFBD59;
-    margin-top: 0px;
-    padding-top: 0px;
+    color: $text-color;
+    margin-top: 0;
+    padding-top: 0;
+    font-size: 1rem;
 }
 
 .user-info {
@@ -9,9 +18,10 @@ p {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    align-items:flex-start;
+    align-items: center;
     margin-top: 1rem;
     justify-content: center;
+    min-height: 90vh;
     p {
         margin-bottom: 1rem;
     }
@@ -19,138 +29,128 @@ p {
 
 .Section {
     display: flex;
-    // background-color: rgba(255, 179, 0, 0.13);
-    background-color: #2F4858;
-    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
-    width: 40vw;
-    height: 20vh;
-    margin: 2rem;
-    padding: 0.5rem;
-
-    padding-top: 0px;
-    border-radius: 20px;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    border: 1px ridge #FFBD59;
+    background-color: $primary-color;
+    box-shadow: $shadow-color 0px 8px 16px;
+    width: 40vw;
+    height: auto;
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid $border-color;
+    transition: transform 0.3s, box-shadow 0.3s;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: $shadow-color 0px 12px 24px;
+    }
 }
 
 .usage-bar {
-    background-color: #333;
+    background-color: $background-color;
     border-radius: 5px;
     height: 8px;
     width: 100%;
+    margin-bottom: 1rem;
 }
 
 .usage-progress {
-    background-color: #FFBD59;
+    background-color: $accent-color;
     height: 100%;
     border-radius: 5px;
+    transition: width 0.5s ease-in-out;
 }
 
 .usage-text {
-    // margin-right: 0.5rem;
-    margin-top: .5rem;
+    margin-top: 0.5rem;
+    color: $text-color;
+    font-weight: bold;
 }
 
 .divider {
     width: 2px;
     height: 80%;
     background-color: rgba(255, 179, 0, 0.066);
-
-    border-radius : 5px;
+    border-radius: 5px;
 }
 
 .dropdown {
-
     cursor: pointer;
-
     display: flex;
-
     align-items: center;
-
     padding: 0 0.5rem;
-
     position: relative;
 }
 
 .name-text {
-    color: #c69245;
-
-    font-size: 2rem;
-    margin-top: 4rem;
-    margin-left: 3rem;
+    color: $text-color;
+    font-size: 2.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    width: fit-content;
+    margin-left: 2rem;
 }
 
 .api-key-handling {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 0px;
-    padding: 0.5rem;
-    align-items: center;
-    justify-content: center;
-    // background-image: linear-gradient(to right, rgb(36, 28, 7),rgb(63, 50, 16), rgba(255, 179, 0, 0));
-    // background-image: linear-gradient(to right, rgb(53, 29, 53), rgba(59, 33, 61, 0.297));
-    background-color: #2F4858;
-    box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
-    border: 1px ridge #FFBD59;
-    height: 20vh;
-    border-radius: 20px;
-    width: 90vw;
-    margin-right: 2rem;
-    margin-left: 2rem;
-    .email-text {
-        margin-bottom: 0px;
-    }
-    
+    background-color: $primary-color;
+    box-shadow: $shadow-color 0px 8px 16px;
+    border: 1px solid $border-color;
+    height: auto; 
+    border-radius: 10px;
+    width: 40vw;
+    margin: 1rem;
+    padding: 1rem;
+    max-height: 139px;
+
 }
 
 .api-key-display {
     display: flex;
     flex-direction: row;
-    position: relative; /* Make this element the containing block for absolutely positioned children */
+    position: relative;
+    align-items: center;
+    justify-content: center;
 }
 
 .obfuscation {
-    position: absolute; /* Positioning it absolutely within the container */
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 10; /* Ensure obfuscation is above the text */
-    background-image: linear-gradient(to right, #273b48,#2F4858, rgba(255, 179, 0, 0));
+    z-index: 10;
+    background-image: linear-gradient(to right, $primary-color 0%, $background-color 100%);
     border-radius: 10px;
-    p {
-        margin-bottom: 0px;
-    }
 }
 
 .obfu {
-    position: relative; /* Ensure text is within relative context of .obfuscation */
-    z-index: 5; /* Ensure text is below the obfuscation */
+    position: relative;
+    z-index: 5;
     p {
-        margin-bottom: 0px;
+        margin-bottom: 0;
+        color: $text-color;
     }
 }
 
 .api-buttons {
-    background-color: #FFBD59;
-    color:#2a2624;
-    padding: 5px;
+    background-color: $secondary-color;
+    color: $primary-color;
+    padding: 8px 16px;
     border: none;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color, box-shadow 0.3s ease-out;
-    overflow: hidden;
-    border: solid 1px #c69245;
-    box-shadow: rgba(204, 155, 39, 0.2) 1.95px 1.95px 2.6px;
-    margin-left: 5px;
-}
+    transition: background-color, box-shadow 0.3s ease-in-out;
+    border: solid 1px $border-color;
+    margin: 0.5rem;
 
-.api-buttons:hover {
-    background-color: #c69245;
-    border: solid 1px #FFBD59;
-    box-shadow: rgba(9, 8, 7, 0.4) 2px 2px, rgba(204, 155, 39, 0.3) 4px 4px, rgba(204, 155, 39, 0.2) 6px 6px, rgba(204, 155, 39, 0.1) 8px 8px, rgba(204, 155, 39, 0.05) 10px 10px;
+    &:hover {
+        background-color: $accent-color;
+        box-shadow: $shadow-color 0px 4px 6px;
+    }
 }
 
 .generate {
@@ -160,9 +160,67 @@ p {
 .usage-info {
     width: 100%;
     p {
-        font-size: 1.1rem;
+        font-size: 1rem;
         text-align: center;
+        color: $text-color;
     }
+}
+
+.email {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: $primary-color;
+    border-radius: 10px;
+    height: auto;
+    margin: 1rem;
+    padding: 1rem;
+    border: 1px solid $border-color;
+
+    input {
+        margin-top: 10px;
+        padding: 10px;
+        border: 1px solid $border-color;
+        border-radius: 5px;
+        width: 90%;
+        background-color: #2a2624;
+        color: $text-color;
+    }
+}
+
+.email p {
+    font-size: 1rem;
+    color: $text-color;
+    text-align: center;
+}
+
+.email input::placeholder {
+    color: $secondary-color;
+}
+
+.email-btn {
+    margin: 10px;
+}
+
+.email-text {
+    color: $text-color;
+}
+
+.email-btn-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.email-error {
+    color: #ef233c;
+    font-size: 0.8rem;
+    margin-top: 10px;
+}
+
+.returnEmails {
+    margin-top: 2rem;
 }
 
 @media screen and (max-width: 480px) {
@@ -174,7 +232,6 @@ p {
     }
     .Section {
         width: 90vw;
-
     }
     .api-key-display {
         flex-direction: column;
@@ -185,73 +242,8 @@ p {
             margin-top: 10px;
         }
     }
-}
-
-p {
-    font-size: 1.3rem;
-}
-
-
-.email {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    // background-color: rgba(255, 179, 0, 0.13);
-    border-radius: 20px;
-    height: 20vh;
-    margin: 2rem;
-    margin-bottom: 0px;
-    padding: 0.5rem;
-    justify-content: center;
-    input {
-        margin-top: 10px;
-        padding: 10px;
-        border: 1px solid #c69245;
-        border-radius: 5px;
-        width: 90%;
-        background-color: #2a2624;
-        color: white;
+    .name-text {
+        font-size: 2rem;
+        margin-left: 1rem;
     }
-}
-
-.email p {
-    font-size: 1.3rem;
-    color: #FFBD59;
-    text-align: center;
-}
-
-.email input::placeholder {
-    color: #c69245;
-}
-
-
-@media screen and (max-width: 812px) {
-    .Section {
-        width: 90vw;
-    }
-    .local-host {
-        margin-top: 0px;
-    }
-}
-
-.email-btn {
-    margin: 10px;
-}
-
-.email-btn-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-}
-.user-info {
-    .email-error {
-        color: red;
-        font-size: 0.8rem;
-        margin-top: 10px;
-    }
-}
-
-.returnEmails {
-    margin-top: 2rem;
 }

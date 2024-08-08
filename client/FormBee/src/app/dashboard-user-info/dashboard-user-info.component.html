@@ -1,14 +1,6 @@
 <h1 class="name-text">Welcome, {{ name }}!</h1>
 
 <div class="user-info">
-  <div class="api-key-handling email">
-    <p class="email-text">Recipient Email</p>
-    <input type="email" placeholder="Set email" value="{{ email }}" id="email-input">
-    <div class="email-btn-container">
-      <button class="api-buttons email-btn" (click)="updateEmail()">Update Email</button>
-      <p *ngIf="emailValid" class="email-error">Invalid email</p>
-    </div>
-  </div>
   <div class="Section">
     <div class="usage-info">
     <p>Current API Usage</p>
@@ -27,6 +19,14 @@
     <p class="usage-text">{{ localHostCurrentSubs }} / {{ localHostMaxSubs }}</p>
   </div>
   </div>
+  <div class="api-key-handling email">
+    <p class="email-text">Recipient Email</p>
+    <input type="email" placeholder="Set email" value="{{ email }}" id="email-input">
+    <div class="email-btn-container">
+      <button class="api-buttons email-btn" (click)="updateEmail()">Update Email</button>
+      <p *ngIf="emailValid" class="email-error">Invalid email</p>
+    </div>
+  </div>
   <div class="api-key-handling">
     <p>Current API Key</p>
     <p *ngIf="!apiKey">loading API key...</p>
@@ -35,7 +35,7 @@
     <div class="obfuscation"></div>
     <p *ngIf="apiKey">{{ displayApiKey }}</p>
   </div>
-  <button class="api-buttons" (click)="copyToClipboard()">Copy API Key</button>
+  <button class="api-buttons" (click)="copyToClipboard()">Copy</button>
 </div>
     <button class="api-buttons generate" (click)="newApiKey()">Generate new key</button>
   </div>
