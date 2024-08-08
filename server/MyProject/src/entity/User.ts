@@ -5,10 +5,10 @@ import { encrypt, decrypt } from "../miscUtils/encryption"
 @Entity()
 export class User {
 
+    //Basic user info start ___________________________________________________________________
     @PrimaryGeneratedColumn()
     id: number
 
-    //can be null
     @Column({ unique: true, nullable: true })
     githubId: number | null
 
@@ -41,7 +41,9 @@ export class User {
 
     @Column({nullable: true})
     apiResetDate: Date | null;
+    //Basic user info end _____________________________________________________________________
 
+    //Return email settings start _____________________________________________________________
     @Column({nullable: true, default: false})
     returnBoolean: boolean | null;
 
@@ -65,5 +67,23 @@ export class User {
         from: (value: string | null) => decrypt(value),
     }})
     fromEmailRefreshToken: string | null;
+
+    @Column({nullable: true})
+    smtpHost: string | null;
+
+    @Column({nullable: true})
+    smtpPort: number | null;
+
+    @Column({nullable: true})
+    smtpUsername: string | null;
+
+    @Column({nullable: true, transformer: {
+        to: (value: string | null) => encrypt(value),
+        from: (value: string | null) => decrypt(value),
+    }})
+    smtpPassword: string | null;
+    //Return email settings end _________________________________________________________________
+
+
 }
     
