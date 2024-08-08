@@ -60,19 +60,24 @@
                 <h2 class="modal-header-text">Return Email Contents</h2>
                 <p class="modal-p">Customize the contents of the return email.</p>
                 <div class="stacked-div">
-                    <div class="return-email-header">
+                    <div class="smtp-input-container">
                         <h2 class="modal-h2">Subject</h2>
-                        <input type="text" class="return-email-input" placeholder="A really awesome email">
+                        <input type="text" class="smtp-input" placeholder="A really awesome email">
                     </div>
-                    <div class="return-email-body">
+                    <div class="smtp-input-container body-section">
                         <h2 class="modal-h2">Body</h2>
-                        <input type="text" class="return-email-input" placeholder="Body">
+                        <textarea 
+                            class="return-email-input email-body" 
+                            placeholder="Type your email message here..."
+                            rows="10"
+                            spellcheck="true"
+                        ></textarea>
                     </div>
                 </div>
             </div>
             
         <div class="modal-footer">
-            <button class="modal-button" (click)="closeModal()">Cancel</button>
+            <button class="modal-button cancel-button" (click)="closeModal()">Cancel</button>
             <button class="modal-button" (click)="closeModal()">Save</button>
         </div>
     </div>

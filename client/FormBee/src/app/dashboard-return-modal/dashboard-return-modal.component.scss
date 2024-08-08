@@ -64,14 +64,14 @@ $shadow-color: rgba(0, 0, 0, 0.2);
     cursor: pointer;
     transition: background-color, box-shadow 0.3s ease-out;
     overflow: hidden;
-    border: solid 1px $border-color;
+    border: solid 1px $primary-color;
     box-shadow: $shadow-color 1.95px 1.95px 2.6px;
     margin-left: 5px;
 }
 
 .modal-button:hover {
-    background-color: $border-color;
-    border: solid 1px $accent-color;
+    background-color: $secondary-color;
+    border: solid 1px $primary-color;
     box-shadow: rgba(9, 8, 7, 0.4) 2px 2px, $shadow-color 4px 4px, rgba(204, 155, 39, 0.2) 6px 6px, rgba(204, 155, 39, 0.1) 8px 8px, rgba(204, 155, 39, 0.05) 10px 10px;
 }
 
@@ -396,4 +396,49 @@ input:checked + .slider:before {
     .modal-header {
         margin-bottom: 0px;
     }
+}
+
+.return-email-contents { 
+    margin-top: 1rem;
+    width: 100%;
+    .modal-header-text {
+        text-align: center;
+    }
+}
+
+.body-section {
+    flex-direction: column;
+}
+.email-body {
+    width: 100%;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    resize: vertical;
+    background-color: $background-color;
+    color: $text-color;
+    resize: none;
+    margin-bottom: 20px;
+}
+
+.email-body:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 5px rgba(226, 203, 74, 0.5);
+}
+
+.smtp-input:focus {
+    box-shadow: 0 0 5px rgba(226, 203, 74, 0.5);
+    outline: none;
+}
+
+.smtp-input {
+    border: 1px solid $border-color;
+}
+
+.cancel-button:hover {
+    box-shadow: rgba(9, 8, 7, 0.4) -2px 2px, $shadow-color -4px 4px, rgba(204, 155, 39, 0.2) -6px 6px, rgba(204, 155, 39, 0.1) -8px 8px, rgba(204, 155, 39, 0.05) -10px 10px;
 }
