@@ -17,11 +17,13 @@ $shadow-color: rgba(0, 0, 0, 0.2);
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 .modal {
     background-color: $primary-color;
-    border-radius: 10px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
     width: 70vw;
     height: 70vh;
     display: flex;
@@ -32,6 +34,12 @@ $shadow-color: rgba(0, 0, 0, 0.2);
     animation: fadeIn 0.5s forwards;
     overflow: scroll;
     overflow-x: hidden;
+    border-top: none;
+    border-bottom: none;
+
+}
+
+.shadow-modal {
     box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
 }
 
@@ -79,11 +87,10 @@ $shadow-color: rgba(0, 0, 0, 0.2);
     background-color: transparent;
     border: none;
     cursor: pointer;
-    position: absolute;
-    top: 10px;
-    right: 12px;
+    position: relative;
     font-size: 2rem;
     transition: color 0.2s ease-out;
+    z-index: 100;
 }
 
 .close-button:hover {
@@ -421,7 +428,7 @@ input:checked + .slider:before {
     background-color: $background-color;
     color: $text-color;
     resize: none;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 .email-body:focus {
@@ -441,4 +448,54 @@ input:checked + .slider:before {
 
 .cancel-button:hover {
     box-shadow: rgba(9, 8, 7, 0.4) -2px 2px, $shadow-color -4px 4px, rgba(204, 155, 39, 0.2) -6px 6px, rgba(204, 155, 39, 0.1) -8px 8px, rgba(204, 155, 39, 0.05) -10px 10px;
+}
+
+/* Width of the scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: $primary-color;
+    border-radius: 6px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: $shadow-color;
+    border-radius: 6px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
+.spacing-modal {
+    height: 30px;
+    width: calc(70vw - .1px);
+    background-color: $primary-color;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border: 1px solid $border-color;
+    border-bottom: none;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.spacing-modal-2 {
+    height: 30px;
+    width: calc(70vw - .1px);
+    background-color: $primary-color;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border: 1px solid $border-color;
+    border-top: none;
 }
