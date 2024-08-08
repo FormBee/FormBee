@@ -123,7 +123,7 @@ p {
     right: 0;
     bottom: 0;
     z-index: 10;
-    background-image: linear-gradient(to right, $primary-color 0%, $background-color 100%);
+    background-image: linear-gradient(to right, $primary-color 0%, $background-color 100%,);
     border-radius: 10px;
 }
 
