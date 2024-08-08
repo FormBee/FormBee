@@ -24,6 +24,7 @@ export class DashboardReturnModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.setSwitch();
+    console.log(this.smtpHost, this.smtpPort, this.smtpUsername, this.smtpPassword, this.emailSubject, this.emailBody, this.returnEmailBoolean);
   }
 
   constructor(elRef: ElementRef<HTMLElement>) {
@@ -31,8 +32,14 @@ export class DashboardReturnModalComponent implements OnInit {
   }
 
   returnEmailModal = output<boolean>();
+  smtpHostOutput = output<string | undefined>();
+  smtpPortOutput = output<number>();
+  smtpUsernameOutput = output<string>();
+  smtpPasswordOutput = output<string>();
+  emailSubjectOutput = output<string>();
+  emailBodyOutput = output<string>();
+  returnEmailBooleanOutput = output<boolean>();
   
-
   closeModal = () => {
     const modalElement = this.elRef.nativeElement.querySelector('.modal');
     const modalContainerElement = this.elRef.nativeElement.querySelector('.modal-container');
@@ -71,6 +78,13 @@ export class DashboardReturnModalComponent implements OnInit {
     this.smtpPassword = smtpPassword.value;
     this.emailSubject = emailSubject.value;
     this.emailBody = emailBody.value;
+    this.smtpHostOutput.emit(this.smtpHost);
+    this.smtpPortOutput.emit(this.smtpPort);
+    this.smtpUsernameOutput.emit(this.smtpUsername);
+    this.smtpPasswordOutput.emit(this.smtpPassword);
+    this.emailSubjectOutput.emit(this.emailSubject);
+    this.emailBodyOutput.emit(this.emailBody);
+    this.returnEmailBooleanOutput.emit(this.returnEmailBoolean);
     await fetch('http://localhost:3000/update-return-settings/' + this.githubId, {
       method: 'POST',
       headers: {
@@ -85,7 +99,7 @@ export class DashboardReturnModalComponent implements OnInit {
         emailBody: this.emailBody,
         returnMessage: this.returnEmailBoolean,
       }),
-    });
+    }).then(this.closeModal);
     console.log("Save changes");
   }
 }

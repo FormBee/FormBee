@@ -63,9 +63,15 @@ export class DashboardUserInfoComponent implements OnInit {
         this.localHostMaxSubs = data.localHostMaxSubmissions;
         this.email = data.email;
         this.googleEmail = data.fromEmail;
+        this.smtpHost = data.smtpHost;
+        this.smtpPort = data.smtpPort;
+        this.smtpUsername = data.smtpUsername;
+        this.smtpPassword = data.smtpPassword;
+        this.emailSubject = data.emailSubject;
+        this.emailBody = data.emailBody;
+        this.returnEmailBoolean = data.returnBoolean;
 
         if (this.apiKey) {
-          // Only show the last 4 characters of the API key
           this.displayApiKey = '*'.repeat(this.apiKey.length - 4) + this.apiKey.slice(this.apiKey.length - 4);
         }
       }

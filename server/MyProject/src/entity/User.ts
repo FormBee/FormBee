@@ -47,9 +47,6 @@ export class User {
     @Column({nullable: true, default: false})
     returnBoolean: boolean | null;
 
-    @Column({nullable: true})
-    returnMessage: string | null;
-
     @Column({nullable: true, transformer: {
         to: (value: string | null) => encrypt(value),
         from: (value: string | null) => decrypt(value),
@@ -82,6 +79,12 @@ export class User {
         from: (value: string | null) => decrypt(value),
     }})
     smtpPassword: string | null;
+
+    @Column({nullable: true})
+    emailSubject: string | null;
+
+    @Column({nullable: true})
+    emailBody: string | null;
     //Return email settings end _________________________________________________________________
 
 

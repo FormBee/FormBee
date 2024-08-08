@@ -466,11 +466,31 @@ AppDataSource.initialize().then(async () => {
     });
 
     app.post('/update-return-settings/:githubId', async (req: Request, res: Response) => {
+        const githubId = parseInt(req.params.githubId);
         const { smtpHost, smtpPort, smtpUsername, smtpPassword, emailSubject, emailBody, returnMessage } = req.body;
         try {
             console.log(req.body)
-            // const result = await User.updateReturnSettings(req.user.githubId, smtpHost, smtpPort, smtpUsername, smtpPassword, emailSubject, emailBody, returnMessage);
-            // res.json(result);
+            const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+            if (!user) {
+                res.status(400).send('User not found');
+                return;
+            } else {
+                user.smtpHost = smtpHost;
+                user.smtpPort = smtpPort;
+                user.smtpUsername = smtpUsername;
+                user.smtpPassword = smtpPassword;
+                user.emailSubject = emailSubject;
+                user.emailBody = emailBody;
+                user.returnBoolean = returnMessage;
+                user.fromEmailAccessToken = null;
+                user.fromEmail = null;
+                user.fromEmailRefreshToken = null;
+                res.json({ message: 'Settings updated successfully' });
+                if (smtpHost && smtpPort && smtpUsername && smtpPassword && emailSubject && emailBody && returnMessage) {
+                    await AppDataSource.manager.save(user);
+                }
+            }
+
         } catch (error) {
             console.error('Error during update return settings:', error);
             res.status(500).json({ error: 'An error occurred during the update process' });

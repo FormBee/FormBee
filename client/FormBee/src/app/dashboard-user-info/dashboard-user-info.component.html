@@ -51,4 +51,4 @@
   <div>
   </div>
 </div>
-<app-dashboard-return-modal *ngIf="returnEmailModal"  (returnEmailModal)="closeReturnEmailModal()" [githubId]="githubId" [returnEmailBoolean]="returnEmailBoolean" [smtpHost]="smtpHost" [smtpPort]="smtpPort" [smtpUsername]="smtpUsername" [smtpPassword]="smtpPassword" [emailSubject]="emailSubject" [emailBody]="emailBody"></app-dashboard-return-modal>
+<app-dashboard-return-modal *ngIf="returnEmailModal" (smtpHostOutput)="smtpHost = $event" (smtpPortOutput)="smtpPort = $event" (smtpUsernameOutput)="smtpUsername = $event" (smtpPasswordOutput)="smtpPassword = $event" (emailSubjectOutput)="emailSubject = $event" (emailBodyOutput)="emailBody = $event" (returnEmailBooleanOutput)="returnEmailBoolean = $event" (returnEmailModal)="closeReturnEmailModal()" [githubId]="githubId" [returnEmailBoolean]="returnEmailBoolean" [smtpHost]="smtpHost" [smtpPort]="smtpPort" [smtpUsername]="smtpUsername" [smtpPassword]="smtpPassword" [emailSubject]="emailSubject" [emailBody]="emailBody"></app-dashboard-return-modal>
