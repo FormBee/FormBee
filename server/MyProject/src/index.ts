@@ -464,7 +464,18 @@ AppDataSource.initialize().then(async () => {
             res.status(500).json({ error: 'An error occurred during the authentication process' });
         }
     });
-      // ______________________________________________________________________________________
+
+    app.post('/update-return-settings/:githubId', async (req: Request, res: Response) => {
+        const { smtpHost, smtpPort, smtpUsername, smtpPassword, emailSubject, emailBody, returnMessage } = req.body;
+        try {
+            console.log(req.body)
+            // const result = await User.updateReturnSettings(req.user.githubId, smtpHost, smtpPort, smtpUsername, smtpPassword, emailSubject, emailBody, returnMessage);
+            // res.json(result);
+        } catch (error) {
+            console.error('Error during update return settings:', error);
+            res.status(500).json({ error: 'An error occurred during the update process' });
+        }
+    });
 
     
     // register express routes from defined application routes

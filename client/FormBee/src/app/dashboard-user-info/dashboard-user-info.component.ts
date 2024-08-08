@@ -27,6 +27,13 @@ export class DashboardUserInfoComponent implements OnInit {
   emailValid: boolean = false;
   googleEmail: string | undefined;
   returnEmailModal: boolean = false;
+  smtpHost: string | undefined;
+  smtpPort: number | undefined;
+  smtpUsername: string | undefined;
+  smtpPassword: string | undefined;
+  emailSubject: string | undefined;
+  emailBody: string | undefined;
+  returnEmailBoolean: boolean = false;
 
   fetchApiKey = async (githubId: string) => {
     console.log("Fetching API key");

@@ -51,4 +51,4 @@
   <div>
   </div>
 </div>
-<app-dashboard-return-modal *ngIf="returnEmailModal"  (returnEmailModal)="closeReturnEmailModal()"></app-dashboard-return-modal>
+<app-dashboard-return-modal *ngIf="returnEmailModal"  (returnEmailModal)="closeReturnEmailModal()" [githubId]="githubId" [returnEmailBoolean]="returnEmailBoolean" [smtpHost]="smtpHost" [smtpPort]="smtpPort" [smtpUsername]="smtpUsername" [smtpPassword]="smtpPassword" [emailSubject]="emailSubject" [emailBody]="emailBody"></app-dashboard-return-modal>

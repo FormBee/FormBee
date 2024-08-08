@@ -18,7 +18,7 @@
                     <p class="modal-p">Enable or disable the return email feature.</p>
                 </div>
                 <label class="switch">
-                    <input type="checkbox" (mousedown)="toggleSwitch()" id="toggleSwitch">
+                    <input type="checkbox" (click)="toggleSwitch()" id="toggleSwitch">
                     <span class="slider round"></span>
                 </label>
             </div>
@@ -45,19 +45,19 @@
                     </div>
                     <div class="smtp-input-container">
                         <h2 class="modal-h2">SMTP Host</h2>
-                        <input type="text" class="smtp-input" placeholder="smtp.example.com">
+                        <input type="text" id="smtp-host-input-host" class="smtp-input" placeholder="smtp.example.com" value="{{ smtpHost }}">
                     </div>
                     <div class="smtp-input-container">
                         <h2 class="modal-h2">SMTP Port</h2>
-                        <input type="text" class="smtp-input" placeholder="587(example)">
+                        <input type="text" id="smtp-port-input-port" class="smtp-input" placeholder="587(example)" value="{{ smtpPort }}">
                     </div>
                     <div class="smtp-input-container">
                         <h2 class="modal-h2">Username</h2>
-                        <input type="text" class="smtp-input" placeholder="Username">
+                        <input type="text" id="smtp-username-input-username" class="smtp-input" placeholder="Username" value="{{ smtpUsername }}">
                     </div>
                     <div class="smtp-input-container">
                         <h2 class="modal-h2">Password</h2>
-                        <input type="text" class="smtp-input" placeholder="Password">
+                        <input type="text" id="smtp-password-input-password" class="smtp-input" placeholder="Password" value="{{ smtpPassword }}">
                     </div>
                 </div>
 
@@ -67,7 +67,7 @@
                     <div class="stacked-div">
                         <div class="smtp-input-container">
                             <h2 class="modal-h2">Subject</h2>
-                            <input type="text" class="smtp-input" placeholder="A really awesome email">
+                            <input id="email-subject-input-subject" type="text" class="smtp-input" placeholder="A really awesome email" value="{{ emailSubject }}">
                         </div>
                         <div class="smtp-input-container body-section">
                             <h2 class="modal-h2">Body</h2>
@@ -76,6 +76,7 @@
                                 placeholder="Type your email message here..."
                                 rows="10"
                                 spellcheck="true"
+                                id="email-body-input-body"
                             ></textarea>
                         </div>
                     </div>
@@ -83,7 +84,7 @@
                 
             <div class="modal-footer">
                 <button class="modal-button cancel-button" (click)="closeModal()">Cancel</button>
-                <button class="modal-button" (click)="closeModal()">Save</button>
+                <button class="modal-button" (click)="saveChanges()">Save</button>
             </div>
         </div>
         <div class="spacing-modal-2"></div>
