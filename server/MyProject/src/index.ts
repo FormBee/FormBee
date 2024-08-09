@@ -314,6 +314,7 @@ AppDataSource.initialize().then(async () => {
                 // console.log("User: ", user);
                 if (User) {
                     res.json(user);
+                    console.log("User: ", user);
                 } else {
                     console.log("user: ", user);
                     res.status(404).json('User not found');
@@ -351,6 +352,12 @@ AppDataSource.initialize().then(async () => {
             res.status(400).send('User not found');
             return;
         } else if (user.fromEmailAccessToken) {
+            user.smtpHost = null;
+            user.smtpPort = null;
+            user.smtpUsername = null;
+            user.smtpPassword = null;
+            console.log("User: ", user);
+            await AppDataSource.manager.save(user);
             res.redirect("http://localhost:4200/dashboard");
             return;
         } else {
@@ -451,10 +458,18 @@ AppDataSource.initialize().then(async () => {
                 res.status(400).send('User not found');
                 return;
             } else {
+                // Add google credentials to user
                 user.fromEmailAccessToken = access_token;
                 user.fromEmailRefreshToken = refresh_token;
                 user.fromEmail = userEmail;
+                // Remove smtp credentials
+                user.smtpHost = null;
+                user.smtpPort = null;
+                user.smtpUsername = null;
+                user.smtpPassword = null;
+                console.log("User: ", user);
                 await AppDataSource.manager.save(user);
+                
                 res.redirect("http://localhost:4200/dashboard");
             }
         

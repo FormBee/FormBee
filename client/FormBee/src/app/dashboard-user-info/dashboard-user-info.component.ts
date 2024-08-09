@@ -62,7 +62,11 @@ export class DashboardUserInfoComponent implements OnInit {
         this.localHostCurrentSubs = data.localHostCurrentSubmissions;
         this.localHostMaxSubs = data.localHostMaxSubmissions;
         this.email = data.email;
-        this.googleEmail = data.fromEmail;
+        if (data.fromEmail) {
+          this.googleEmail = data.fromEmail;
+        } else {
+          this.googleEmail = data.smtpUsername;
+        }
         this.smtpHost = data.smtpHost;
         this.smtpPort = data.smtpPort;
         this.smtpUsername = data.smtpUsername;
@@ -138,9 +142,7 @@ export class DashboardUserInfoComponent implements OnInit {
     }
   }
 
-  gmailLogin = () => {
-    window.location.href = "http://localhost:3000/oauth/google/" + this.githubId;
-  }
+
 
   saveOptions = () => {
     const emailInput = document.getElementById('email-input-return') as HTMLInputElement;
