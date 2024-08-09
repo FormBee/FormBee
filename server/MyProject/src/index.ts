@@ -32,16 +32,12 @@ AppDataSource.initialize().then(async () => {
     
 
     const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true,
+        host: 'smtp.zoho.com',
+        port: 465, // or 587 for TLS
+        secure: true, // true for 465, false for other ports
         auth: {
-            type: 'OAuth2',
-            user: process.env.USER,
-            accessToken: process.env.GOOGLE_ACCESS_TOKEN,
-            clientId: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
+            user: process.env.ZOHO_USER, // your Zoho email address
+            pass: process.env.ZOHO_PASSWORD // your Zoho email password
         },
     });
     
@@ -81,7 +77,7 @@ AppDataSource.initialize().then(async () => {
                     if (req.headers.origin.includes("localhost")) {
                         user.localHostCurrentSubmissions++;
                         await sendMail(recEmail, name, email, message, null, res);
-                        if (email) {
+                        if (user.returnBoolean === true) {
                             const returnEmail = email;
                             axios.post('http://localhost:3000/formbee/return/' + apikey, {
                                 emailToSendTo: returnEmail,
@@ -102,7 +98,7 @@ AppDataSource.initialize().then(async () => {
 
         async function sendMail(recEmail, name, email, message, file, res) {        
             const mailMessage = {
-                from: process.env.user,
+                from: process.env.ZOHO_USER,
                 to: [recEmail,],
                 subject: 'New form submission',
                 text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
@@ -134,41 +130,73 @@ AppDataSource.initialize().then(async () => {
                 const email = user.fromEmail;
                 const accessToken = user.fromEmailAccessToken;
                 const refreshToken = user.fromEmailRefreshToken;
-                const transporter = nodemailer.createTransport({
-                    host: 'smtp.gmail.com',
-                    port: 465,
-                    secure: true,
-                    auth: {
-                        type: 'OAuth2',
-                        user: email,
-                        accessToken: accessToken,
-                        refreshToken: refreshToken,
-                        clientId: process.env.GOOGLE_CLIENT_ID,
-                        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-                    },
-                });
-                const mailMessage = {
-                    from: email,
-                    to: emailToSendTo,
-                    subject: 'Return email',
-                    text: 'Return email',
-                }
-                transporter.sendMail(mailMessage, (error) => {
-                    if (error) {
-                        console.error(error);
-                        res.status(500).json('Error sending email');
-                    } else {
-                        res.json({ message: 'Email sent successfully' });
+                const smtpHost = user.smtpHost;
+                const smtpPort = user.smtpPort;
+                const smtpUsername = user.smtpUsername;
+                const smtpPassword = user.smtpPassword;
+                const emailSubject = user.emailSubject;
+                const emailBody = user.emailBody;
+                const returnMessage = user.returnBoolean;
+
+                if (smtpHost && smtpPort && smtpUsername && smtpPassword && emailSubject && emailBody && returnMessage) {
+                    const transporter = nodemailer.createTransport({
+                        host: smtpHost,
+                        port: smtpPort,
+                        secure: true,
+                        auth: {
+                            user: smtpUsername,
+                            pass: smtpPassword,
+                        },
+                    });
+                    const mailMessage = {
+                        from: smtpUsername,
+                        to: emailToSendTo,
+                        subject: emailSubject,
+                        text: emailBody,
                     }
-                });
+                    transporter.sendMail(mailMessage, (error) => {
+                        if (error) {
+                            console.error(error);
+                            res.status(500).json('Error sending email');
+                        } else {
+                            res.json({ message: 'Email sent successfully' });
+                        }
+                    });
+                } else if (email && accessToken && refreshToken) {
+                    const transporter = nodemailer.createTransport({
+                        host: 'smtp.gmail.com',
+                        port: 465,
+                        secure: true,
+                        auth: {
+                            type: 'OAuth2',
+                            user: email,
+                            accessToken: accessToken,
+                            refreshToken: refreshToken,
+                            clientId: process.env.GOOGLE_CLIENT_ID,
+                            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+                        },
+                    });
+                    const mailMessage = {
+                        from: email,
+                        to: emailToSendTo,
+                        subject: emailSubject,
+                        text: emailBody,
+                    }
+                    transporter.sendMail(mailMessage, (error) => {
+                        if (error) {
+                            console.error(error);
+                            res.status(500).json('Error sending email');
+                        } else {
+                            res.json({ message: 'Email sent successfully' });
+                        }
+                    });
+                } else {
+                    res.status(405).json('Missing email or smtp credentials');
+                }
             }
-            
             // Add any necessary email sending logic here
 
-            
-            res.json({ message: 'Email sent successfully' });
         } catch (error) {
-            console.error("Error in /hi:", error);
             res.status(500).json({ error: 'Failed to send email' });
         }
     });
@@ -490,18 +518,19 @@ AppDataSource.initialize().then(async () => {
                 res.status(400).send('User not found');
                 return;
             } else {
+                user.returnBoolean = returnMessage;
+                user.emailSubject = emailSubject;
+                user.emailBody = emailBody;
+                await AppDataSource.manager.save(user);
                 user.smtpHost = smtpHost;
                 user.smtpPort = smtpPort;
                 user.smtpUsername = smtpUsername;
                 user.smtpPassword = smtpPassword;
-                user.emailSubject = emailSubject;
-                user.emailBody = emailBody;
-                user.returnBoolean = returnMessage;
                 user.fromEmailAccessToken = null;
                 user.fromEmail = null;
                 user.fromEmailRefreshToken = null;
                 res.json({ message: 'Settings updated successfully' });
-                if (smtpHost && smtpPort && smtpUsername && smtpPassword && emailSubject && emailBody && returnMessage) {
+                if (smtpHost && smtpPort && smtpUsername && smtpPassword) {
                     await AppDataSource.manager.save(user);
                 }
             }
