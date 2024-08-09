@@ -5,6 +5,7 @@ $text-color: #fff875;
 $background-color: #2f4858;
 $border-color: #1e8576;
 $shadow-color: rgba(0, 0, 0, 0.2);
+$background-color-seethrough: #2f485800;
 
 p {
     color: $text-color;
@@ -123,7 +124,7 @@ p {
     right: 0;
     bottom: 0;
     z-index: 10;
-    background-image: linear-gradient(to right, $primary-color 0%, $background-color 100%,);
+    background-image: linear-gradient(to right, $primary-color 0%, $background-color 50%, $background-color-seethrough 100%);
     border-radius: 10px;
 }
 
