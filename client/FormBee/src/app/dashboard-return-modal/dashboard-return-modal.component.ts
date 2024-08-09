@@ -83,6 +83,7 @@ export class DashboardReturnModalComponent implements OnInit {
     this.smtpPassword = smtpPassword.value;
     this.emailSubject = emailSubject.value;
     this.emailBody = emailBody.value;
+  
     this.smtpHostOutput.emit(this.smtpHost);
     this.smtpPortOutput.emit(this.smtpPort);
     this.smtpUsernameOutput.emit(this.smtpUsername);
