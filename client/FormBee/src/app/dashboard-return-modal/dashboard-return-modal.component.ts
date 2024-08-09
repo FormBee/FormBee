@@ -39,6 +39,7 @@ export class DashboardReturnModalComponent implements OnInit {
   emailSubjectOutput = output<string>();
   emailBodyOutput = output<string>();
   returnEmailBooleanOutput = output<boolean>();
+  googleEmailOutput = output<string | undefined>();
   
   closeModal = () => {
     const modalElement = this.elRef.nativeElement.querySelector('.modal');
@@ -103,6 +104,10 @@ export class DashboardReturnModalComponent implements OnInit {
         emailBody: this.emailBody,
         returnMessage: this.returnEmailBoolean,
       }),
+    }).then(() => {
+      if (this.smtpHost && this.smtpPort && this.smtpUsername && this.smtpPassword && this.emailSubject && this.emailBody) {
+        this.googleEmailOutput.emit(this.smtpUsername);
+      }
     }).then(this.closeModal);
     console.log("Save changes");
   }

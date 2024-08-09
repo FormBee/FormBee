@@ -44,11 +44,11 @@
     <p *ngIf="googleEmail">Current return email: {{ googleEmail }}</p>
     <p *ngIf="!googleEmail">Set up return email to return an email to users who submit your forms.</p>
 
-    <button *ngIf="googleEmail" class="api-buttons gmail-login" (click)="openReturnEmailModal()">Change return email</button>
+    <button *ngIf="googleEmail" class="api-buttons gmail-login" (click)="openReturnEmailModal()">Return email settings</button>
     <button *ngIf="!googleEmail" class="api-buttons gmail-login" (click)="openReturnEmailModal()">Sign into return email</button>
   </div>
 
   <div>
   </div>
 </div>
-<app-dashboard-return-modal *ngIf="returnEmailModal" (smtpHostOutput)="smtpHost = $event" (smtpPortOutput)="smtpPort = $event" (smtpUsernameOutput)="smtpUsername = $event" (smtpPasswordOutput)="smtpPassword = $event" (emailSubjectOutput)="emailSubject = $event" (emailBodyOutput)="emailBody = $event" (returnEmailBooleanOutput)="returnEmailBoolean = $event" (returnEmailModal)="closeReturnEmailModal()" [githubId]="githubId" [returnEmailBoolean]="returnEmailBoolean" [smtpHost]="smtpHost" [smtpPort]="smtpPort" [smtpUsername]="smtpUsername" [smtpPassword]="smtpPassword" [emailSubject]="emailSubject" [emailBody]="emailBody"></app-dashboard-return-modal>
+<app-dashboard-return-modal *ngIf="returnEmailModal" (googleEmailOutput)="googleEmail = $event" (smtpHostOutput)="smtpHost = $event" (smtpPortOutput)="smtpPort = $event" (smtpUsernameOutput)="smtpUsername = $event" (smtpPasswordOutput)="smtpPassword = $event" (emailSubjectOutput)="emailSubject = $event" (emailBodyOutput)="emailBody = $event" (returnEmailBooleanOutput)="returnEmailBoolean = $event" (returnEmailModal)="closeReturnEmailModal()" [githubId]="githubId" [returnEmailBoolean]="returnEmailBoolean" [smtpHost]="smtpHost" [smtpPort]="smtpPort" [smtpUsername]="smtpUsername" [smtpPassword]="smtpPassword" [emailSubject]="emailSubject" [emailBody]="emailBody"></app-dashboard-return-modal>
