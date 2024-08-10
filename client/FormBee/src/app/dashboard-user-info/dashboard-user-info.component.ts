@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { DashboardReturnModalComponent } from '../dashboard-return-modal/dashboard-return-modal.component';
+import { ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard-user-info',
@@ -180,5 +181,18 @@ export class DashboardUserInfoComponent implements OnInit {
     }
     console.log("Github ID: ", this.githubId);
     this.fetchApiKey(this.githubId);
+    this.convertToScript();
+  }
+
+  @ViewChild('script', {static: true}) script!: ElementRef;
+  convertToScript() {
+    const element = this.script.nativeElement;
+    const script = document.createElement('script');
+    script.src = 'https://telegram.org/js/telegram-widget.js?22';
+    script.setAttribute('data-telegram-login', "FormbeeBot");
+    script.setAttribute('data-size', 'large');
+    script.setAttribute('data-auth-url', 'http://localhost:3000/oauth/telegram');
+    script.setAttribute('data-request-access', 'write');
+    element.parentElement.replaceChild(script, element);
   }
 }

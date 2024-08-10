@@ -259,9 +259,9 @@ AppDataSource.initialize().then(async () => {
                         apiResetDate: sameDayNextMonth,
                     })
                 );
-            res.redirect(`http://localhost:4200/login?token=${tokenData.access_token}`);
+            res.redirect(`https://b121-24-52-69-34.ngrok-free.app/login?token=${tokenData.access_token}`);
             } else {
-                res.redirect(`http://localhost:4200/login?token=${tokenData.access_token}`);
+                res.redirect(`https://b121-24-52-69-34.ngrok-free.app/login?token=${tokenData.access_token}`);
             }
         } catch (error) {
             console.error('Error fetching access token:', error);
@@ -368,6 +368,67 @@ AppDataSource.initialize().then(async () => {
         .catch(error => {
             res.status(500).json('Internal Server Error');
         });
+    });
+
+    // Telegram
+
+    app.get('/oauth/telegram', async (req, res) => {
+        const verifyTelegramHash = (authData, botToken) => {
+            const secretKey = crypto.createHash('sha256').update(botToken).digest();
+            const dataCheckString = Object.keys(authData)
+                .filter(key => key !== 'hash')
+                .sort()
+                .map(key => `${key}=${authData[key]}`)
+                .join('\n');
+        
+            const hmac = crypto.createHmac('sha256', secretKey)
+                .update(dataCheckString)
+                .digest('hex');
+        
+            return hmac === authData.hash;
+        };
+        
+        const { id, first_name, last_name, username, photo_url, auth_date, hash } = req.query;
+        console.log(req.query);
+        const botToken = process.env.TELEGRAM_API_TOKEN;
+    
+        try {
+            if (!botToken) {
+                throw new Error('TELEGRAM_BOT_API_KEY is not set in environment variables');
+            }
+    
+            const isValid = await verifyTelegramHash(req.query, botToken);
+
+            if (isValid) {
+                // The hash is valid, process user data
+                res.redirect("http://localhost:4200/dashboard");
+            } else {
+                // Invalid hash
+                res.status(400).send('Invalid request');
+            }
+        } catch (error) {
+            console.error('Error verifying Telegram hash:', error);
+            res.status(500).send('Internal Server Error');
+        }
+    });
+
+    app.post('/telegram/send/:githubId', async (req, res) => {
+        const githubId = parseInt(req.params.githubId);
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            const message = req.body.message;
+            const chatId = req.body.chatId;
+            const url = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_API_KEY}/sendMessage?chat_id=${chatId}&text=${message}&parse_mode=Markdown`;
+            try {
+                const response = await axios.get(url);
+                res.json(response.data);
+            } catch (error) {
+                res.status(500).json('Internal Server Error');
+            }
+        }
     });
 
 
