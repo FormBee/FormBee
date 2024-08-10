@@ -35,6 +35,7 @@ export class DashboardUserInfoComponent implements OnInit {
   emailSubject: string | undefined;
   emailBody: string | undefined;
   returnEmailBoolean: boolean = false;
+  telegramModal: boolean = false;
 
   fetchApiKey = async (githubId: string) => {
     console.log("Fetching API key");
@@ -194,5 +195,13 @@ export class DashboardUserInfoComponent implements OnInit {
     script.setAttribute('data-auth-url', 'http://localhost:3000/oauth/telegram/' + this.githubId);
     script.setAttribute('data-request-access', 'write');
     element.parentElement.replaceChild(script, element);
+  }
+
+  openTelegramModal = () => {
+    this.telegramModal = true;
+  }
+
+  closeTelegramModal = () => {
+    this.telegramModal = false;
   }
 }
