@@ -82,9 +82,11 @@ AppDataSource.initialize().then(async () => {
                             axios.post('http://localhost:3000/formbee/return/' + apikey, {
                                 emailToSendTo: returnEmail,
                             });
-                            // For prod...
-                            // return AppDataSource.manager.save(user);
+
                         }
+                        axios.post('http://localhost:3000/telegram/send/' + user.githubId, {
+                            message: req.body,
+                        });
                     } else {
                         user.currentSubmissions++;
                         sendMail(recEmail, name, email, message, null, res);
@@ -370,9 +372,11 @@ AppDataSource.initialize().then(async () => {
         });
     });
 
-    // Telegram
+    // Telegram oauth
 
-    app.get('/oauth/telegram', async (req, res) => {
+    app.get('/oauth/telegram/:githubId', async (req, res) => {
+        const githubId = parseInt(req.params.githubId);
+        console.log("in telegram oauth: ", githubId);
         const verifyTelegramHash = (authData, botToken) => {
             const secretKey = crypto.createHash('sha256').update(botToken).digest();
             const dataCheckString = Object.keys(authData)
@@ -393,13 +397,34 @@ AppDataSource.initialize().then(async () => {
         const botToken = process.env.TELEGRAM_API_TOKEN;
     
         try {
-            if (!botToken) {
-                throw new Error('TELEGRAM_BOT_API_KEY is not set in environment variables');
-            }
-    
             const isValid = await verifyTelegramHash(req.query, botToken);
 
             if (isValid) {
+                const sendTelegramMessage = async (chatId, message) => {
+                    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+                
+                    try {
+                        console.log
+                        await axios.post(url, {
+                            chat_id: chatId,
+                            text: message,
+                        });
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                    }
+                };
+                await sendTelegramMessage(id, `Hi ${first_name}! Formbee will now be sending your form submission data to this chat!`);
+
+                const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+                if (!user) {
+                    res.status(400).send('User not found');
+                    return;
+                } else {
+                    user.telegramChatId = Number(id);
+                    await AppDataSource.manager.save(user);
+                    res.redirect("http://localhost:4200/dashboard");
+                    return;
+                }
                 // The hash is valid, process user data
                 res.redirect("http://localhost:4200/dashboard");
             } else {
@@ -413,26 +438,54 @@ AppDataSource.initialize().then(async () => {
     });
 
     app.post('/telegram/send/:githubId', async (req, res) => {
+        console.log("in telegram send");
         const githubId = parseInt(req.params.githubId);
         const user = await AppDataSource.manager.findOne(User, { where: { githubId } });
         if (!user) {
             res.status(400).send('User not found');
             return;
         } else {
+            console.log("in the else...");
             const message = req.body.message;
-            const chatId = req.body.chatId;
-            const url = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_API_KEY}/sendMessage?chat_id=${chatId}&text=${message}&parse_mode=Markdown`;
-            try {
-                const response = await axios.get(url);
-                res.json(response.data);
-            } catch (error) {
-                res.status(500).json('Internal Server Error');
+            let messageList = [];
+            // Loop through the message object and format it to be sent to Telegram
+            for (const [key, value] of Object.entries(message)) {
+                if (typeof value === 'string') {
+                    messageList.push(`${key}: ${value}`);
+                } else if (Array.isArray(value)) {
+                    messageList.push(`${key}: ${value.join(', ')}`);
+                } else {
+                    messageList.push(`${key}: ${JSON.stringify(value)}`);
+                }
             }
+            // Join the formatted message list into a single string
+            const formattedMessage = messageList.join('\n\n');
+
+            console.log("formatted message: ", formattedMessage);
+            console.log("message: ", message);
+
+            message
+            const sendTelegramMessage = async (chatId, message) => {
+                const url = `https://api.telegram.org/bot${process.env.TELEGRAM_API_TOKEN}/sendMessage`;
+                console.log("telegram url: ", url);
+            
+                try {
+                    console.log("in the try...");
+                    await axios.post(url, {
+                        chat_id: chatId,
+                        text: message,
+                    });
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                }
+            };
+            await sendTelegramMessage(user.telegramChatId, formattedMessage);
+
         }
     });
 
 
-    // Github OAuth
+    // Google OAuth
     app.get('/oauth/google/:githubId', async(req, res) => {
         console.log("in google oauth");
         const githubId = parseInt(req.params.githubId);  // Convert githubId to integer
@@ -463,7 +516,6 @@ AppDataSource.initialize().then(async () => {
                 "https://mail.google.com/"
             ];
             
-            // Generate a secure random state value and include githubId
             const stateValue = {
                 state: crypto.randomBytes(32).toString('hex'),
                 githubId

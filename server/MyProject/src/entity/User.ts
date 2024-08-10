@@ -88,5 +88,14 @@ export class User {
     //Return email settings end _________________________________________________________________
 
 
+    //Telegram settings start _________________________________________________________________
+    @Column({nullable: true, default: false})
+    telegramBoolean: boolean | null;
+
+    @Column({nullable: true})
+    telegramChatId: number | null;
+
+    //Telegram settings end ____________________________________________________________________
+
 }
     
