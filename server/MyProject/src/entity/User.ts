@@ -97,5 +97,14 @@ export class User {
 
     //Telegram settings end ____________________________________________________________________
 
+    //Discord settings start _________________________________________________________________
+    @Column({nullable: true, default: false})
+    discordBoolean: boolean | null;
+
+    @Column({nullable: true})
+    discordWebhook: string | null;
+
+    //Discord settings end ____________________________________________________________________
+
 }
     

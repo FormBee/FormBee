@@ -42,11 +42,9 @@ export class DashboardUserInfoComponent implements OnInit {
   telegramModal: boolean = false;
   telegramEnabled: boolean = false;
   telegramChat: string | undefined;
-  elRef: ElementRef<HTMLElement>;
-
-  constructor(elRef: ElementRef<HTMLElement>) {
-    this.elRef = elRef;
-  }
+  discordModal: boolean = false;
+  discordEnabled: boolean = false;
+  discordWebhook: string | undefined;
 
   fetchApiKey = async (githubId: string) => {
     console.log("Fetching API key");
@@ -89,6 +87,8 @@ export class DashboardUserInfoComponent implements OnInit {
         this.returnEmailBoolean = data.returnBoolean;
         this.telegramEnabled = data.telegramBoolean;
         this.telegramChat = data.telegramChatId;
+        this.discordEnabled = data.discordBoolean;
+        this.discordWebhook = data.discordWebhook;
 
         if (this.apiKey) {
           this.displayApiKey = '*'.repeat(this.apiKey.length - 4) + this.apiKey.slice(this.apiKey.length - 4);
@@ -239,4 +239,52 @@ export class DashboardUserInfoComponent implements OnInit {
     console.log("Telegram unlinked");
   }
 
+  openDiscordModal = () => {
+    this.discordModal = !this.discordModal;
+  }
+
+  async discordSwitch() {
+    this.discordEnabled = !this.discordEnabled;
+
+    await fetch('http://localhost:3000/discord/toogle/' + this.githubId, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        discordBoolean: this.discordEnabled,
+      }),
+    });
+    console.log(this.discordEnabled);
+  }
+
+  async unlinkDiscord() {
+    this.discordWebhook = undefined;
+    await fetch('http://localhost:3000/discord/unlink/' + this.githubId, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+    console.log("Discord unlinked");
+  }
+
+  async saveDiscordWebhook() {
+    const discordInput = document.getElementById('discord-input');
+    if (discordInput) {
+      this.discordWebhook = (<HTMLInputElement>discordInput).value;
+      await fetch('http://localhost:3000/discord/webhook/' + this.githubId, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          discordWebhook: this.discordWebhook,
+        }),
+      });
+      console.log("Discord webhook saved");
+    } else {
+      console.error("'discord-input' element not found.");
+    }
+  }
 }

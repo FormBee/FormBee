@@ -474,3 +474,18 @@ input:checked + .slider:before {
         box-shadow: $shadow-color 0px 4px 6px;
     }
 }
+
+#discord-input {
+    width: 90%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: $primary-color;
+    color: $text-color;
+}
+
+#discord-input:focus {
+        outline: none;
+        border: none;
+        box-shadow: 0 0 5px $text-color;
+    }

@@ -14,8 +14,6 @@ import { Routes } from "./routes";
 import { User } from "./entity/User";
 import createChallenge = require("./Alcha/Challenge.js");
 import axios from 'axios';
-import MailMessage = require("nodemailer/lib/mailer/mail-message");
-import { DataSource } from "typeorm";
 
 const redirectUrl = "https://ibex-causal-painfully.ngrok-free.app";
 // const redirectUrl = "http://localhost:4200";
@@ -62,6 +60,20 @@ AppDataSource.initialize().then(async () => {
     app.post('/formbee/:apikey', upload.none(), (req, res) => {
         const { apikey } = req.params;
         const { name, email, message } = req.body;
+        let messageList = [];
+            // Loop through the message object and format it to be sent to Telegram
+            for (const [key, value] of Object.entries(req.body)) {
+                if (typeof value === 'string') {
+                    messageList.push(`${key}: ${value}`);
+                } else if (Array.isArray(value)) {
+                    messageList.push(`${key}: ${value.join(', ')}`);
+                } else {
+                    messageList.push(`${key}: ${JSON.stringify(value)}`);
+                }
+            }
+        let niceMessage = messageList.join('\n\n');
+        //wrap nice message in ``` to make it look better
+        let niceMessageDiscord = `\`\`\`${niceMessage}\`\`\``;
         // Find the user in the database with API key, then increment the current submissions
         AppDataSource.manager.findOne(User, { where: { apiKey: apikey } })
             .then(async user => {
@@ -105,6 +117,18 @@ AppDataSource.initialize().then(async () => {
                             axios.post('http://localhost:3000/telegram/send/' + user.githubId, {
                                 message: req.body,
                             });
+                        }
+
+                        if (user.discordWebhook != null && user.discordBoolean) {
+                        console.log("Discord webhook");
+                        const sendMessage = async (message) => {
+                            console.log("Sendding to discord");
+                            console.log(user.discordWebhook, message);
+                            await axios.post(user.discordWebhook, {
+                                content: message,
+                            });
+                          };
+                        await sendMessage(niceMessageDiscord);
                         }
                         user.currentSubmissions++;
                         sendMail(recEmail, name, email, message, null, res);
@@ -244,6 +268,35 @@ AppDataSource.initialize().then(async () => {
             await AppDataSource.manager.save(user);
             console.log("Telegram settings updated successfully", user.telegramBoolean);
             res.json({ message: 'Telegram settings updated successfully' });
+        }
+    });
+
+    app.post('/discord/toogle/:githubId', async (req, res) => {
+        const { githubId } = req.params;
+        const { discordBoolean } = req.body;
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            user.discordBoolean = discordBoolean;
+            await AppDataSource.manager.save(user);
+            console.log("Discord settings updated successfully", user.discordBoolean);
+            res.json({ message: 'Discord settings updated successfully' });
+        }
+    });
+
+    app.post('/discord/webhook/:githubId', async (req, res) => {
+        const { githubId } = req.params;
+        const { discordWebhook } = req.body;
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            user.discordWebhook = discordWebhook;
+            await AppDataSource.manager.save(user);
+            res.json({ message: 'Discord webhook settings updated successfully' });
         }
     });
     

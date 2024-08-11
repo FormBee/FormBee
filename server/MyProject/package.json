@@ -17,6 +17,7 @@
       "bcryptjs": "^2.4.3",
       "body-parser": "^1.19.1",
       "crypto": "^1.0.1",
+      "discord.js": "^14.15.3",
       "express": "^4.19.2",
       "express-session": "^1.18.0",
       "googleapis": "^140.0.1",
