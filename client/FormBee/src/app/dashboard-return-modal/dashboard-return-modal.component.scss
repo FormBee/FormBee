@@ -500,15 +500,3 @@ input:checked + .slider:before {
     border-top: none;
 }
 
-.flex-column {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content:center;
-}
-
-.toggle {
-    padding-bottom: 0px;
-    margin-bottom: 0px;
-}
