@@ -3,6 +3,7 @@ import { OnInit } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { DashboardReturnModalComponent } from '../dashboard-return-modal/dashboard-return-modal.component';
 import { ViewChild, ElementRef } from '@angular/core';
+import { DashboardTelegramWidgetComponent } from '../dashboard-telegram-widget/dashboard-telegram-widget.component';
 
 @Component({
   selector: 'app-dashboard-user-info',
@@ -10,6 +11,7 @@ import { ViewChild, ElementRef } from '@angular/core';
   imports: [ 
     NgIf,
     DashboardReturnModalComponent,
+    DashboardTelegramWidgetComponent,
    ],
   templateUrl: './dashboard-user-info.component.html',
   styleUrl: './dashboard-user-info.component.scss'
@@ -35,7 +37,9 @@ export class DashboardUserInfoComponent implements OnInit {
   emailSubject: string | undefined;
   emailBody: string | undefined;
   returnEmailBoolean: boolean = false;
-  telegramModal: boolean = false;
+  telegramModal: boolean = true;
+  telegramEnabled: boolean = false;
+  telegramChat: string | undefined;
 
   fetchApiKey = async (githubId: string) => {
     console.log("Fetching API key");
@@ -76,6 +80,8 @@ export class DashboardUserInfoComponent implements OnInit {
         this.emailSubject = data.emailSubject;
         this.emailBody = data.emailBody;
         this.returnEmailBoolean = data.returnBoolean;
+        this.telegramEnabled = data.telegramBoolean;
+        this.telegramChat = data.telegramChat;
 
         if (this.apiKey) {
           this.displayApiKey = '*'.repeat(this.apiKey.length - 4) + this.apiKey.slice(this.apiKey.length - 4);
@@ -183,6 +189,7 @@ export class DashboardUserInfoComponent implements OnInit {
     console.log("Github ID: ", this.githubId);
     this.fetchApiKey(this.githubId);
     this.convertToScript();
+    this.setTeleSwitch();
   }
 
   @ViewChild('script', {static: true}) script!: ElementRef;
@@ -198,10 +205,18 @@ export class DashboardUserInfoComponent implements OnInit {
   }
 
   openTelegramModal = () => {
-    this.telegramModal = true;
+    this.telegramModal = !this.telegramModal;
   }
 
-  closeTelegramModal = () => {
-    this.telegramModal = false;
+  teleSwitch() {
+    const modalSwitch = document.getElementById('teleSwitch') as HTMLInputElement;
+    this.telegramEnabled = modalSwitch.checked;
+    console.log(this.telegramEnabled);
+  }
+
+  setTeleSwitch() {
+    const modalSwitch = document.getElementById('teleSwitch') as HTMLInputElement;
+    modalSwitch.checked = this.telegramEnabled;
+    console.log(this.telegramEnabled);
   }
 }

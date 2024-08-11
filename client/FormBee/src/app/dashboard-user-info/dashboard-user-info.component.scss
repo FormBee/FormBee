@@ -230,10 +230,12 @@ p {
     width: 100px;
     height: 100px;
     margin: 1rem;
+    z-index: 25px;
   
     &:hover {
       transform: translateY(-5px);
       box-shadow: $shadow-color 0px 8px 16px;
+      z-index: 30px;
     }
   
     svg {
@@ -295,13 +297,163 @@ p {
     }
 }
 
+
 .telegram-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    background-color: $background-color;
     border-radius: 10px;
-    border: 1px solid $border-color;
-    width: 200px;
-    height: 200px;
+    border: 1px solid $secondary-color;
+    width: 40vw;
+    height: fit-content;
+    padding: 1rem;
+    z-index: 25;
+    opacity: 0;
+    animation: showModal 0.6s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  }
+  
+  @keyframes showModal {
+    0% {
+      transform: rotateY(30deg) translateY(-300px) skewY(-30deg);
+      opacity: 0;
+    }
+    100% {
+      transform: rotateY(0deg) translateY(0) skewY(0deg);
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
 
+    }
+  }
+
+  .plugin-title {
+    color: $text-color2;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .plugin-description {
+    color: #c7c7c7;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 2rem;
+    color: #c7c7c7;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+    background-color: transparent;
+    border: none;
+    &:hover {
+      color: #fff;
+    }
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    margin-left: 10px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $background-color;
+    box-shadow: 0 0 3px $text-color;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:hover {
+    transform: scale(1.1);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: $primary-color;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: $accent-color;
+    border: 1px solid $border-color;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 3px $border-color;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.flex-row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content:center;
+}
+
+@media screen and (max-width: 800px) {
+    .telegram-modal {
+        width: 90vw;
+        border-radius: 10px;
+        border: 1px solid $secondary-color;
+        height: fit-content;
+        padding: 1rem;
+        z-index: 25;
+        opacity: 0;
+        animation: showModal 0.6s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    }
+}
+
+.toggle {
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+.telegram-switch {
+    margin-top: 1rem;
 }

@@ -261,9 +261,9 @@ AppDataSource.initialize().then(async () => {
                         apiResetDate: sameDayNextMonth,
                     })
                 );
-            res.redirect(`https://b121-24-52-69-34.ngrok-free.app/login?token=${tokenData.access_token}`);
+            res.redirect(`https://ibex-causal-painfully.ngrok-free.app/login?token=${tokenData.access_token}`);
             } else {
-                res.redirect(`https://b121-24-52-69-34.ngrok-free.app/login?token=${tokenData.access_token}`);
+                res.redirect(`https://ibex-causal-painfully.ngrok-free.app/login?token=${tokenData.access_token}`);
             }
         } catch (error) {
             console.error('Error fetching access token:', error);
