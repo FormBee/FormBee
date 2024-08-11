@@ -106,7 +106,7 @@
    <div class="flex-row telegram-switch">
       <p class="plugin-description toggle">Enable/Disable Telegram</p>
       <label class="switch">
-        <input type="checkbox" (click)="teleSwitch()" id="teleSwitch">
+        <input [(ngModel)]="telegramEnabled" type="checkbox"  id="teleSwitch" (click)="teleSwitch()" />
         <span class="slider round"></span>
       </label>
   </div>

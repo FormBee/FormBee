@@ -15,6 +15,7 @@ import { User } from "./entity/User";
 import createChallenge = require("./Alcha/Challenge.js");
 import axios from 'axios';
 import MailMessage = require("nodemailer/lib/mailer/mail-message");
+import { DataSource } from "typeorm";
 
 
 
@@ -24,7 +25,7 @@ AppDataSource.initialize().then(async () => {
     const app = express();
     app.use(bodyParser.json());
     const corsOptions = {
-        origin: ['http://localhost:4200'],
+        origin: ['http://localhost:4200', 'https://ibex-causal-painfully.ngrok-free.app'],
         methods: ['GET', 'POST'],
         allowedHeaders: ['Content-Type', 'x-altcha-spam-filter', 'x-api-key'],
     };
@@ -214,6 +215,20 @@ AppDataSource.initialize().then(async () => {
         res.redirect(`${githubAuthUrl}?client_id=${clientId}`);
     });
 
+    app.post('/telegram/toogle/:githubId', async (req, res) => {
+        const { githubId } = req.params;
+        const { telegramBoolean } = req.body;
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            user.telegramBoolean = telegramBoolean;
+            await AppDataSource.manager.save(user);
+            console.log("Telegram settings updated successfully", user.telegramBoolean);
+            res.json({ message: 'Telegram settings updated successfully' });
+        }
+    });
     
     app.get('/auth/github/callback', async (req, res) => {
         const code = req.query.code;
