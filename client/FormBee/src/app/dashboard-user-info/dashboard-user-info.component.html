@@ -105,7 +105,7 @@
 <div class="modal-container" *ngIf="telegramModal">
   <div class="telegram-modal">
     <button class="close-button" (click)="openTelegramModal()">&times;</button>
-    <p class="plugin-title">Connect to Telegram</p>
+    <p class="plugin-title">Connect to <u (click)="teleLink()" class="clickable" style="cursor: pointer; color:rgb(225, 178, 60)">Telegram</u></p>
     <p class="plugin-description">When you connect your Telegram account, you will be able to recieve form data via messages on Telegram.</p>
     <div class="flex-row">
         <app-dashboard-telegram-widget *ngIf="telegramChat==null" [githubId]="githubId"></app-dashboard-telegram-widget>
@@ -128,8 +128,8 @@
 <div class="modal-container" *ngIf="discordModal">
   <div class="telegram-modal">
     <button class="close-button" (click)="openDiscordModal()">&times;</button>
-    <p class="plugin-title">Connect to Discord</p>
-    <p class="plugin-description">When you connect your Discord with a webhook, you will be able to recieve form data via messages on Discord.</p>
+    <p class="plugin-title">Connect to <u (click)="discordLink()" class="clickable" style="cursor: pointer; color:rgb(225, 178, 60)">Discord</u></p>
+    <p class="plugin-description">When you connect your Discord channel with a webhook, you will be able to recieve form data via messages in your Discord channel.</p>
     <div class="flex-row">
       <input type="text" placeholder="Webhook URL" value="{{ discordWebhook }}" id="discord-input">
       <button class="api-buttons" (click)="saveDiscordWebhook()">Save</button>

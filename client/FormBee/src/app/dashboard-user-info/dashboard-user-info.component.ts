@@ -213,6 +213,10 @@ export class DashboardUserInfoComponent implements OnInit {
     this.telegramModal = !this.telegramModal;
   }
 
+  teleLink = () => {
+    window.open("https://telegram.org/");
+  }
+
   async teleSwitch() {
     this.telegramEnabled = !this.telegramEnabled;
 
@@ -286,5 +290,9 @@ export class DashboardUserInfoComponent implements OnInit {
     } else {
       console.error("'discord-input' element not found.");
     }
+  }
+
+  discordLink = () => {
+    window.open("https://discord.com/");
   }
 }
