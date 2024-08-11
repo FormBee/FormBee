@@ -306,7 +306,7 @@ p {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    background-color: $background-color;
+    background-color: $primary-color;
     border-radius: 10px;
     border: 1px solid $secondary-color;
     width: 40vw;
@@ -315,7 +315,7 @@ p {
     z-index: 25;
     opacity: 0;
     animation: showModal 0.6s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    box-shadow: 0 0 5px $text-color, rgba(0, 0, 0, 0.56) 0px 22px 70px 4px, rgba(0, 0, 0, 0.56) 0px -22px 70px -4px;
   }
   
   @keyframes showModal {
@@ -480,7 +480,7 @@ input:checked + .slider:before {
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background-color: $primary-color;
+    background-color: $background-color;
     color: $text-color;
 }
 
