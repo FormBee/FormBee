@@ -106,5 +106,11 @@ export class User {
 
     //Discord settings end ____________________________________________________________________
 
+    //Slack settings start _________________________________________________________________
+    @Column({nullable: true, default: false})
+    slackBoolean: boolean | null;
+
+    //Slack settings end ____________________________________________________________________
+
 }
     

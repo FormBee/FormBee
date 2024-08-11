@@ -756,6 +756,21 @@ AppDataSource.initialize().then(async () => {
         }
     });
 
+    app.post('/slack/toogle/:githubId', async (req, res) => {
+        const githubId = parseInt(req.params.githubId);
+        const { slackBoolean } = req.body;
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            user.slackBoolean = slackBoolean;
+            await AppDataSource.manager.save(user);
+            console.log("Slack settings updated successfully", user.slackBoolean);
+            res.json({ message: 'Slack settings updated successfully' });
+        }
+    });
+
     
     // register express routes from defined application routes
     Routes.forEach(route => {

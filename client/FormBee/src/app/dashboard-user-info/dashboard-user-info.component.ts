@@ -45,6 +45,8 @@ export class DashboardUserInfoComponent implements OnInit {
   discordModal: boolean = false;
   discordEnabled: boolean = false;
   discordWebhook: string | undefined;
+  slackModal: boolean = false;
+  slackEnabled: boolean = false;
 
   fetchApiKey = async (githubId: string) => {
     console.log("Fetching API key");
@@ -89,6 +91,7 @@ export class DashboardUserInfoComponent implements OnInit {
         this.telegramChat = data.telegramChatId;
         this.discordEnabled = data.discordBoolean;
         this.discordWebhook = data.discordWebhook;
+        this.slackEnabled = data.slackBoolean;
 
         if (this.apiKey) {
           this.displayApiKey = '*'.repeat(this.apiKey.length - 4) + this.apiKey.slice(this.apiKey.length - 4);
@@ -294,5 +297,28 @@ export class DashboardUserInfoComponent implements OnInit {
 
   discordLink = () => {
     window.open("https://discord.com/");
+  }
+
+  openSlackModal = () => {
+    this.slackModal = !this.slackModal;
+  }
+
+  async slackSwitch() {
+    this.slackEnabled = !this.slackEnabled;
+
+    await fetch('http://localhost:3000/slack/toogle/' + this.githubId, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        slackBoolean: this.slackEnabled,
+      }),
+    });
+    console.log(this.slackEnabled);
+  }
+
+  slackLink = () => {
+    window.open("https://slack.com/");
   }
 }
