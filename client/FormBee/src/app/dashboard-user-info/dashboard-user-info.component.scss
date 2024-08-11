@@ -457,3 +457,20 @@ input:checked + .slider:before {
 .telegram-switch {
     margin-top: 1rem;
 }
+
+.telegram-unlink-button {
+    background-color: $secondary-color;
+    color: $primary-color;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color, box-shadow 0.3s ease-in-out;
+    border: solid 1px $border-color;
+    margin: 0.5rem;
+
+    &:hover {
+        background-color: $accent-color;
+        box-shadow: $shadow-color 0px 4px 6px;
+    }
+}

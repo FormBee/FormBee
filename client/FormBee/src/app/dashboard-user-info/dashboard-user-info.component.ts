@@ -88,7 +88,7 @@ export class DashboardUserInfoComponent implements OnInit {
         this.emailBody = data.emailBody;
         this.returnEmailBoolean = data.returnBoolean;
         this.telegramEnabled = data.telegramBoolean;
-        this.telegramChat = data.telegramChat;
+        this.telegramChat = data.telegramChatId;
 
         if (this.apiKey) {
           this.displayApiKey = '*'.repeat(this.apiKey.length - 4) + this.apiKey.slice(this.apiKey.length - 4);
@@ -226,6 +226,17 @@ export class DashboardUserInfoComponent implements OnInit {
       }),
     });
     console.log(this.telegramEnabled);
+  }
+
+  async unlinkTelegram() {
+    this.telegramChat = undefined;
+    await fetch('http://localhost:3000/telegram/unlink/' + this.githubId, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+    console.log("Telegram unlinked");
   }
 
 }

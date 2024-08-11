@@ -97,18 +97,21 @@
 </div>
 <div class="modal-container" *ngIf="telegramModal">
   <div class="telegram-modal">
-  <button class="close-button" (click)="openTelegramModal()">&times;</button>
-  <p class="plugin-title">Connect to Telegram</p>
-  <p class="plugin-description">When you connect your Telegram account, you will be able to recieve form data via messages on Telegram.</p>
-   <div class="flex-row">
-      <app-dashboard-telegram-widget [githubId]="githubId"></app-dashboard-telegram-widget>
+    <button class="close-button" (click)="openTelegramModal()">&times;</button>
+    <p class="plugin-title">Connect to Telegram</p>
+    <p class="plugin-description">When you connect your Telegram account, you will be able to recieve form data via messages on Telegram.</p>
+    <div class="flex-row">
+        <app-dashboard-telegram-widget *ngIf="telegramChat==null" [githubId]="githubId"></app-dashboard-telegram-widget>
+        <div class="" *ngIf="telegramChat">
+          <button class="telegram-unlink-button" (click)="unlinkTelegram()">Unlink Telegram</button>
+        </div>
     </div>
-   <div class="flex-row telegram-switch">
+    <div class="flex-row telegram-switch">
       <p class="plugin-description toggle">Enable/Disable Telegram</p>
       <label class="switch">
         <input [(ngModel)]="telegramEnabled" type="checkbox"  id="teleSwitch" (click)="teleSwitch()" />
         <span class="slider round"></span>
       </label>
-  </div>
+    </div>
   </div>
 </div>

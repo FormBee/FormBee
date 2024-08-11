@@ -17,7 +17,8 @@ import axios from 'axios';
 import MailMessage = require("nodemailer/lib/mailer/mail-message");
 import { DataSource } from "typeorm";
 
-
+const redirectUrl = "https://ibex-causal-painfully.ngrok-free.app";
+// const redirectUrl = "http://localhost:4200";
 
 dotenv.config();
 AppDataSource.initialize().then(async () => {
@@ -85,10 +86,26 @@ AppDataSource.initialize().then(async () => {
                             });
 
                         }
-                        axios.post('http://localhost:3000/telegram/send/' + user.githubId, {
-                            message: req.body,
-                        });
+                        if (user.telegramChatId != null && user.telegramBoolean) {
+                            console.log("Sendding to telegram");
+                            axios.post('http://localhost:3000/telegram/send/' + user.githubId, {
+                                message: req.body,
+                            });
+                        }
                     } else {
+                        if (user.returnBoolean === true) {
+                            const returnEmail = email;
+                            axios.post('http://localhost:3000/formbee/return/' + apikey, {
+                                emailToSendTo: returnEmail,
+                            });
+
+                        }
+                        if (user.telegramChatId != null && user.telegramBoolean) {
+                            console.log("Sendding to telegram");
+                            axios.post('http://localhost:3000/telegram/send/' + user.githubId, {
+                                message: req.body,
+                            });
+                        }
                         user.currentSubmissions++;
                         sendMail(recEmail, name, email, message, null, res);
                         return AppDataSource.manager.save(user);
@@ -437,11 +454,10 @@ AppDataSource.initialize().then(async () => {
                 } else {
                     user.telegramChatId = Number(id);
                     await AppDataSource.manager.save(user);
-                    res.redirect("http://localhost:4200/dashboard");
+                    res.redirect(redirectUrl + "/dashboard");
                     return;
                 }
                 // The hash is valid, process user data
-                res.redirect("http://localhost:4200/dashboard");
             } else {
                 // Invalid hash
                 res.status(400).send('Invalid request');
@@ -499,6 +515,24 @@ AppDataSource.initialize().then(async () => {
         }
     });
 
+    app.post('/telegram/unlink/:githubId', async (req, res) => {
+        const githubId = parseInt(req.params.githubId);
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            const url = `https://api.telegram.org/bot${process.env.TELEGRAM_API_TOKEN}/sendMessage`;
+            await axios.post(url, {
+                chat_id: user.telegramChatId,
+                text: "Formbee will no longer be sending your form submission data to this chat!",
+            });
+            user.telegramChatId = null;
+            await AppDataSource.manager.save(user);
+            res.json({ message: 'Telegram unlinked successfully' });
+        }
+    });
+
 
     // Google OAuth
     app.get('/oauth/google/:githubId', async(req, res) => {
@@ -515,7 +549,7 @@ AppDataSource.initialize().then(async () => {
             user.smtpPassword = null;
             console.log("User: ", user);
             await AppDataSource.manager.save(user);
-            res.redirect("http://localhost:4200/dashboard");
+            res.redirect(redirectUrl + "/dashboard");
             return;
         } else {
             const oauth2Client = new google.auth.OAuth2(
@@ -626,7 +660,7 @@ AppDataSource.initialize().then(async () => {
                 console.log("User: ", user);
                 await AppDataSource.manager.save(user);
                 
-                res.redirect("http://localhost:4200/dashboard");
+                res.redirect(redirectUrl + "/dashboard");
             }
         
             // Redirect to your application's dashboard or handle information as needed
