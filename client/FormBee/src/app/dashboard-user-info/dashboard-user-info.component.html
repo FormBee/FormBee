@@ -149,7 +149,7 @@
   <div class="telegram-modal">
     <button class="close-button" (click)="openSlackModal()">&times;</button>
     <p class="plugin-title">Connect to <u (click)="slackLink()" class="clickable" style="cursor: pointer; color:rgb(225, 178, 60)">Slack</u></p>
-    <p class="plugin-description slack-description">When you connect your Slack channel with a webhook, you will be able to recieve form data via messages in your Slack channel.</p>
+    <p class="plugin-description slack-description">When you connect your Slack channel, you will be able to recieve form data via messages in your Slack channel.</p>
     <p class="plugin-description channelName" *ngIf="slackChannelName">Connected Channel: {{this.slackChannelName}}</p>
     <div class="flex-row">
       <button *ngIf="slackChannelName==null" class="telegram-unlink-button" (click)="connectToSlack()">Connect to slack</button>
