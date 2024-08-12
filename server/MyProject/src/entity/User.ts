@@ -107,8 +107,15 @@ export class User {
     //Discord settings end ____________________________________________________________________
 
     //Slack settings start _________________________________________________________________
+    
     @Column({nullable: true, default: false})
     slackBoolean: boolean | null;
+
+    @Column({nullable: true})
+    slackChannelId: string | null;
+
+    @Column({nullable: true})
+    slackAccessToken: string | null;
 
     //Slack settings end ____________________________________________________________________
 

@@ -58,6 +58,7 @@ AppDataSource.initialize().then(async () => {
 
     // Basic post route, sends form data to the users email.
     app.post('/formbee/:apikey', upload.none(), (req, res) => {
+        console.log("in formbee");
         const { apikey } = req.params;
         const { name, email, message } = req.body;
         let messageList = [];
@@ -89,6 +90,7 @@ AppDataSource.initialize().then(async () => {
                     const recEmail = user.email;
                     // check if the users origin was from the local host
                     if (req.headers.origin.includes("localhost")) {
+                        console.log("Local host");
                         user.localHostCurrentSubmissions++;
                         await sendMail(recEmail, name, email, message, null, res);
                         if (user.returnBoolean === true) {
@@ -104,7 +106,37 @@ AppDataSource.initialize().then(async () => {
                                 message: req.body,
                             });
                         }
+
+                        if (user.discordWebhook != null && user.discordBoolean) {
+                            console.log("Discord webhook");
+                            const sendMessage = async (message) => {
+                                console.log("Sendding to discord");
+                                console.log(user.discordWebhook, message);
+                                await axios.post(user.discordWebhook, {
+                                    content: message,
+                                });
+                              };
+                            await sendMessage(niceMessageDiscord);
+                            }
+    
+                            if (user.slackChannelId != null && user.slackAccessToken != null && user.slackBoolean) {
+                                console.log("Sendding to slack");
+                                const sendMessage = async (message) => {
+                                    console.log("Sendding to slack");
+                                    await axios.post(`http://localhost:3000/slack/send-message`, {
+                                        message,
+                                        slackChannelId: user.slackChannelId,
+                                        slackAccessToken: user.slackAccessToken,
+                                    });
+                                };
+                                await sendMessage(niceMessageDiscord);
+                            }
+                    return AppDataSource.manager.save(user);
+
+
+                    // else the user is not from the local host, we need to update the current submissions
                     } else {
+                        console.log("Not local host");
                         if (user.returnBoolean === true) {
                             const returnEmail = email;
                             axios.post('http://localhost:3000/formbee/return/' + apikey, {
@@ -130,8 +162,20 @@ AppDataSource.initialize().then(async () => {
                           };
                         await sendMessage(niceMessageDiscord);
                         }
+
+                        if (user.slackChannelId != null && user.slackAccessToken != null && user.slackBoolean) {
+                            console.log("Sendding to slack");
+                            const sendMessage = async (message) => {
+                                console.log("Sendding to slack");
+                                await axios.post(`http://localhost:3000/slack/send-message`, {
+                                    message,
+                                    slackChannelId: user.slackChannelId,
+                                    slackAccessToken: user.slackAccessToken,
+                                });
+                            };
+                            await sendMessage(niceMessageDiscord);
+                        }
                         user.currentSubmissions++;
-                        sendMail(recEmail, name, email, message, null, res);
                         return AppDataSource.manager.save(user);
                     }
                 }
@@ -772,10 +816,10 @@ AppDataSource.initialize().then(async () => {
     });
 
     app.get('/slack/callback', async (req, res) => {
-
         console.log("in slack callback");
         try {
             const { code, state } = req.query;
+            let githubId = state;
             if (typeof state !== 'string') {
                 res.status(400).send('Invalid state parameter');
                 return;
@@ -789,28 +833,70 @@ AppDataSource.initialize().then(async () => {
                     redirect_uri:  "https://ibex-causal-painfully.ngrok-free.app/slack/callback",
                 },
             });
-            console.log(response.data);
             const { access_token } = response.data;
-            const { channel_id }= response.data.incoming_webhook;
-            console.log("access_token: ", access_token);
-            console.log("channel_id: ", channel_id);
+            let { channel_id }= response.data.incoming_webhook;
 
-            await axios.post('https://slack.com/api/chat.postMessage', {
-                channel: channel_id,
-                text: "Hello from Formbee!",
-                token: access_token,
-            });
+            try {
+                const response = await axios.post(
+                    'https://slack.com/api/chat.postMessage', 
+                    {
+                        channel: channel_id,
+                        text: "Hello Formbee will be sending form data in this channel!",
+                    },
+                    { 
+                        headers: { 
+                            'Authorization': `Bearer ${access_token}`,
+                        } 
+                    }
+                );
+                if (response.data.ok) {
+                    console.log('Message sent successfully');
+                }
+            } catch (error) {
+                console.error('Request failed:', error);
+            }
 
             // Get the user with the githubId
-            // const user = await AppDataSource.manager.findOne(User, { where: { githubId } });
-                res.redirect(redirectUrl + "/dashboard");
-            // }
+            const user = await AppDataSource.manager.findOne(User, { where: { githubId: Number(githubId) } });
+                if (!user) {
+                    res.status(400).send('User not found');
+                    return;
+                } else {
+                    user.slackChannelId = channel_id;
+                    user.slackAccessToken = access_token;
+                    await AppDataSource.manager.save(user);
+                    res.redirect(redirectUrl + "/dashboard");
+                }
         } catch (error) {
             console.error('Error during OAuth callback:', error);
             res.status(500).json({ error: 'An error occurred during the authentication process' });
         }
     });
     
+    app.post('/slack/send-message', async (req, res) => {
+        const { message, slackChannelId, slackAccessToken } = req.body;
+            try {
+                const response = await axios.post(
+                    'https://slack.com/api/chat.postMessage', 
+                    {
+                        channel: slackChannelId,
+                        text: message,
+                    },
+                    { 
+                        headers: { 
+                            'Authorization': `Bearer ${slackAccessToken}`,
+                        } 
+                    });
+                if (response.data.ok) {
+                    console.log('Message sent successfully');
+                }
+            } catch (error) {
+                console.error('Request failed:', error);
+            }
+        }
+    );
+        
+
     // register express routes from defined application routes
     Routes.forEach(route => {
         (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
