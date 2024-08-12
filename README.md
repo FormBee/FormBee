@@ -7,6 +7,10 @@ The open-source form solution for data privacy conscious developers.
 # TODO
 - [] Toggle in admin panel for adding website URL for CORS to only allow requests from the clients domain.
 - [] slack, webhooks, zapier integrations.
+- [] Make sure to change oauth Redirect URL's in
+    - [] Slack
+    - [] google
+    - [] Github
 
 
 ## Docs todo
