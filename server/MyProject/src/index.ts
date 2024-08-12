@@ -15,8 +15,8 @@ import { User } from "./entity/User";
 import createChallenge = require("./Alcha/Challenge.js");
 import axios from 'axios';
 
-const redirectUrl = "https://ibex-causal-painfully.ngrok-free.app";
-// const redirectUrl = "http://localhost:4200";
+// const redirectUrl = "https://ibex-causal-painfully.ngrok-free.app";
+const redirectUrl = "http://localhost:4200";
 
 dotenv.config();
 AppDataSource.initialize().then(async () => {
@@ -346,9 +346,9 @@ AppDataSource.initialize().then(async () => {
                         apiResetDate: sameDayNextMonth,
                     })
                 );
-            res.redirect(`https://ibex-causal-painfully.ngrok-free.app/login?token=${tokenData.access_token}`);
+            res.redirect( redirectUrl + "/login?token=" + tokenData.access_token);
             } else {
-                res.redirect(`https://ibex-causal-painfully.ngrok-free.app/login?token=${tokenData.access_token}`);
+                res.redirect( redirectUrl + "/login?token=" + tokenData.access_token);
             }
         } catch (error) {
             console.error('Error fetching access token:', error);
@@ -771,6 +771,45 @@ AppDataSource.initialize().then(async () => {
         }
     });
 
+    app.get('/slack/callback', async (req, res) => {
+
+        console.log("in slack callback");
+        try {
+            const { code, state } = req.query;
+            if (typeof state !== 'string') {
+                res.status(400).send('Invalid state parameter');
+                return;
+            }
+            // Decode state to retrieve the githubId
+            const response = await axios.post('https://slack.com/api/oauth.v2.access', null, {
+                params: {
+                    code,
+                    client_id: process.env.SLACK_CLIENT_ID,
+                    client_secret: process.env.SLACK_CLIENT_SECRET,
+                    redirect_uri:  "https://ibex-causal-painfully.ngrok-free.app/slack/callback",
+                },
+            });
+            console.log(response.data);
+            const { access_token } = response.data;
+            const { channel_id }= response.data.incoming_webhook;
+            console.log("access_token: ", access_token);
+            console.log("channel_id: ", channel_id);
+
+            await axios.post('https://slack.com/api/chat.postMessage', {
+                channel: channel_id,
+                text: "Hello from Formbee!",
+                token: access_token,
+            });
+
+            // Get the user with the githubId
+            // const user = await AppDataSource.manager.findOne(User, { where: { githubId } });
+                res.redirect(redirectUrl + "/dashboard");
+            // }
+        } catch (error) {
+            console.error('Error during OAuth callback:', error);
+            res.status(500).json({ error: 'An error occurred during the authentication process' });
+        }
+    });
     
     // register express routes from defined application routes
     Routes.forEach(route => {

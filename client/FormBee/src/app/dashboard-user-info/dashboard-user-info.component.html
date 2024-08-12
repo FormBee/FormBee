@@ -149,10 +149,10 @@
   <div class="telegram-modal">
     <button class="close-button" (click)="openSlackModal()">&times;</button>
     <p class="plugin-title">Connect to <u (click)="slackLink()" class="clickable" style="cursor: pointer; color:rgb(225, 178, 60)">Slack</u></p>
-    <p class="plugin-description">When you connect your Slack channel with a webhook, you will be able to recieve form data via messages in your Slack channel.</p>
+    <p class="plugin-description slack-description">When you connect your Slack channel with a webhook, you will be able to recieve form data via messages in your Slack channel.</p>
     <div class="flex-row">
-      <!-- <input type="text" placeholder="Webhook URL" value="{{ slackWebhook }}" id="slack-input">
-      <button class="api-buttons" (click)="saveSlackWebhook()">Save</button> -->
+
+      <button class="telegram-unlink-button" (click)="connectToSlack()">Connect to slack</button>
     </div>
     <div class="flex-row slack-switch">
       <p class="plugin-description toggle">Enable/Disable Slack</p>

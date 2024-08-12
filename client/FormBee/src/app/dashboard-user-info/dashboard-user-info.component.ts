@@ -321,4 +321,10 @@ export class DashboardUserInfoComponent implements OnInit {
   slackLink = () => {
     window.open("https://slack.com/");
   }
+
+  connectToSlack = () => {
+    console.log("in connect to slack");
+    const url = "https://slack.com/oauth/v2/authorize?client_id=7572076162737.7563846148610&scope=incoming-webhook&user_scope=channels:read,chat:write";
+    window.open(url);
+  }
 }
