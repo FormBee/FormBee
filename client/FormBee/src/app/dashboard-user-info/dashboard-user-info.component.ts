@@ -47,6 +47,7 @@ export class DashboardUserInfoComponent implements OnInit {
   discordWebhook: string | undefined;
   slackModal: boolean = false;
   slackEnabled: boolean = false;
+  slackChannelName: string | undefined;
 
   fetchApiKey = async (githubId: string) => {
     console.log("Fetching API key");
@@ -92,6 +93,7 @@ export class DashboardUserInfoComponent implements OnInit {
         this.discordEnabled = data.discordBoolean;
         this.discordWebhook = data.discordWebhook;
         this.slackEnabled = data.slackBoolean;
+        this.slackChannelName = data.slackChannelName
 
         if (this.apiKey) {
           this.displayApiKey = '*'.repeat(this.apiKey.length - 4) + this.apiKey.slice(this.apiKey.length - 4);
@@ -326,5 +328,16 @@ export class DashboardUserInfoComponent implements OnInit {
     console.log("in connect to slack");
     const url = `https://slack.com/oauth/v2/authorize?client_id=7572076162737.7563846148610&scope=incoming-webhook&user_scope=channels:read,chat:write&state=${this.githubId}`;
     window.open(url);
+  }
+
+  unlinkSlack = async () => {
+    this.slackChannelName = undefined;
+    await fetch('http://localhost:3000/slack/unlink/' + this.githubId, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+    console.log("Slack unlinked");
   }
 }

@@ -82,7 +82,8 @@ AppDataSource.initialize().then(async () => {
                     console.log("User not found!");
                     res.status(401).json('Unauthorized');
                     return;
-                } else if (user.maxSubmissions && user.currentSubmissions >= user.maxSubmissions || user.localHostMaxSubmissions && user.localHostCurrentSubmissions >= user.localHostMaxSubmissions) {
+                    // || user.localHostMaxSubmissions && user.localHostCurrentSubmissions >= user.localHostMaxSubmissions
+                } else if (user.maxSubmissions && user.currentSubmissions >= user.maxSubmissions) {
                     console.log("Reached submission limit");
                     res.status(403).json('You have reached your submission limit');
                     return;
@@ -206,9 +207,16 @@ AppDataSource.initialize().then(async () => {
 
 
     // Sends the return email to the user's client's.
-    app.post('/formbee/return/:apikey', async (req, res) => {
-        try {
-            const { emailToSendTo } = req.body;
+app.post('/formbee/return/:apikey', async (req, res) => {
+
+    const isValidEmail = async (email: string): Promise<boolean> => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        console.log(emailRegex.test(email))
+        return emailRegex.test(email);
+    }
+
+    try {
+        const { emailToSendTo } = req.body;
             const apiKey = req.params.apikey;
             const user = await AppDataSource.manager.findOne(User, { where: { apiKey } });
             if (!user) {
@@ -225,8 +233,7 @@ AppDataSource.initialize().then(async () => {
                 const emailSubject = user.emailSubject;
                 const emailBody = user.emailBody;
                 const returnMessage = user.returnBoolean;
-
-                if (smtpHost && smtpPort && smtpUsername && smtpPassword && emailSubject && emailBody && returnMessage) {
+                if (smtpHost && smtpPort && smtpUsername && smtpPassword && emailSubject && emailBody && returnMessage && await isValidEmail(emailToSendTo) === true) {
                     const transporter = nodemailer.createTransport({
                         host: smtpHost,
                         port: smtpPort,
@@ -250,7 +257,8 @@ AppDataSource.initialize().then(async () => {
                             res.json({ message: 'Email sent successfully' });
                         }
                     });
-                } else if (email && accessToken && refreshToken) {
+                } else if (email && accessToken && refreshToken && await isValidEmail(emailToSendTo) === true) {
+
                     const transporter = nodemailer.createTransport({
                         host: 'smtp.gmail.com',
                         port: 465,
@@ -279,7 +287,7 @@ AppDataSource.initialize().then(async () => {
                         }
                     });
                 } else {
-                    res.status(405).json('Missing email or smtp credentials');
+                    return
                 }
             }
             // Add any necessary email sending logic here
@@ -834,7 +842,8 @@ AppDataSource.initialize().then(async () => {
                 },
             });
             const { access_token } = response.data;
-            let { channel_id }= response.data.incoming_webhook;
+            let { channel_id, channel }= response.data.incoming_webhook;
+            console.log(response.data)
 
             try {
                 const response = await axios.post(
@@ -864,6 +873,7 @@ AppDataSource.initialize().then(async () => {
                 } else {
                     user.slackChannelId = channel_id;
                     user.slackAccessToken = access_token;
+                    user.slackChannelName = channel
                     await AppDataSource.manager.save(user);
                     res.redirect(redirectUrl + "/dashboard");
                 }
@@ -896,6 +906,20 @@ AppDataSource.initialize().then(async () => {
         }
     );
         
+    app.post('/slack/unlink/:githubId', async (req, res) => {
+        const githubId = parseInt(req.params.githubId);
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            user.slackChannelId = null;
+            user.slackAccessToken = null;
+            user.slackChannelName = null;
+            await AppDataSource.manager.save(user);
+            res.json({ message: 'Slack unlinked successfully' });
+        }
+    });
 
     // register express routes from defined application routes
     Routes.forEach(route => {
