@@ -82,8 +82,7 @@ AppDataSource.initialize().then(async () => {
                     console.log("User not found!");
                     res.status(401).json('Unauthorized');
                     return;
-                    // || user.localHostMaxSubmissions && user.localHostCurrentSubmissions >= user.localHostMaxSubmissions
-                } else if (user.maxSubmissions && user.currentSubmissions >= user.maxSubmissions) {
+                } else if (user.maxSubmissions && user.currentSubmissions >= user.maxSubmissions || user.localHostMaxSubmissions && user.localHostCurrentSubmissions >= user.localHostMaxSubmissions) {
                     console.log("Reached submission limit");
                     res.status(403).json('You have reached your submission limit');
                     return;
@@ -92,7 +91,8 @@ AppDataSource.initialize().then(async () => {
                     // check if the users origin was from the local host
                     if (req.headers.origin.includes("localhost")) {
                         console.log("Local host");
-                        user.localHostCurrentSubmissions++;
+                        // add back in for prod
+                        // user.localHostCurrentSubmissions++;
                         await sendMail(recEmail, name, email, message, null, res);
                         if (user.returnBoolean === true) {
                             const returnEmail = email;
@@ -290,7 +290,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                     return
                 }
             }
-            // Add any necessary email sending logic here
 
         } catch (error) {
             res.status(500).json({ error: 'Failed to send email' });
@@ -919,6 +918,21 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             await AppDataSource.manager.save(user);
             res.json({ message: 'Slack unlinked successfully' });
         }
+    });
+
+    // Make integration
+    app.get('/api/:apikey', async (req: Request, res: Response) => {
+        const apiKey = req.params.apikey;
+        console.log("in apikey: ", apiKey);
+        const user = await AppDataSource.manager.findOne(User, { where: { apiKey } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            res.json(user);
+        }
+
+        res.json('HI');
     });
 
     // register express routes from defined application routes
