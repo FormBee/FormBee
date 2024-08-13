@@ -122,5 +122,13 @@ export class User {
 
     //Slack settings end ____________________________________________________________________
 
+    //Make settings start ___________________________________________________________________
+
+    @Column({nullable: true})
+    makeWebhook: string | null;
+
+    @Column({nullable: true})
+    makeBoolean: boolean | null;
+    //Make settings end ____________________________________________________________________
 }
     

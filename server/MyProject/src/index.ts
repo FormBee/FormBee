@@ -58,7 +58,6 @@ AppDataSource.initialize().then(async () => {
 
     // Basic post route, sends form data to the users email.
     app.post('/formbee/:apikey', upload.none(), (req, res) => {
-        console.log("in formbee");
         const { apikey } = req.params;
         const { name, email, message } = req.body;
         let messageList = [];
@@ -90,7 +89,6 @@ AppDataSource.initialize().then(async () => {
                     const recEmail = user.email;
                     // check if the users origin was from the local host
                     if (req.headers.origin.includes("localhost")) {
-                        console.log("Local host");
                         // add back in for prod
                         // user.localHostCurrentSubmissions++;
                         await sendMail(recEmail, name, email, message, null, res);
@@ -132,6 +130,13 @@ AppDataSource.initialize().then(async () => {
                                 };
                                 await sendMessage(niceMessageDiscord);
                             }
+                            if (user.makeBoolean && user.makeWebhook != null) {
+                                axios.post('http://localhost:3000/make/' + apikey, {
+                                    message: req.body,
+                                });
+                            }
+
+
                     return AppDataSource.manager.save(user);
 
 
@@ -921,18 +926,66 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     });
 
     // Make integration
-    app.get('/api/:apikey', async (req: Request, res: Response) => {
-        const apiKey = req.params.apikey;
-        console.log("in apikey: ", apiKey);
-        const user = await AppDataSource.manager.findOne(User, { where: { apiKey } });
+    app.post('/make/:apikey', async (req, res) => {
+            const githubId = req.params.apikey;
+            const message = req.body;
+            const user = await AppDataSource.manager.findOne(User, { where: { apiKey: githubId } });
+            if (!user) {
+                res.status(400).send('User not found');
+                return;
+            } else {
+                try {
+                    // Send form data to Make.com
+                    await axios.post(user.makeWebhook, message);
+                    res.status(200).send('Form submitted successfully');
+                  } catch (error) {
+                    console.error('Error sending data to Make.com:', error);
+                    res.status(500).send('Internal Server Error');
+                  }
+            }
+
+    });
+
+    app.post('/make/toogle/:apikey', async (req, res) => {
+        const githubId = req.params.apikey;
+        const { makeBoolean } = req.body;
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
         if (!user) {
             res.status(400).send('User not found');
             return;
         } else {
-            res.json(user);
+            user.makeBoolean = makeBoolean;
+            await AppDataSource.manager.save(user);
+            console.log("Make settings updated successfully", user.makeBoolean);
+            res.json({ message: 'Make settings updated successfully' });
         }
+    });
 
-        res.json('HI');
+    app.post('/make/unlink/:apikey', async (req, res) => {
+        const githubId = req.params.apikey;
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            user.makeWebhook = null;
+            await AppDataSource.manager.save(user);
+            res.json({ message: 'Make unlinked successfully' });
+        }
+    });
+
+    app.post('/make/webhook/:apikey', async (req, res) => {
+        const githubId = req.params.apikey;
+        const { makeWebhook } = req.body;
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            user.makeWebhook = makeWebhook;
+            await AppDataSource.manager.save(user);
+            res.json({ message: 'Make webhook settings updated successfully' });
+        }
     });
 
     // register express routes from defined application routes

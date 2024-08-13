@@ -48,6 +48,9 @@ export class DashboardUserInfoComponent implements OnInit {
   slackModal: boolean = false;
   slackEnabled: boolean = false;
   slackChannelName: string | undefined;
+  makeEnabled: boolean = false;
+  makeWebhook: string | undefined;
+  makeModal: boolean = false;
 
   fetchApiKey = async (githubId: string) => {
     console.log("Fetching API key");
@@ -94,6 +97,8 @@ export class DashboardUserInfoComponent implements OnInit {
         this.discordWebhook = data.discordWebhook;
         this.slackEnabled = data.slackBoolean;
         this.slackChannelName = data.slackChannelName
+        this.makeEnabled = data.makeBoolean;
+        this.makeWebhook = data.makeWebhook;
 
         if (this.apiKey) {
           this.displayApiKey = '*'.repeat(this.apiKey.length - 4) + this.apiKey.slice(this.apiKey.length - 4);
@@ -339,5 +344,58 @@ export class DashboardUserInfoComponent implements OnInit {
       },
     });
     console.log("Slack unlinked");
+  }
+
+  openMakeModal = () => {
+    this.makeModal = !this.makeModal;
+  }
+
+  async makeSwitch() {
+    this.makeEnabled = !this.makeEnabled;
+
+    await fetch('http://localhost:3000/make/toogle/' + this.githubId, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        makeBoolean: this.makeEnabled,
+      }),
+    });
+    console.log(this.makeEnabled);
+  }
+
+  async unlinkMake() {
+    this.makeWebhook = undefined;
+    await fetch('http://localhost:3000/make/unlink/' + this.githubId, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+    console.log("Make unlinked");
+  }
+
+  async saveMakeWebhook() {
+    const discordInput = document.getElementById('discord-input');
+    if (discordInput) {
+      this.makeWebhook = (<HTMLInputElement>discordInput).value;
+      await fetch('http://localhost:3000/make/webhook/' + this.githubId, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          makeWebhook: this.makeWebhook,
+        }),
+      });
+      console.log("Make webhook saved");
+    } else {
+      console.error("'discord-input' element not found.");
+    }
+  }
+
+  makeLink = () => {
+    window.open("https://make.com/");
   }
 }
