@@ -136,6 +136,7 @@ AppDataSource.initialize().then(async () => {
                                     message: req.body,
                                 });
                             }
+                            if (user.n8nBoolean === true && user.n8nWebhook != null)
                             axios.post('http://localhost:3000/n8n/send/' + apikey, {
                                 message: req.body,
                             });
