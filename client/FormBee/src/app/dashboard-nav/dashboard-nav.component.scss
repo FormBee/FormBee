@@ -228,3 +228,49 @@
     }
   }
 }
+
+.dropdown-list {
+  // ... existing styles ...
+
+  li {
+    position: relative;
+
+    a {
+      // ... existing styles ...
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}
+
+.theme-submenu {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  background-color: #161b28;
+  border-radius: 4px;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease-out;
+
+  &.active {
+    max-height: 200px;
+    transition: max-height 0.5s ease-in;
+  }
+
+  li {
+    a {
+      padding: 8px 16px 8px 32px;
+      font-size: 14px;
+    }
+  }
+}
+
+svg {
+  transition: transform 0.3s ease;
+
+  &.flipped {
+    transform: rotate(180deg);
+  }
+}

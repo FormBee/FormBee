@@ -1,7 +1,24 @@
-/* You can add global styles to this file, and also import other style files */
-
+@use 'default-theme';
+@use 'high-contract-theme';
+@use 'light-theme';
+@use 'elegent-theme';
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+
+
 html, body {
     font-family: "Poppins", sans-serif;
     margin:0;
+}
+
+@mixin theme-colors($theme) {
+    @if $theme == 'default' {
+      @include default-theme.theme();
+    } @else if $theme == 'high-contract-theme' {
+      @include high-contrast-theme.theme();
+    } @else if $theme == 'light' {
+      @include light-theme.theme();
+    } @else {
+      @include elegent-theme.theme();
+    }
 }

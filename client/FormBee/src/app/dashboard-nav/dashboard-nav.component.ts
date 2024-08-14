@@ -1,9 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { OnInit } from '@angular/core';
+import { NgFor } from '@angular/common';
 @Component({
   selector: 'app-dashboard-nav',
   standalone: true,
-  imports: [],
+  imports: [NgFor],
   templateUrl: './dashboard-nav.component.html',
   styleUrl: './dashboard-nav.component.scss'
 })
@@ -16,6 +17,9 @@ export class DashboardNavComponent implements OnInit {
   maxSubs: number = 0;
   subscriptionTier: string = "Loading...";
   isDropdownOpen: boolean = false;
+  themes: string[] = ['Default', 'Dark', 'Light', 'High Contrast'];
+  currentTheme: string = 'Default';
+  isThemeMenuOpen: boolean = false;
 
   ngOnInit(): void {
     const getUser = async (githubId: string | undefined) => {
@@ -27,6 +31,7 @@ export class DashboardNavComponent implements OnInit {
           this.maxSubs = data.maxSubmissions;
           this.currentSubs = data.currentSubmissions;
           this.subscriptionTier = data.subscriptionTier;
+          this.currentTheme = localStorage.getItem("theme") || "Default";
         }
       }
     };
@@ -42,5 +47,15 @@ export class DashboardNavComponent implements OnInit {
     localStorage.removeItem("Fb-pA4lBUfsqVAWFN78eWDF");
     //redirect to login page
     window.location.href = "/home";
+  }
+
+  changeTheme(theme: string): void {
+    this.currentTheme = theme;
+    localStorage.setItem("theme", theme);
+    console.log("Theme changed to " + theme);
+  }
+
+  toggleThemeMenu(): void {
+    this.isThemeMenuOpen = !this.isThemeMenuOpen;
   }
 }

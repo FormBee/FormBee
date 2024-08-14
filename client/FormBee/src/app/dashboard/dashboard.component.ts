@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit {
   profilePic: string | undefined;
   githubId: string | undefined;
   loading: boolean = true;
+  currentTheme: string = "Default";
   constructor(private Router: Router) {}
 
   ngOnInit(): void {
@@ -51,6 +52,7 @@ export class DashboardComponent implements OnInit {
           }
           this.profilePic = data.avatar_url;
           this.githubId = data.id;
+          this.currentTheme = localStorage.getItem("theme") || "Default";
         }
       })
       .finally(() => {
