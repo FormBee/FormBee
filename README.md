@@ -14,5 +14,7 @@ The open-source form solution for data privacy conscious developers.
     - [] Github
 
 
+
 ## Docs todo
-- [] Discord channel webhook docs.  
+- [] Discord channel webhook docs.
+- - [] After docs are complete make sure to connect link to plugin modal. 
