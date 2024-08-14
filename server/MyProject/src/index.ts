@@ -141,6 +141,11 @@ AppDataSource.initialize().then(async () => {
                                 message: req.body,
                             });
 
+                            if (user.webhookBoolean === true && user.webhookWebhook != null)
+                            axios.post('http://localhost:3000/webhook/send/' + apikey, {
+                                message: req.body,
+                            });
+
 
                     return AppDataSource.manager.save(user);
 
@@ -1057,6 +1062,69 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
+    app.post('/webhook/toogle/:githubId', async (req, res) => {
+        const githubId = parseInt(req.params.githubId);
+        const { webhookBoolean } = req.body;
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            user.webhookBoolean = webhookBoolean;
+            await AppDataSource.manager.save(user);
+            console.log("Webhook settings updated successfully", user.webhookBoolean);
+            res.json({ message: 'Webhook settings updated successfully' });
+        }
+    });
+
+    app.post('/webhook/unlink/:githubId', async (req, res) => {
+        const githubId = parseInt(req.params.githubId);
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            user.webhookWebhook = null;
+            await AppDataSource.manager.save(user);
+            res.json({ message: 'Webhook unlinked successfully' });
+        }
+    });
+
+    app.post('/webhook/webhook/:githubId', async (req, res) => {
+        const githubId = parseInt(req.params.githubId);
+        const { webhookWebhook } = req.body;
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            user.webhookWebhook = webhookWebhook;
+            await AppDataSource.manager.save(user);
+            res.json({ message: 'Webhook settings updated successfully' });
+        }
+    });
+
+    app.post('/webhook/send/:githubId', async (req, res) => {
+        const githubId = req.params.githubId;
+        const message = req.body;
+        const user = await AppDataSource.manager.findOne(User, { where: { apiKey: githubId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            try {
+                console.log("Sendding webhook");
+                await axios.post(user.n8nWebhook, message);
+                res.status(200).send('Form submitted successfully');
+              } catch (error) {
+                console.log("Error sending message");
+                res.send('Error sending message');
+              }
+        }
+
+    });
+
+    
 
     // register express routes from defined application routes
     Routes.forEach(route => {

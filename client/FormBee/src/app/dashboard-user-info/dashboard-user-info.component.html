@@ -103,6 +103,15 @@
       <p class="plugin-text">n8n</p>
     </div>
 
+    <div class="plugin-box" (click)="openWebhookModal()">
+      <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g fill="#000000">
+         <path d="M6.032 4.132c0-1.039.843-1.882 1.886-1.882.709 0 1.328.39 1.65.97a.75.75 0 101.311-.728A3.385 3.385 0 007.918.75a3.383 3.383 0 00-3.386 3.382c0 .94.385 1.79 1.003 2.402l-2.054 3.594a1.25 1.25 0 00.151 2.49h.007a1.25 1.25 0 001.146-1.75l2.369-4.144a.75.75 0 00-.249-1.005 1.879 1.879 0 01-.873-1.587z" fill="#C41953"></path> 
+         <path d="M7.793 5.375a1.25 1.25 0 01.125-2.494h.006a1.25 1.25 0 011.157 1.725l2.159 3.572a3.383 3.383 0 014.51 3.19 3.383 3.383 0 01-4.23 3.275.75.75 0 11.373-1.452 1.883 1.883 0 002.357-1.822 1.883 1.883 0 00-2.897-1.588.75.75 0 01-1.045-.245l-2.515-4.16z"></path>
+        <path d="M2.002 10.429a.75.75 0 00-1.298-.752 3.383 3.383 0 002.932 5.073c1.61 0 2.96-1.124 3.301-2.632h4.42c.229.304.592.5 1.001.5h.007a1.25 1.25 0 000-2.5h-.007c-.409 0-.772.197-1 .5H6.271a.75.75 0 00-.75.75 1.883 1.883 0 01-1.886 1.882 1.883 1.883 0 01-1.633-2.821z"></path> </g> </g>
+      </svg>
+      <p class="plugin-text">Webhook</p>
+    </div>
+
   </div>
 </div>
 
@@ -216,6 +225,28 @@
       <p class="plugin-description toggle">Enable/Disable n8n</p>
       <label class="switch">
         <input [(ngModel)]="n8nEnabled" type="checkbox"  id="teleSwitch" (click)="n8nSwitch()" />
+        <span class="slider round"></span>
+      </label>
+    </div>
+  </div>
+</div>
+
+<!-- Misc Webhook Modal -->
+<div class="modal-container" *ngIf="webhookModal">
+  <div class="telegram-modal">
+    <button class="close-button" (click)="openWebhookModal()">&times;</button>
+    <p class="plugin-title">Connect a <u (click)="webhookLink()" class="clickable" style="cursor: pointer; color:rgb(225, 178, 60); ">webhook</u></p>
+    <p class="read-docs"><u style="text-decoration: none;">read docs</u></p>
+    <p class="plugin-product-description">A webhook is a method used to deliver data from one application to another, typically by making an HTTP POST request to a specified URL. Webhooks are often used for real-time data transfer and automation, allowing systems to communicate efficiently.</p>
+    <p class="plugin-description">When you enter a valid webhook URL below, formbee will send your form data to the webhook URL you provide.</p>
+    <div class="flex-row">
+      <input type="text" placeholder="Webhook URL" value="{{ webhookWebhook }}" id="discord-input">
+      <button class="api-buttons" (click)="saveWebhookWebhook()">Save</button>
+    </div>
+    <div class="flex-row telegram-switch">
+      <p class="plugin-description toggle">Enable/Disable webhook</p>
+      <label class="switch">
+        <input [(ngModel)]="webhookEnabled" type="checkbox"  id="teleSwitch" (click)="webhookSwitch()" />
         <span class="slider round"></span>
       </label>
     </div>

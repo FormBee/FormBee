@@ -139,5 +139,14 @@ export class User {
     @Column({nullable: true})
     n8nBoolean: boolean | null;
     //n8n settings end ____________________________________________________________________
+
+    // Misc Webhook settings start _____________________________________________________________
+
+    @Column({nullable: true})
+    webhookWebhook: string | null;
+
+    @Column({nullable: true})
+    webhookBoolean: boolean | null;
+    // Misc Webhook settings end _________________________________________________________________
 }
     

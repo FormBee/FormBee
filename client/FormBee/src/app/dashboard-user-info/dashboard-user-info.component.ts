@@ -54,6 +54,9 @@ export class DashboardUserInfoComponent implements OnInit {
   n8nEnabled: boolean = false;
   n8nWebhook: string | undefined;
   n8nModal: boolean = false;
+  webhookModal: boolean = false;
+  webhookEnabled: boolean = false;
+  webhookWebhook: string | undefined;
 
   fetchApiKey = async (githubId: string) => {
     console.log("Fetching API key");
@@ -104,6 +107,8 @@ export class DashboardUserInfoComponent implements OnInit {
         this.makeWebhook = data.makeWebhook;
         this.n8nEnabled = data.n8nBoolean;
         this.n8nWebhook = data.n8nWebhook;
+        this.webhookEnabled = data.webhookBoolean;
+        this.webhookWebhook = data.webhookWebhook;
 
         if (this.apiKey) {
           this.displayApiKey = '*'.repeat(this.apiKey.length - 4) + this.apiKey.slice(this.apiKey.length - 4);
@@ -455,5 +460,57 @@ export class DashboardUserInfoComponent implements OnInit {
 
   async n8nLink() {
     window.open("https://n8n.io/");
+  }
+
+  openWebhookModal = () => {
+    this.webhookModal = !this.webhookModal;
+  }
+
+  async webhookSwitch() {
+    this.webhookEnabled = !this.webhookEnabled;
+
+    await fetch('http://localhost:3000/webhook/toogle/' + this.githubId, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        webhookBoolean: this.webhookEnabled,
+      }),
+    });
+    console.log(this.webhookEnabled);
+  }
+
+  async unlinkWebhook() {
+    this.webhookWebhook = undefined;
+    await fetch('http://localhost:3000/webhook/unlink/' + this.githubId, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+    console.log("Webhook unlinked");
+  }
+
+  async saveWebhookWebhook() {
+    const discordInput = document.getElementById('discord-input');
+    if (discordInput) {
+      this.webhookWebhook = (<HTMLInputElement>discordInput).value;
+      await fetch('http://localhost:3000/webhook/webhook/' + this.githubId, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          webhookWebhook: this.webhookWebhook,
+        }),
+      });
+      console.log("Webhook webhook saved");
+    } else {
+      console.error("'discord-input' element not found.");
+    }
+  }
+  async webhookLink() {
+    window.open("https://whatisawebhook.com/");
   }
 }
