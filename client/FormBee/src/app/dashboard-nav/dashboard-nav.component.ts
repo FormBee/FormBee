@@ -15,6 +15,7 @@ export class DashboardNavComponent implements OnInit {
   currentSubs: number = 0;
   maxSubs: number = 0;
   subscriptionTier: string = "Loading...";
+  isDropdownOpen: boolean = false;
 
   ngOnInit(): void {
     const getUser = async (githubId: string | undefined) => {
@@ -30,5 +31,16 @@ export class DashboardNavComponent implements OnInit {
       }
     };
     getUser(this.githubId);
+  }
+
+  toggleDropdown(): void {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  logout(): void {
+    console.log("Logging out");
+    localStorage.removeItem("Fb-pA4lBUfsqVAWFN78eWDF");
+    //redirect to login page
+    window.location.href = "/home";
   }
 }

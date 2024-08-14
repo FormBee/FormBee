@@ -9,12 +9,26 @@
           <div class="divider"></div>
           <p>{{currentSubs}} / {{maxSubs}}</p>
         </div>
-        <div class="dropdown">
-        <img [src]="profilePic" alt="Profile Pic" class="profile-pic">
-
+        <div class="dropdown" (click)="toggleDropdown()">
+          <img [src]="profilePic" alt="Profile Pic" class="profile-pic">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M7 10l5 5 5-5H7z" fill="#C69245"/>
           </svg>
+          <div class="dropdown-menu" [class.active]="isDropdownOpen">
+            <div class="dropdown-header">
+              <img [src]="profilePic" alt="Profile Pic" class="dropdown-profile-pic">
+              <div class="dropdown-user-info">
+                <h3>{{name}}</h3>
+                <p>{{login}}</p>
+              </div>
+            </div>
+            <ul class="dropdown-list">
+              <li><a>Theme</a></li>
+              <li><a>Billing</a></li>
+              <li><a>Docs</a></li>
+              <li (click)="logout()"><a>Log Out</a></li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
