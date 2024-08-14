@@ -51,6 +51,9 @@ export class DashboardUserInfoComponent implements OnInit {
   makeEnabled: boolean = false;
   makeWebhook: string | undefined;
   makeModal: boolean = false;
+  n8nEnabled: boolean = false;
+  n8nWebhook: string | undefined;
+  n8nModal: boolean = false;
 
   fetchApiKey = async (githubId: string) => {
     console.log("Fetching API key");
@@ -99,6 +102,8 @@ export class DashboardUserInfoComponent implements OnInit {
         this.slackChannelName = data.slackChannelName
         this.makeEnabled = data.makeBoolean;
         this.makeWebhook = data.makeWebhook;
+        this.n8nEnabled = data.n8nBoolean;
+        this.n8nWebhook = data.n8nWebhook;
 
         if (this.apiKey) {
           this.displayApiKey = '*'.repeat(this.apiKey.length - 4) + this.apiKey.slice(this.apiKey.length - 4);
@@ -397,5 +402,58 @@ export class DashboardUserInfoComponent implements OnInit {
 
   makeLink = () => {
     window.open("https://make.com/");
+  }
+
+  openN8nModal = () => {
+    this.n8nModal = !this.n8nModal;
+  }
+
+  async n8nSwitch() {
+    this.n8nEnabled = !this.n8nEnabled;
+
+    await fetch('http://localhost:3000/n8n/toogle/' + this.githubId, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        n8nBoolean: this.n8nEnabled,
+      }),
+    });
+    console.log(this.n8nEnabled);
+  }
+
+  async unlinkN8n() {
+    this.n8nWebhook = undefined;
+    await fetch('http://localhost:3000/n8n/unlink/' + this.githubId, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+    console.log("N8n unlinked");
+  }
+
+  async saveN8nWebhook() {
+    const discordInput = document.getElementById('discord-input');
+    if (discordInput) {
+      this.n8nWebhook = (<HTMLInputElement>discordInput).value;
+      await fetch('http://localhost:3000/n8n/webhook/' + this.githubId, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          n8nWebhook: this.n8nWebhook,
+        }),
+      });
+      console.log("N8n webhook saved");
+    } else {
+      console.error("'discord-input' element not found.");
+    }
+  }
+
+  async n8nLink() {
+    window.open("https://n8n.io/");
   }
 }

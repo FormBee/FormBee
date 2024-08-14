@@ -130,5 +130,14 @@ export class User {
     @Column({nullable: true})
     makeBoolean: boolean | null;
     //Make settings end ____________________________________________________________________
+
+    //n8n settings start ___________________________________________________________________
+
+    @Column({nullable: true})
+    n8nWebhook: string | null;
+
+    @Column({nullable: true})
+    n8nBoolean: boolean | null;
+    //n8n settings end ____________________________________________________________________
 }
     

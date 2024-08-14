@@ -96,6 +96,13 @@
       <p class="plugin-text">Make</p>
     </div>
 
+    <div class="plugin-box" (click)="openN8nModal()">
+      <div class="maintain n8n-logo">
+        <img src="../../assets/n8n.io.svg" alt="Make.com logo" width="200" height="60" style="position: relative; overflow:hidden">
+      </div>
+      <p class="plugin-text">n8n</p>
+    </div>
+
   </div>
 </div>
 
@@ -179,6 +186,26 @@
       <p class="plugin-description toggle">Enable/Disable Make</p>
       <label class="switch">
         <input [(ngModel)]="makeEnabled" type="checkbox"  id="teleSwitch" (click)="makeSwitch()" />
+        <span class="slider round"></span>
+      </label>
+    </div>
+  </div>
+</div>
+
+<!-- N8n Modal -->
+<div class="modal-container" *ngIf="n8nModal">
+  <div class="telegram-modal">
+    <button class="close-button" (click)="openN8nModal()">&times;</button>
+    <p class="plugin-title">Connect to <u (click)="n8nLink()" class="clickable" style="cursor: pointer; color:rgb(225, 178, 60)">n8n</u></p>
+    <p class="plugin-description">When you connect your n8n workflow with a webhook, you will be able to create n8n workflows with your form data.</p>
+    <div class="flex-row">
+      <input type="text" placeholder="Webhook URL" value="{{ n8nWebhook }}" id="discord-input">
+      <button class="api-buttons" (click)="saveN8nWebhook()">Save</button>
+    </div>
+    <div class="flex-row telegram-switch">
+      <p class="plugin-description toggle">Enable/Disable n8n</p>
+      <label class="switch">
+        <input [(ngModel)]="n8nEnabled" type="checkbox"  id="teleSwitch" (click)="n8nSwitch()" />
         <span class="slider round"></span>
       </label>
     </div>

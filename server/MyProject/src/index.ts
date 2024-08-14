@@ -130,11 +130,15 @@ AppDataSource.initialize().then(async () => {
                                 };
                                 await sendMessage(niceMessageDiscord);
                             }
-                            if (user.makeBoolean && user.makeWebhook != null) {
+                            if (user.makeBoolean === true && user.makeWebhook != null) {
+                                console.log("Sendding to make");
                                 axios.post('http://localhost:3000/make/' + apikey, {
                                     message: req.body,
                                 });
                             }
+                            axios.post('http://localhost:3000/n8n/send/' + apikey, {
+                                message: req.body,
+                            });
 
 
                     return AppDataSource.manager.save(user);
@@ -935,6 +939,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                 return;
             } else {
                 try {
+                    console.log("Sendding to make in try? why?");
                     // Send form data to Make.com
                     await axios.post(user.makeWebhook, message);
                     res.status(200).send('Form submitted successfully');
@@ -987,6 +992,70 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             res.json({ message: 'Make webhook settings updated successfully' });
         }
     });
+
+    app.post('/n8n/send/:apikey', async (req, res) => {
+        const githubId = req.params.apikey;
+        const message = req.body;
+        const user = await AppDataSource.manager.findOne(User, { where: { apiKey: githubId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            try {
+                // Send form data to N8N.com
+                console.log("Sendding to n8n");
+                await axios.post(user.n8nWebhook, message);
+                res.status(200).send('Form submitted successfully');
+              } catch (error) {
+                console.log("Error sending message");
+                res.send('Error sending message');
+              }
+        }
+
+    });
+
+    app.post('/n8n/toogle/:apikey', async (req, res) => {
+        const githubId = req.params.apikey;
+        const { n8nBoolean } = req.body;
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            user.n8nBoolean = n8nBoolean;
+            await AppDataSource.manager.save(user);
+            console.log("N8n settings updated successfully", user.n8nBoolean);
+            res.json({ message: 'N8n settings updated successfully' });
+        }
+    });
+
+    app.post('/n8n/unlink/:apikey', async (req, res) => {
+        const githubId = req.params.apikey;
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            user.n8nWebhook = null;
+            await AppDataSource.manager.save(user);
+            res.json({ message: 'N8n unlinked successfully' });
+        }
+    });
+
+    app.post('/n8n/webhook/:apikey', async (req, res) => {
+        const githubId = req.params.apikey;
+        const { n8nWebhook } = req.body;
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            user.n8nWebhook = n8nWebhook;
+            await AppDataSource.manager.save(user);
+            res.json({ message: 'N8n webhook settings updated successfully' });
+        }
+    });
+
 
     // register express routes from defined application routes
     Routes.forEach(route => {
