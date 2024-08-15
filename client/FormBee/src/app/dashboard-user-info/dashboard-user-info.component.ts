@@ -57,6 +57,9 @@ export class DashboardUserInfoComponent implements OnInit {
   webhookModal: boolean = false;
   webhookEnabled: boolean = false;
   webhookWebhook: string | undefined;
+  currentTheme: string = 'Default';
+  themes: string[] = ['Default', 'elegent-theme', 'light-theme'];
+
 
   fetchApiKey = async (githubId: string) => {
     console.log("Fetching API key");
@@ -210,6 +213,7 @@ export class DashboardUserInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    document.documentElement.className = this.currentTheme;
     if (!this.githubId) {
       return;
     }

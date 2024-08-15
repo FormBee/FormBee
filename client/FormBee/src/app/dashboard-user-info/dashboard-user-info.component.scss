@@ -8,9 +8,12 @@ $shadow-color: rgba(0, 0, 0, 0.2);
 $background-color-seethrough: #2f485800;
 $text-color2: #c7c7c7;
 
+body {
+    background-color: var(--background-color);
+}
 
 .plugin-text {
-  color: $text-color2;
+  color: var(--text-color2);
 }
 
 p {

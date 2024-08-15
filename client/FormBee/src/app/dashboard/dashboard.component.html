@@ -1,5 +1,5 @@
-<div *ngIf="loading">
-  <p>Loading...</p>
+<div class="loading" *ngIf="loading">
+  <p >Loading...</p>
 </div>
 <div *ngIf="!loading" class="dashboard">
   <app-dashboard-nav [name]="name" [login]="login" [profilePic]="profilePic" [githubId]="githubId"></app-dashboard-nav>

@@ -1,7 +1,4 @@
-@use 'default-theme';
-@use 'high-contract-theme';
-@use 'light-theme';
-@use 'elegent-theme';
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 
@@ -11,14 +8,74 @@ html, body {
     margin:0;
 }
 
-@mixin theme-colors($theme) {
-    @if $theme == 'default' {
-      @include default-theme.theme();
-    } @else if $theme == 'high-contract-theme' {
-      @include high-contrast-theme.theme();
-    } @else if $theme == 'light' {
-      @include light-theme.theme();
-    } @else {
-      @include elegent-theme.theme();
-    }
-}
+// Default Theme
+
+$primary-color: #2b2d42;
+$secondary-color: #ffba2fd7;
+$accent-color: #ffb700;
+$text-color: #fff875;
+$div-color: #2f4858;
+$border-color: #1e8576;
+$shadow-color: rgba(0, 0, 0, 0.2);
+$background-color-seethrough: #2f485800;
+$text-color2: #c7c7c7;
+$background-color: rgb(0, 6, 14);
+$nav-hover-color: #32355c;
+
+// Dark Theme
+$elegent-primary-color: #2d3267;
+$elegent-secondary-color: #8b610bd7;
+$elegent-accent-color: #524422;
+$elegent-div-color: #253138;
+$elegent-text-color: #454311;
+$elegent-border-color: #10b39a;
+$elegent-shadow-color: rgba(0, 0, 0, 0.2);
+$elegent-background-color-seethrough: #213c4c00;
+$elegent-text-color2: #533030;
+$elegent-background-color: rgb(11, 38, 74);
+$elegent-nav-hover-color: #242d41;
+
+
+
+// Light Theme
+$light-primary-color: #0fa122;
+$light-background-color: #eee;
+$light-text-color: #000;
+
+// src/styles/themes.scss
+
+:root {
+    --primary-color: #{$primary-color};
+    --div-color: #{$div-color};
+    --text-color: #{$text-color};
+    --border-color: #{$border-color};
+    --shadow-color: #{$shadow-color};
+    --background-color-seethrough: #{$background-color-seethrough};
+    --text-color2: #{$text-color2};
+    --accent-color: #{$accent-color};
+    --secondary-color: #{$secondary-color};
+    --background-color: #{$background-color};
+    --nav-hover-color: #{$nav-hover-color};
+  }
+  
+  .elegent-theme {
+    --primary-color: #{$elegent-primary-color};
+    --div-color: #{$elegent-div-color};
+    --text-color: #{$elegent-text-color};
+    --border-color: #{$elegent-border-color};
+    --shadow-color: #{$elegent-shadow-color};
+    --background-color-seethrough: #{$elegent-background-color-seethrough};
+    --text-color2: #{$elegent-text-color2};
+    --accent-color: #{$elegent-accent-color};
+    --secondary-color: #{$elegent-secondary-color};
+    --background-color: #{$elegent-background-color};
+    --nav-hover-color: #{$elegent-nav-hover-color};
+  }
+  
+  .light-theme {
+    --primary-color: #{$light-primary-color};
+    --background-color: #{$light-background-color};
+    --text-color: #{$light-text-color};
+  }
+  
+  // Other themes as you defined above...
