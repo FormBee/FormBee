@@ -192,7 +192,7 @@
       transition: background-color 0.4s ease;
 
       &:hover {
-        background-color: #32355c;
+        background-color: var(--nav-hover-color);
       }
     }
   }
@@ -217,7 +217,7 @@
   list-style-type: none;
   padding: 0;
   margin: 0;
-  background-color: #161b28;
+  background-color: var(--submenu-background-color);
   border-radius: 4px;
   overflow: hidden;
   max-height: 0;

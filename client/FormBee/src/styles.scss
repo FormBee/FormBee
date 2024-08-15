@@ -21,6 +21,7 @@ $background-color-seethrough: #2f485800;
 $text-color2: #c7c7c7;
 $background-color: rgb(0, 6, 14);
 $nav-hover-color: #32355c;
+$submenu-background-color: #161b28;
 
 // Dark Theme
 $elegent-primary-color: #2d3267;
@@ -56,6 +57,7 @@ $light-text-color: #000;
     --secondary-color: #{$secondary-color};
     --background-color: #{$background-color};
     --nav-hover-color: #{$nav-hover-color};
+    --submenu-background-color: #{$submenu-background-color};
   }
   
   .elegent-theme {
@@ -70,6 +72,7 @@ $light-text-color: #000;
     --secondary-color: #{$elegent-secondary-color};
     --background-color: #{$elegent-background-color};
     --nav-hover-color: #{$elegent-nav-hover-color};
+    --submenu-background-color: #{submenu-background-color};
   }
   
   .light-theme {

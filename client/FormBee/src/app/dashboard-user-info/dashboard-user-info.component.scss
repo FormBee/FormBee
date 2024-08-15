@@ -17,7 +17,7 @@ body {
 }
 
 p {
-    color: $text-color;
+    color: var(--text-color);
     margin-top: 0;
     padding-top: 0;
     font-size: 1rem;
@@ -41,24 +41,24 @@ p {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: $primary-color;
-    box-shadow: $shadow-color 0px 8px 16px;
+    background-color: var(--primary-color);
+    box-shadow: var(--shadow-color) 0px 8px 16px;
     width: 40vw;
     height: auto;
     margin: 1rem;
     padding: 1rem;
     border-radius: 10px;
-    border: 1px solid $border-color;
+    border: 1px solid var(--border-color);
     transition: transform 0.3s, box-shadow 0.3s;
 
     &:hover {
         transform: translateY(-5px);
-        box-shadow: $shadow-color 0px 12px 24px;
+        box-shadow: var(--shadow-color) 0px 12px 24px;
     }
 }
 
 .usage-bar {
-    background-color: $background-color;
+    background-color: var(--div-color);
     border-radius: 5px;
     height: 8px;
     width: 100%;
@@ -66,7 +66,7 @@ p {
 }
 
 .usage-progress {
-    background-color: $accent-color;
+    background-color: var(--accent-color);
     height: 100%;
     border-radius: 5px;
     transition: width 0.5s ease-in-out;
@@ -74,27 +74,13 @@ p {
 
 .usage-text {
     margin-top: 0.5rem;
-    color: $text-color;
+    color: var(--text-color);
     font-weight: bold;
 }
 
-.divider {
-    width: 2px;
-    height: 80%;
-    background-color: rgba(255, 179, 0, 0.066);
-    border-radius: 5px;
-}
-
-.dropdown {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    padding: 0 0.5rem;
-    position: relative;
-}
 
 .name-text {
-    color: $text-color;
+    color: var(--text-color);
     font-size: 2.5rem;
     margin-top: 2rem;
     margin-bottom: 1rem;
@@ -106,9 +92,9 @@ p {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: $primary-color;
-    box-shadow: $shadow-color 0px 8px 16px;
-    border: 1px solid $border-color;
+    background-color: var(--primary-color);
+    box-shadow: var(--shadow-color) 0px 8px 16px;
+    border: 1px solid var(--border-color);
     height: auto; 
     border-radius: 10px;
     width: 40vw;
@@ -133,7 +119,7 @@ p {
     right: 0;
     bottom: 0;
     z-index: 10;
-    background-image: linear-gradient(to right, $primary-color 0%, $background-color 50%, $background-color-seethrough 100%);
+    background-image: linear-gradient(to right, var(--primary-color) 0%, var(--div-color) 50%, var(--background-color-seethrough) 100%);
     border-radius: 10px;
 }
 
@@ -142,24 +128,24 @@ p {
     z-index: 5;
     p {
         margin-bottom: 0;
-        color: $text-color;
+        color: var(--text-color);
     }
 }
 
 .api-buttons {
-    background-color: $secondary-color;
-    color: $primary-color;
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
     padding: 8px 16px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color, box-shadow 0.3s ease-in-out;
-    border: solid 1px $border-color;
+    border: solid 1px var(--border-color);
     margin: 0.5rem;
 
     &:hover {
-        background-color: $accent-color;
-        box-shadow: $shadow-color 0px 4px 6px;
+        background-color: var(--accent-color);
+        box-shadow: var(--shadow-color) 0px 4px 6px;
     }
 }
 
@@ -172,7 +158,7 @@ p {
     p {
         font-size: 1rem;
         text-align: center;
-        color: $text-color;
+        color: var(--text-color);
     }
 }
 
@@ -180,21 +166,21 @@ p {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: $primary-color;
+    background-color: var(--primary-color);
     border-radius: 10px;
     height: auto;
     margin: 1rem;
     padding: 1rem;
-    border: 1px solid $border-color;
+    border: 1px solid var(--border-color);
 
     input {
         margin-top: 10px;
         padding: 10px;
-        border: 1px solid $border-color;
+        border: 1px solid var(--border-color);
         border-radius: 5px;
         width: 90%;
-        background-color: #2a2624;
-        color: $text-color;
+        background-color: var(--submenu-background-color);
+        color: var(--text-color);
     }
 }
 
@@ -206,7 +192,7 @@ p {
   margin-top: 2rem;
   
   h2 {
-    color: $text-color;
+    color: var(--text-color);
     text-align: center;
     margin-bottom: 1rem;
   }
@@ -220,8 +206,8 @@ p {
 }
 
 .plugin-box {
-    background-color: $primary-color;
-    border: 1px solid $border-color;
+    background-color: var(--primary-color);
+    border: 1px solid var(--border-color);
     border-radius: 10px;
     padding: 1rem;
     display: flex;
@@ -237,7 +223,7 @@ p {
   
     &:hover {
       transform: translateY(-5px);
-      box-shadow: $shadow-color 0px 8px 16px;
+      box-shadow: var(--shadow-color) 0px 8px 16px;
       z-index: 30px;
     }
   
@@ -309,16 +295,16 @@ p {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    background-color: $primary-color;
+    background-color: var(--primary-color);
     border-radius: 10px;
-    border: 1px solid $secondary-color;
+    border: 1px solid var(--secondary-color);
     width: 40vw;
     height: fit-content;
     padding: 1rem;
     z-index: 25;
     opacity: 0;
     animation: showModal 0.6s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-    box-shadow: 0 0 5px $text-color, rgba(0, 0, 0, 0.56) 0px 22px 70px 4px, rgba(0, 0, 0, 0.56) 0px -22px 70px -4px;
+    box-shadow: 0 0 5px var(--text-color), rgba(0, 0, 0, 0.56) 0px 22px 70px 4px, rgba(0, 0, 0, 0.56) 0px -22px 70px -4px;
   }
   
   @keyframes showModal {
@@ -341,7 +327,7 @@ p {
   }
 
   .plugin-description {
-    color: #c7c7c7;
+    color: var(--text-color2);
     font-size: 1rem;
     margin-bottom: 1rem;
   }
