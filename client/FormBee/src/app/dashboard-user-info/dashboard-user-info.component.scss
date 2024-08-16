@@ -337,13 +337,13 @@ p {
     top: 1rem;
     right: 1rem;
     font-size: 2rem;
-    color: #c7c7c7;
+    color: var(--text-color2);
     cursor: pointer;
     transition: color 0.3s ease-in-out;
     background-color: transparent;
     border: none;
     &:hover {
-      color: #fff;
+      color: var(--text-color);
     }
 }
 
@@ -370,8 +370,8 @@ p {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: $background-color;
-    box-shadow: 0 0 3px $text-color;
+    background-color: var(--div-color);
+    box-shadow: 0 0 3px var(--text-color);
     -webkit-transition: .4s;
     transition: .4s;
 }
@@ -387,18 +387,18 @@ p {
     width: 26px;
     left: 4px;
     bottom: 4px;
-    background-color: $primary-color;
+    background-color: var(--primary-color);
     -webkit-transition: .4s;
     transition: .4s;
 }
 
 input:checked + .slider {
-    background-color: $accent-color;
-    border: 1px solid $border-color;
+    background-color: var(--accent-color);
+    border: 1px solid var(--border-color);
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 3px $border-color;
+    box-shadow: 0 0 3px var(--border-color);
 }
 
 input:checked + .slider:before {
@@ -428,7 +428,7 @@ input:checked + .slider:before {
     .telegram-modal {
         width: 90vw;
         border-radius: 10px;
-        border: 1px solid $secondary-color;
+        border: 1px solid var(--secondary-color);
         height: fit-content;
         padding: 1rem;
         z-index: 25;
@@ -448,19 +448,19 @@ input:checked + .slider:before {
 }
 
 .telegram-unlink-button {
-    background-color: $secondary-color;
-    color: $primary-color;
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
     padding: 8px 16px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color, box-shadow 0.3s ease-in-out;
-    border: solid 1px $border-color;
+    border: solid 1px var(--border-color);
     margin: 0.5rem;
 
     &:hover {
-        background-color: $accent-color;
-        box-shadow: $shadow-color 0px 4px 6px;
+        background-color: var(--accent-color);
+        box-shadow: var(--shadow-color) 0px 4px 6px;
     }
 }
 
@@ -469,14 +469,14 @@ input:checked + .slider:before {
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background-color: $background-color;
-    color: $text-color;
+    background-color: var(--div-color);
+    color: var(--text-color);
 }
 
 #discord-input:focus {
         outline: none;
         border: none;
-        box-shadow: 0 0 5px $text-color;
+        box-shadow: 0 0 5px var(--text-color);
     }
 
 .slack-description {
@@ -491,7 +491,7 @@ input:checked + .slider:before {
     color: $primary-color;
     padding: 5px;
     border-radius: 30px;
-    box-shadow: 0 0 5px $text-color;
+    box-shadow: 0 0 5px var(--text-color);
 
 }
 
@@ -508,7 +508,7 @@ input:checked + .slider:before {
 
 .plugin-product-description {
     margin-top: 10px;
-    color: #c4b690;
+    color: var(--plugin-description-color);
     font-size: 1rem;
     line-height: 1.5rem;
 }
@@ -522,8 +522,8 @@ input:checked + .slider:before {
     padding: 2px;
     border-radius: 20px;
     background-color: #444766;
-    border: 1px solid $background-color;
-    box-shadow: 0 0 5px $shadow-color;
+    border: 1px solid var(--div-color);
+    box-shadow: 0 0 5px var(--shadow-color);
     transition: background-color 0.3s ease-in-out;
 }
 
