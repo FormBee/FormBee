@@ -9,8 +9,7 @@ html, body {
     background-color: var(--background-color);
 }
 
-// Default Theme
-
+// Default Theme (dark
 $primary-color: #2b2d42;
 $secondary-color: #ffba2fd7;
 $accent-color: #ffb700;
@@ -20,33 +19,40 @@ $border-color: #1e8576;
 $shadow-color: rgba(0, 0, 0, 0.2);
 $background-color-seethrough: #2f485800;
 $text-color2: #c7c7c7;
-$background-color: rgb(0, 6, 14);
+$background-color1: rgb(0, 6, 14);
 $nav-hover-color: #32355c;
 $submenu-background-color: #161b28;
 $plugin-description-color: #c4b690;
 
 // Dark Theme
-$elegent-primary-color: #3b3f5c;
-$elegent-secondary-color: #b793e6;
-$elegent-accent-color: #9980fa;
-$elegent-div-color: #eaeaea;
-$elegent-text-color: #ffb700;
-$elegent-border-color: #5c5c88;
-$elegent-shadow-color: rgba(0, 0, 0, 0.15);
-$elegent-background-color-seethrough: rgba(59, 63, 92, 0);
-$elegent-text-color2: #d1d1e0;
-$elegent-background-color: #1d1d33;
-$elegent-nav-hover-color: #484e78;
-$elegent-submenu-background-color: #242442; 
-$elegent-plugin-description-color: #a497a5;
-
-
-
+$elegent-primary-color: #576f8c; 
+$elegent-secondary-color: #1C2541;
+ $elegent-accent-color: #c0a75b; 
+ $elegent-div-color: #0B132B; 
+ $elegent-text-color: #dac22c; 
+ $elegent-border-color: #2A3950; 
+ $elegent-shadow-color: rgba(0, 0, 0, 0.5); 
+ $elegent-background-color-seethrough: rgba(58, 80, 107, 0.2); 
+ $elegent-text-color2: #dfb733; 
+ $elegent-background-color: #1F2833; 
+ $elegent-nav-hover-color: #33526c; 
+ $elegent-submenu-background-color: #2C3E50; 
+ $elegent-plugin-description-color: #232322;
 
 // Light Theme
-$light-primary-color: #0fa122;
-$light-background-color: #eee;
-$light-text-color: #000;
+$light-primary-color: #f8d17d;
+$light-secondary-color: #E0E0E0;
+$light-accent-color: #4b91e2;
+$light-div-color: #F0F4F8;
+$light-text-color: #333333;
+$light-border-color: #4b91e2;
+$light-shadow-color: rgba(0, 0, 0, 0.1);
+$light-background-color-seethrough: rgba(107, 142, 164, 0.1);
+$light-text-color2: #134580;
+$light-background-color: #f0f0f0;
+$light-nav-hover-color: #e1cd5b;
+$light-submenu-background-color: #c8dfed;
+$light-plugin-description-color: #565252;
 
 // src/styles/themes.scss
 
@@ -60,13 +66,13 @@ $light-text-color: #000;
     --text-color2: #{$text-color2};
     --accent-color: #{$accent-color};
     --secondary-color: #{$secondary-color};
-    --background-color: #{$background-color};
+    --background-color1: #{$background-color1};
     --nav-hover-color: #{$nav-hover-color};
     --submenu-background-color: #{$submenu-background-color};
     --plugin-description-color: #{$plugin-description-color};
   }
   
-  .ho {
+  .neutral {
     --primary-color: #{$elegent-primary-color};
     --div-color: #{$elegent-div-color};
     --text-color: #{$elegent-text-color};
@@ -76,7 +82,7 @@ $light-text-color: #000;
     --text-color2: #{$elegent-text-color2};
     --accent-color: #{$elegent-accent-color};
     --secondary-color: #{$elegent-secondary-color};
-    --background-color: #{$elegent-background-color};
+    --background-color1: #{$elegent-background-color};
     --nav-hover-color: #{$elegent-nav-hover-color};
     --submenu-background-color: #{$elegent-submenu-background-color};
     --plugin-description-color: #{$elegent-plugin-description-color};
@@ -84,8 +90,17 @@ $light-text-color: #000;
   
   .light-theme {
     --primary-color: #{$light-primary-color};
-    --background-color: #{$light-background-color};
+    --div-color: #{$light-div-color};
     --text-color: #{$light-text-color};
+    --border-color: #{$light-border-color};
+    --shadow-color: #{$light-shadow-color};
+    --background-color-seethrough: #{$light-background-color-seethrough};
+    --text-color2: #{$light-text-color2};
+    --accent-color: #{$light-accent-color};
+    --secondary-color: #{$light-secondary-color};
+    --background-color1: #{$light-background-color};
+    --nav-hover-color: #{$light-nav-hover-color};
+    --submenu-background-color: #{$light-submenu-background-color};
+    --plugin-description-color: #{$light-plugin-description-color};
   }
-  
   // Other themes as you defined above...

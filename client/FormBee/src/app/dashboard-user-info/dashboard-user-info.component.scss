@@ -139,13 +139,13 @@ p {
 }
 
 .api-buttons {
-    background-color: var(--secondary-color);
+    background-color: var(--plugin-description-color);
     color: var(--primary-color);
     padding: 8px 16px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color, box-shadow 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out;
     border: solid 1px var(--border-color);
     margin: 0.5rem;
 
@@ -327,7 +327,7 @@ p {
   }
 
   .plugin-title {
-    color: $text-color2;
+    color: var(--text-color2);
     font-size: 1.5rem;
     margin-bottom: 0px;
   }

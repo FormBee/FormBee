@@ -2,7 +2,7 @@ $primary-color: var(--primary-color);
 $secondary-color: var(--secondary-color);
 $accent-color: var(--accent-color);
 $text-color: var(--text-color2);
-$background-color: var(--background-color);
+$background-color: var(--background-color1);
 $border-color: var(--border-color);
 $shadow-color: var(--shadow-color);
 
@@ -359,7 +359,7 @@ input:checked + .slider:before {
     border: none;
     border-radius: 5px;
     background-color: $background-color;
-    color: white;
+    color: $text-color;
     padding: 5px;
     height: 20px;
 }
