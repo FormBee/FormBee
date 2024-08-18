@@ -17,7 +17,7 @@ export class DashboardNavComponent implements OnInit {
   maxSubs: number = 0;
   subscriptionTier: string = "Loading...";
   isDropdownOpen: boolean = false;
-  themes: string[] = ['Default', 'elegent-theme', 'light-theme'];
+  themes: string[] = ['default (dark)', 'ho', 'light-theme'];
   currentTheme: string = 'Default';
   isThemeMenuOpen: boolean = false;
 

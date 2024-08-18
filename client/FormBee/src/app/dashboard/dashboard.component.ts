@@ -20,10 +20,12 @@ export class DashboardComponent implements OnInit {
   profilePic: string | undefined;
   githubId: string | undefined;
   loading: boolean = true;
-  currentTheme: string = "Default";
+  currentTheme: string = localStorage.getItem("theme") || "Default";
   constructor(private Router: Router) {}
 
   ngOnInit(): void {
+    this.currentTheme = localStorage.getItem("theme") || "Default";
+    document.documentElement.className = this.currentTheme;
     const token = localStorage.getItem('Fb-pA4lBUfsqVAWFN78eWDF');
     if (!token) {
       this.Router.navigate(['/login']);
@@ -52,11 +54,12 @@ export class DashboardComponent implements OnInit {
           }
           this.profilePic = data.avatar_url;
           this.githubId = data.id;
-          this.currentTheme = localStorage.getItem("theme") || "Default";
         }
       })
       .finally(() => {
-        this.loading = false;
+        setTimeout(() => {
+          this.loading = false;
+        }, 1000);
       });
   }
 }

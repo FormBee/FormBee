@@ -1,10 +1,10 @@
-$primary-color: #2b2d42;
-$secondary-color: #ffba2fd7;
-$accent-color: #ffb700;
-$text-color: #c7c7c7;
-$background-color: #2f4858;
-$border-color: #1e8576;
-$shadow-color: rgba(0, 0, 0, 0.2);
+$primary-color: var(--primary-color);
+$secondary-color: var(--secondary-color);
+$accent-color: var(--accent-color);
+$text-color: var(--text-color2);
+$background-color: var(--background-color);
+$border-color: var(--border-color);
+$shadow-color: var(--shadow-color);
 
 .modal-container {
     position: fixed;

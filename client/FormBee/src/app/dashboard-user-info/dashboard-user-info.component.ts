@@ -21,6 +21,7 @@ import { FormsModule } from '@angular/forms';
 export class DashboardUserInfoComponent implements OnInit {
   @Input() githubId: string | undefined;
   @Input() name: string | undefined;
+  @Input() currentTheme: string | undefined;
   apiKey: string | undefined;
   displayApiKey: string | undefined;
   usagePercent = 50;
@@ -57,7 +58,6 @@ export class DashboardUserInfoComponent implements OnInit {
   webhookModal: boolean = false;
   webhookEnabled: boolean = false;
   webhookWebhook: string | undefined;
-  currentTheme: string = 'Default';
   themes: string[] = ['Default', 'elegent-theme', 'light-theme'];
 
 
@@ -213,7 +213,6 @@ export class DashboardUserInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    document.documentElement.className = this.currentTheme;
     if (!this.githubId) {
       return;
     }

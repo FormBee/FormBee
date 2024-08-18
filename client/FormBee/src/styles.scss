@@ -6,6 +6,7 @@
 html, body {
     font-family: "Poppins", sans-serif;
     margin:0;
+    background-color: var(--background-color);
 }
 
 // Default Theme
@@ -25,18 +26,19 @@ $submenu-background-color: #161b28;
 $plugin-description-color: #c4b690;
 
 // Dark Theme
-$elegent-primary-color: #2d3267;
-$elegent-secondary-color: #8b610bd7;
-$elegent-accent-color: #524422;
-$elegent-div-color: #253138;
-$elegent-text-color: #454311;
-$elegent-border-color: #10b39a;
-$elegent-shadow-color: rgba(0, 0, 0, 0.2);
-$elegent-background-color-seethrough: #213c4c00;
-$elegent-text-color2: #533030;
-$elegent-background-color: rgb(11, 38, 74);
-$elegent-nav-hover-color: #242d41;
-$elegent-plugin-description-color: #c4b690;
+$elegent-primary-color: #3b3f5c;
+$elegent-secondary-color: #b793e6;
+$elegent-accent-color: #9980fa;
+$elegent-div-color: #eaeaea;
+$elegent-text-color: #ffb700;
+$elegent-border-color: #5c5c88;
+$elegent-shadow-color: rgba(0, 0, 0, 0.15);
+$elegent-background-color-seethrough: rgba(59, 63, 92, 0);
+$elegent-text-color2: #d1d1e0;
+$elegent-background-color: #1d1d33;
+$elegent-nav-hover-color: #484e78;
+$elegent-submenu-background-color: #242442; 
+$elegent-plugin-description-color: #a497a5;
 
 
 
@@ -64,7 +66,7 @@ $light-text-color: #000;
     --plugin-description-color: #{$plugin-description-color};
   }
   
-  .elegent-theme {
+  .ho {
     --primary-color: #{$elegent-primary-color};
     --div-color: #{$elegent-div-color};
     --text-color: #{$elegent-text-color};
@@ -76,7 +78,7 @@ $light-text-color: #000;
     --secondary-color: #{$elegent-secondary-color};
     --background-color: #{$elegent-background-color};
     --nav-hover-color: #{$elegent-nav-hover-color};
-    --submenu-background-color: #{submenu-background-color};
+    --submenu-background-color: #{$elegent-submenu-background-color};
     --plugin-description-color: #{$elegent-plugin-description-color};
   }
   

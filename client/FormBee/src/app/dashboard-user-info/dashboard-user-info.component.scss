@@ -12,6 +12,11 @@ body {
     background-color: var(--background-color);
 }
 
+.all-info {
+    background-color: var(--background-color);
+    
+}
+
 .plugin-text {
   color: var(--text-color2);
 }
@@ -82,10 +87,11 @@ p {
 .name-text {
     color: var(--text-color);
     font-size: 2.5rem;
-    margin-top: 2rem;
+    padding-top: 2.5rem;
     margin-bottom: 1rem;
     width: fit-content;
     margin-left: 2rem;
+    margin-top: 0;
 }
 
 .api-key-handling {

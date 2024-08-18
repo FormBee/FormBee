@@ -34,7 +34,7 @@
                 </a>
                 <ul class="theme-submenu" [class.active]="isThemeMenuOpen">
                   <li *ngFor="let theme of themes" (click)="changeTheme(theme)">
-                    <a>{{theme}}</a>
+                    <a>{{theme.split("-")[0].charAt(0).toUpperCase() + theme.split("-")[0].slice(1)}}</a>
                   </li>
                 </ul>
               </li>
