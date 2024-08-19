@@ -9,4 +9,14 @@
             <p>We send the data to your email.</p>
         </div>
     </div>
+
 </div>
+<div class="plugins-section">
+    <p>Then optionally, you can</p>
+    <div class="slideshow">
+      <div class="plugin-slide" *ngFor="let plugin of plugins; let i = index" [class.active]="i === currentPluginIndex">
+        <img [src]="plugin.icon" [alt]="plugin.name">
+        <p>{{plugin.description}}</p>
+      </div>
+    </div>
+  </div>
