@@ -51,7 +51,7 @@ $light-background-color-seethrough: rgba(107, 142, 164, 0.1);
 $light-text-color2: #134580;
 $light-background-color: #f0f0f0;
 $light-nav-hover-color: #e1cd5b;
-$light-submenu-background-color: #c8dfed;
+$light-submenu-background-color: #d1d9dd;
 $light-plugin-description-color: #565252;
 
 // src/styles/themes.scss
@@ -103,4 +103,4 @@ $light-plugin-description-color: #565252;
     --submenu-background-color: #{$light-submenu-background-color};
     --plugin-description-color: #{$light-plugin-description-color};
   }
-  // Other themes as you defined above...
+  // Other themes as you defined above... 

@@ -90,8 +90,8 @@ p {
     padding-top: 2.5rem;
     margin-bottom: 1rem;
     width: fit-content;
-    margin-left: 2rem;
-    margin-top: 0;
+    margin-left: 7vw;
+    margin-top: 5rem;
 }
 
 .api-key-handling {
@@ -455,7 +455,7 @@ input:checked + .slider:before {
 
 .telegram-unlink-button {
     background-color: var(--secondary-color);
-    color: var(--primary-color);
+    color: var(--text-color2);
     padding: 8px 16px;
     border: none;
     border-radius: 5px;
