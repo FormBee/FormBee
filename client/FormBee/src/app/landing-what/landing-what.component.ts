@@ -16,7 +16,7 @@ export class LandingWhatComponent implements OnInit {
     { icon: 'https://gliscfokeivkvdrwzlsv.supabase.co/storage/v1/object/public/Plugin%20images/discord%20logo.webp', name: 'Discord logo', description: 'Receive your form submissions in your discord channel.' },
     { icon: 'https://gliscfokeivkvdrwzlsv.supabase.co/storage/v1/object/public/Plugin%20images/make%20logo.png', name: 'Make logo', description: 'Create automations on make.com with your form data.' },
     { icon: 'https://gliscfokeivkvdrwzlsv.supabase.co/storage/v1/object/public/Plugin%20images/Telegram-Logo.png', name: 'Telegram logo', description: 'Receive your form submissions via Telegram.' },
-    { icon: 'https://gliscfokeivkvdrwzlsv.supabase.co/storage/v1/object/public/Plugin%20images/wehhook%20logo.png', name: 'Webhook logo', description: 'Reveive your form submissions with custom webhooks.' },
+    { icon: 'https://gliscfokeivkvdrwzlsv.supabase.co/storage/v1/object/public/Plugin%20images/wehhook%20logo.png', name: 'Webhook logo', description: 'Receive your form submissions with custom webhooks.' },
 
   ];
 

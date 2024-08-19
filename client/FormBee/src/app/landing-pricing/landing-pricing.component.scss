@@ -213,3 +213,15 @@
     
     }
 }
+
+@media screen and (max-width: 400px) {
+    .pricing-section {
+        .prices {
+            .price-card {
+                width: 250px;
+            }
+        }
+
+    }
+
+}
