@@ -20,11 +20,11 @@ export class DashboardComponent implements OnInit {
   profilePic: string | undefined;
   githubId: string | undefined;
   loading: boolean = true;
-  currentTheme: string = localStorage.getItem("theme") || "Default";
+  currentTheme: string = localStorage.getItem("theme") || "neutral";
   constructor(private Router: Router) {}
 
   ngOnInit(): void {
-    this.currentTheme = localStorage.getItem("theme") || "Default";
+    this.currentTheme = localStorage.getItem("theme") || "neutral";
     document.documentElement.className = this.currentTheme;
     const token = localStorage.getItem('Fb-pA4lBUfsqVAWFN78eWDF');
     if (!token) {

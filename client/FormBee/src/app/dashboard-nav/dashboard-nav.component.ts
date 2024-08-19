@@ -17,7 +17,7 @@ export class DashboardNavComponent implements OnInit {
   maxSubs: number = 0;
   subscriptionTier: string = "Loading...";
   isDropdownOpen: boolean = false;
-  themes: string[] = ['default (dark)', 'neutral', 'light-theme'];
+  themes: string[] = ['default', 'neutral', 'light-theme'];
   currentTheme: string = 'Default';
   isThemeMenuOpen: boolean = false;
 
@@ -31,7 +31,7 @@ export class DashboardNavComponent implements OnInit {
           this.maxSubs = data.maxSubmissions;
           this.currentSubs = data.currentSubmissions;
           this.subscriptionTier = data.subscriptionTier;
-          this.currentTheme = localStorage.getItem("theme") || "Default";
+          this.currentTheme = localStorage.getItem("theme") || "neutral";
           document.documentElement.className = this.currentTheme;
         }
       }
