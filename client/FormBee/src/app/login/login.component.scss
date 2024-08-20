@@ -6,6 +6,7 @@
     width: 100%;
     height: 100vh;
     margin: auto;
+    flex-direction: column;
 }
 
 .login-card {
@@ -67,4 +68,11 @@ p {
 
 .button-text {
     vertical-align: middle;
+}
+
+
+a {
+    color: #927317;
+    text-decoration: underline;
+    cursor: pointer;
 }

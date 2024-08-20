@@ -39,12 +39,10 @@ export class LoginComponent  implements OnInit {
   }
 
   login() {
-    // Redirect to GitHub OAuth login
-
-    
     window.location.href = 'http://localhost:3000/auth/github';
+  }
 
-    //access token data from url
-
+  termsOfService() {
+    this.router.navigate(['/terms-of-service']);
   }
 }

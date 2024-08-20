@@ -13,6 +13,7 @@ export class LandingFooterComponent {
   constructor(private router: Router) {}
   openTerms() {
     this.router.navigate(['/terms-of-service']);
+    window.scrollTo(0, 0);
   }
   openPrivacy() {
     this.router.navigate(['/privacy-policy']);

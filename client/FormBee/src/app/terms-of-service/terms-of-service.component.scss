@@ -1,0 +1,54 @@
+.terms-of-service-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+  
+    h1 {
+      font-size: 2.5rem;
+      color: #2f2f2f;
+      border-bottom: 2px solid #dbb434;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+  
+    h2 {
+      font-size: 1.8rem;
+      color: #b99029;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+  
+    p {
+      margin-bottom: 1rem;
+    }
+  
+    ul {
+      margin-bottom: 1rem;
+      padding-left: 2rem;
+  
+      li {
+        margin-bottom: 0.5rem;
+      }
+    }
+  
+    section {
+      margin-bottom: 2rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .terms-of-service-container {
+      padding: 1rem;
+  
+      h1 {
+        font-size: 2rem;
+      }
+  
+      h2 {
+        font-size: 1.5rem;
+      }
+    }
+  }
