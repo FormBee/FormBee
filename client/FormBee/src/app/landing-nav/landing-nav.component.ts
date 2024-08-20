@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, } from '@angular/core';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-landing-nav',
@@ -20,6 +20,17 @@ export class LandingNavComponent {
 
   signIn() {
     this.router.navigate(['/login']);
+  }
+  pricingJump() {
+    const pricingSection = document.getElementById('pricing-section');
+    if (!pricingSection) {
+      console.log("Pricing section not found");
+      return;
+    }
+    pricingSection.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
   }
 }
 
