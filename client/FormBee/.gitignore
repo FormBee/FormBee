@@ -2,7 +2,7 @@
 
 # Compiled output
 # /dist
-/dist/form-bee
+/dist
 /tmp
 /out-tsc
 /bazel-out
