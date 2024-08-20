@@ -6,6 +6,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AuthGuard } from './auth.guard';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component';
+import { CookiePolicyComponent } from './cookie-policy/cookie-policy.component';
 export const routes: Routes = [
     { path: 'test', component: ContactComponent },
     { path: 'home', component: LandingComponent },
@@ -13,5 +14,6 @@ export const routes: Routes = [
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], },
     { path: 'privacy-policy', component: PrivacyPolicyComponent },
     { path: 'terms-of-service', component: TermsOfServiceComponent },
+    { path: 'cookies-policy', component: CookiePolicyComponent },
     { path: '**', redirectTo: '/home', pathMatch: 'full' },
 ];

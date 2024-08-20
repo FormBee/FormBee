@@ -17,8 +17,10 @@ export class LandingFooterComponent {
   }
   openPrivacy() {
     this.router.navigate(['/privacy-policy']);
+    window.scrollTo(0, 0);
   }
   openCookies() {
     this.router.navigate(['/cookies-policy']);
+    window.scrollTo(0, 0);
   }
 }
