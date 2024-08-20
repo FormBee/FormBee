@@ -9,11 +9,11 @@ import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.com
 import { CookiePolicyComponent } from './cookie-policy/cookie-policy.component';
 export const routes: Routes = [
     { path: 'test', component: ContactComponent },
-    { path: 'home', component: LandingComponent, pathMatch: 'full' },
+    { path: 'home', component: LandingComponent },
     { path: 'login', component: LoginComponent },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], },
     { path: 'privacy-policy', component: PrivacyPolicyComponent },
     { path: 'terms-of-service', component: TermsOfServiceComponent },
     { path: 'cookies-policy', component: CookiePolicyComponent },
-    { path: '**', redirectTo: '/home'},
+    { path: '**', redirectTo: '/home', pathMatch: 'full' },
 ];
