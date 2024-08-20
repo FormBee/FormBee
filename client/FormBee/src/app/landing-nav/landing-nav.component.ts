@@ -18,13 +18,26 @@ export class LandingNavComponent {
     this.menuOpen = false;
   }
 
+  goHome() {
+    this.router.navigate(['/home']);
+  }
+
   signIn() {
     this.router.navigate(['/login']);
   }
   pricingJump() {
     const pricingSection = document.getElementById('pricing-section');
     if (!pricingSection) {
-      console.log("Pricing section not found");
+      this.router.navigate(['/home']);
+      setTimeout(() => {
+        let pricingSection = document.getElementById('pricing-section');
+        if (pricingSection) {
+          pricingSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        } 
+      }, 1000);
       return;
     }
     pricingSection.scrollIntoView({

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-landing-footer',
@@ -9,4 +10,14 @@ import { Component } from '@angular/core';
 })
 export class LandingFooterComponent {
 
+  constructor(private router: Router) {}
+  openTerms() {
+    this.router.navigate(['/terms-of-service']);
+  }
+  openPrivacy() {
+    this.router.navigate(['/privacy-policy']);
+  }
+  openCookies() {
+    this.router.navigate(['/cookies-policy']);
+  }
 }
