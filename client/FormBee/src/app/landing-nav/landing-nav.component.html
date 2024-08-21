@@ -15,9 +15,9 @@
       </div>
     </div>
     <ul class="mobile-menu" [class.open]="menuOpen">
-      <li><a href="/docs" (click)="closeMenu()">Docs</a></li>
-      <li><a href="/pricing" (click)="closeMenu()">Pricing</a></li>
-      <li><button class="sign-in-btn" (click)="closeMenu()">Sign In</button></li>
+      <li><a href="/docs" (click)="toggleMenu()">Docs</a></li>
+      <li><a (click)="pricingJump()">Pricing</a></li>
+      <li><button class="sign-in-btn" (click)="signIn()">Sign In</button></li>
     </ul>
   </nav>
   
