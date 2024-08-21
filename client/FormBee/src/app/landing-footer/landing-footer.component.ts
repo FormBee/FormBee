@@ -23,4 +23,8 @@ export class LandingFooterComponent {
     this.router.navigate(['/cookies-policy']);
     window.scrollTo(0, 0);
   }
+  openContact() {
+    this.router.navigate(['/contact']);
+    window.scrollTo(0, 0);
+  }
 }

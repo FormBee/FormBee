@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-landing-pricing',
   standalone: true,
@@ -8,5 +8,9 @@ import { Component } from '@angular/core';
   styleUrl: './landing-pricing.component.scss'
 })
 export class LandingPricingComponent {
-
+  constructor(private router: Router) {}
+  openContact() {
+    this.router.navigate(['/contact']);
+    window.scrollTo(0, 0);
+  }
 }

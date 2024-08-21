@@ -1,29 +1,31 @@
-<form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
-    <label for="name">Name:</label>
-    <input id="name" formControlName="name" name="name">
-    <div>
-      Name is required.
-    </div>
+<app-landing-nav></app-landing-nav>
+<app-landing-three-bg style="position: absolute; z-index: -1;"></app-landing-three-bg>
+
+<div class="contact-container">
+  <h2>Question, comment, inquiry, or just want to say hi? Shoot us a message!</h2>
   
+  <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+
     <label for="email">Email:</label>
     <input id="email" formControlName="email" name="email">
-    <div>
-      Enter a valid email.
-    </div>
-  
+    <p *ngIf="needEmail" class="error">Email is required</p>
+    <p *ngIf="needValidEmail" class="error">Email is invalid</p>
     <label for="message">Message:</label>
-    <textarea id="message" formControlName="message" name="message"></textarea>
-    <label for="image">Image:</label>
-    <input type="file" id="image" formControlName="image" (change)="onFileSelected($event)">
-    <div>
-      Message is required.
-    </div>
+    <textarea id="message" formControlName="message" name="message" rows="7"></textarea>
+    <p *ngIf="needMessage" class="error">Message is required</p>
+    <input style="display: none;" id="honey" name="spot">
+
     <altcha-widget
-    class="altcha"
-    challengeurl="http://localhost:3000/challenge"
-    hidelogo
-    hidefooter
-  ></altcha-widget>
+      class="altcha"
+      challengeurl="http://localhost:3000/challenge"
+      hidelogo
+      hidefooter
+      (click)="captchaDone = true"
+    ></altcha-widget>
+    <p *ngIf="!captchaDone" class="error">Captcha is required</p>
+    
     <button type="submit">Submit</button>
   </form>
-  
+</div>
+
+<app-landing-footer></app-landing-footer>

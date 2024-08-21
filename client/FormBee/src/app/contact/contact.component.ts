@@ -4,11 +4,14 @@ import { NgIf, CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import 'altcha';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LandingThreeBgComponent } from '../landing-three-bg/landing-three-bg.component';
+import { LandingNavComponent } from '../landing-nav/landing-nav.component';
+import { LandingFooterComponent } from '../landing-footer/landing-footer.component';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule, NgIf, ReactiveFormsModule],
+  imports: [CommonModule, NgIf, ReactiveFormsModule, LandingThreeBgComponent, LandingNavComponent, LandingFooterComponent],
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -17,7 +20,13 @@ export class ContactComponent implements OnInit, AfterViewInit {
   contactForm: FormGroup;
   altchaElement: HTMLElement | null = null;
   isVerified = false; // Flag to track verification state
-  selectedFile: File | null = null;
+  honeyElement: HTMLElement | null = null;
+  messageElement: HTMLElement | null = null;
+  emailElement: HTMLElement | null = null;
+  needMessage: boolean = false;
+  needEmail: boolean = false;
+  needValidEmail: boolean = false;
+  captchaDone: boolean = true;
 
   constructor(
     private fb: FormBuilder, 
@@ -26,60 +35,64 @@ export class ContactComponent implements OnInit, AfterViewInit {
     private renderer: Renderer2
   ) {
     this.contactForm = this.fb.group({
-      name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       message: ['', Validators.required]
     });
   }
   
   ngOnInit() {
-    // Component setup can be done here
+    this.honeyElement = this.elRef.nativeElement.querySelector('#honey');
+    this.messageElement = this.elRef.nativeElement.querySelector('#message');
+    this.emailElement = this.elRef.nativeElement.querySelector('#email');
   }
 
   ngAfterViewInit() {
     // Set up the event listener after the view has initialized
     this.altchaElement = this.elRef.nativeElement.querySelector('.altcha');
-
     if (this.altchaElement) {
       this.renderer.listen(this.altchaElement, 'statechange', (ev) => {
-        console.log('State change event fired:', ev);
-        console.log('state:', ev.detail.state);
         if (ev.detail.state === 'verified') {
           this.isVerified = true;
-          console.log('payload:', ev.detail.payload);
         } else {
-          this.isVerified = false;
+          return;
         }
-        console.log('isVerified state:', this.isVerified);
       });
     } else {
-      console.error('altchaElement not found');
-    }
-    console.log("altcha element: ", this.altchaElement);
-  }
-
-  // Handler for file input change
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0]; // Only take the first file
+      return;
     }
   }
 
   onSubmit() {
-    console.log(this.contactForm.value);
-
-    if (this.isVerified) {
-      this.http.post('http://localhost:3000/formbee/c64e0d63-6a68-4d84-9135-e04f3cd2d186', this.contactForm.value).subscribe(res => {
-        console.log(this.contactForm.value.email);
-        console.log(res);
-      });
-    } else {
-      if (!this.isVerified) {
-        console.error('Cannot submit: Not verified.');
+    this.needMessage = false;
+    this.needEmail = false;
+    this.needValidEmail = false;
+    if (this.contactForm.invalid) {
+      const message = this.messageElement as HTMLInputElement;
+      const email = this.emailElement as HTMLInputElement;
+      if (!message.value) {
+        this.needMessage = true;
+        return;
+      } else if (!email.value) {
+        this.needEmail = true;
+        return;
+      } else if (!email.validity.typeMismatch) {
+        this.needValidEmail = true;
+        return;
+      } else {
+        return;
       }
-      if (!this.selectedFile) {
-        console.error('No file selected.');
+    } else {
+      const honeyInputElement = this.honeyElement as HTMLInputElement;
+      if (honeyInputElement && honeyInputElement.value) {
+        return;
+      }
+      if (this.isVerified) {
+        this.http.post('http://localhost:3000/formbee/a06b4db1-348c-41b6-8672-697cb30dc364', this.contactForm.value).subscribe(res => {
+        });
+      } else {
+        if (!this.isVerified) {
+          this.captchaDone = false;
+        }
       }
     }
   }

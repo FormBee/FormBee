@@ -8,7 +8,7 @@ import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.componen
 import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component';
 import { CookiePolicyComponent } from './cookie-policy/cookie-policy.component';
 export const routes: Routes = [
-    { path: 'test', component: ContactComponent },
+    { path: 'contact', component: ContactComponent },
     { path: 'home', component: LandingComponent },
     { path: 'login', component: LoginComponent },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], },
