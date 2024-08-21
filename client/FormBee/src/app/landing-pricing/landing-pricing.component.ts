@@ -13,4 +13,8 @@ export class LandingPricingComponent {
     this.router.navigate(['/contact']);
     window.scrollTo(0, 0);
   }
+
+  openLogin() {
+    this.router.navigate(['/login']);
+  }
 }

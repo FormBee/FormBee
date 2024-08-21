@@ -21,7 +21,6 @@ export class LandingFooterComponent {
   }
   openCookies() {
     this.router.navigate(['/cookies-policy']);
-    window.scrollTo(0, 0);
   }
   openContact() {
     this.router.navigate(['/contact']);

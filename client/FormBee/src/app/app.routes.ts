@@ -15,5 +15,5 @@ export const routes: Routes = [
     { path: 'privacy-policy', component: PrivacyPolicyComponent },
     { path: 'terms-of-service', component: TermsOfServiceComponent },
     { path: 'cookies-policy', component: CookiePolicyComponent },
-    { path: '**', redirectTo: '/home', pathMatch: 'full' },
+    { path: '**', redirectTo: '/home'},
 ];
