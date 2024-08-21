@@ -1,5 +1,8 @@
 <div class="loading" *ngIf="loading">
-  <p >Loading...</p>
+  <div class="hexagon-container">
+    <div class="hexagon"></div>
+  </div>
+  <p>FormBee is loading... buzz buzz...</p>
 </div>
 <div *ngIf="!loading" class="dashboard">
   <app-dashboard-nav [name]="name" [login]="login" [profilePic]="profilePic" [githubId]="githubId"></app-dashboard-nav>

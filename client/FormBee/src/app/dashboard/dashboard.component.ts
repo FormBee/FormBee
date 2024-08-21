@@ -4,12 +4,14 @@ import { Router } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { DashboardNavComponent } from '../dashboard-nav/dashboard-nav.component';
 import { DashboardUserInfoComponent } from '../dashboard-user-info/dashboard-user-info.component';
+import { NgFor } from '@angular/common';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [ NgIf, 
     DashboardNavComponent,
     DashboardUserInfoComponent,
+    NgFor,
    ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -20,6 +22,7 @@ export class DashboardComponent implements OnInit {
   profilePic: string | undefined;
   githubId: string | undefined;
   loading: boolean = true;
+  hexagons = Array(7).fill(0); // Creates an array with 7 hexagon
   currentTheme: string = localStorage.getItem("theme") || "neutral";
   constructor(private Router: Router) {}
 
