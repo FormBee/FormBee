@@ -36,7 +36,7 @@ p {
     align-items: center;
     margin-top: 1rem;
     justify-content: center;
-    min-height: 90vh;
+    min-height: 70vh;
     p {
         margin-bottom: 1rem;
     }
@@ -107,7 +107,7 @@ p {
     margin: 1rem;
     padding: 1rem;
     max-height: 139px;
-
+    min-height: 139px;
 }
 
 .api-key-display {
@@ -186,16 +186,24 @@ p {
         border-radius: 5px;
         width: 90%;
         background-color: var(--submenu-background-color);
-        color: var(--text-color);
+        color: var(--text-color); 
+        transition: box-shadow 0.3s ease-in-out;
+        &:focus {
+            outline: none;
+            border: none;
+            box-shadow: 0 0 5px var(--text-color);
+        }
     }
 }
 
 .email p {
     font-size: 1rem;
 }
+
 .plugins-section {
   width: 100vw;
   margin-top: 2rem;
+  margin-bottom: 2rem;
   
   h2 {
     color: var(--text-color);
@@ -264,12 +272,15 @@ p {
 }
 
 .returnEmails {
-    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 820px) {
     .api-key-handling {
         width: 80vw;
+        max-height: 200px;
+        height: fit-content;
         p {
             font-size: 1rem;
         }
@@ -535,4 +546,13 @@ input:checked + .slider:before {
 
 .read-docs:hover {
   background-color:#303249;
+}
+
+.misc-addons {
+    display: flex;
+    align-items: center;
+    height: auto;
+    width: 100vw;
+    margin: auto;
+    justify-content: center;
 }

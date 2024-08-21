@@ -243,3 +243,9 @@ svg {
     transform: rotate(180deg);
   }
 }
+
+@media (max-width: 350px) {
+  .user-details {
+    display: none;
+  }
+}

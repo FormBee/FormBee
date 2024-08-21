@@ -49,9 +49,11 @@
     <button *ngIf="googleEmail" class="api-buttons gmail-login" (click)="openReturnEmailModal()">Return email settings</button>
     <button *ngIf="!googleEmail" class="api-buttons gmail-login" (click)="openReturnEmailModal()">Sign into return email</button>
   </div>
-
-  <div>
-  </div>
+    <div class="api-key-handling email">
+        <p>Allowed Domains</p>
+        <input placeholder="example.com" id="allowed-domains-input">
+        <button class="api-buttons" (click)="addDomain()">Add Domain</button>
+    </div>
 </div>
 <app-dashboard-return-modal *ngIf="returnEmailModal" 
   (googleEmailOutput)="googleEmail = $event" 
@@ -72,12 +74,6 @@
   [emailSubject]="emailSubject" 
   [emailBody]="emailBody">
 </app-dashboard-return-modal>
-<div class="api-key-handling">
-  <div class="allowed-domains-section">
-    <h2>Allowed Domains</h2>
-    <input>
-  </div>
-</div>
 
 <div class="plugins-section">
   <h2>Plugins</h2>
@@ -241,24 +237,24 @@
 </div>
 
 <!-- Misc Webhook Modal -->
-<div class="modal-container" *ngIf="webhookModal">
-  <div class="telegram-modal">
-    <button class="close-button" (click)="openWebhookModal()">&times;</button>
-    <p class="plugin-title">Connect a <u (click)="webhookLink()" class="clickable" style="cursor: pointer; color:rgb(225, 178, 60); ">webhook</u></p>
-    <p class="read-docs"><u style="text-decoration: none;">read docs</u></p>
-    <p class="plugin-product-description">A webhook is a method used to deliver data from one application to another, typically by making an HTTP POST request to a specified URL. Webhooks are often used for real-time data transfer and automation, allowing systems to communicate efficiently.</p>
-    <p class="plugin-description">When you enter a valid webhook URL below, formbee will send your form data to the webhook URL you provide.</p>
-    <div class="flex-row">
-      <input type="text" placeholder="Webhook URL" value="{{ webhookWebhook }}" id="discord-input">
-      <button class="api-buttons" (click)="saveWebhookWebhook()">Save</button>
-    </div>
-    <div class="flex-row telegram-switch">
-      <p class="plugin-description toggle">Enable/Disable webhook</p>
-      <label class="switch">
-        <input [(ngModel)]="webhookEnabled" type="checkbox"  id="teleSwitch" (click)="webhookSwitch()" />
-        <span class="slider round"></span>
-      </label>
+  <div class="modal-container" *ngIf="webhookModal">
+    <div class="telegram-modal">
+      <button class="close-button" (click)="openWebhookModal()">&times;</button>
+      <p class="plugin-title">Connect a <u (click)="webhookLink()" class="clickable" style="cursor: pointer; color:rgb(225, 178, 60); ">webhook</u></p>
+      <p class="read-docs"><u style="text-decoration: none;">read docs</u></p>
+      <p class="plugin-product-description">A webhook is a method used to deliver data from one application to another, typically by making an HTTP POST request to a specified URL. Webhooks are often used for real-time data transfer and automation, allowing systems to communicate efficiently.</p>
+      <p class="plugin-description">When you enter a valid webhook URL below, formbee will send your form data to the webhook URL you provide.</p>
+      <div class="flex-row">
+        <input type="text" placeholder="Webhook URL" value="{{ webhookWebhook }}" id="discord-input">
+        <button class="api-buttons" (click)="saveWebhookWebhook()">Save</button>
+      </div>
+      <div class="flex-row telegram-switch">
+        <p class="plugin-description toggle">Enable/Disable webhook</p>
+        <label class="switch">
+          <input [(ngModel)]="webhookEnabled" type="checkbox"  id="teleSwitch" (click)="webhookSwitch()" />
+          <span class="slider round"></span>
+        </label>
+      </div>
     </div>
   </div>
-</div>
-</div>
+

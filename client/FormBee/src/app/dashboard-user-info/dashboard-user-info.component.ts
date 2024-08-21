@@ -516,4 +516,26 @@ export class DashboardUserInfoComponent implements OnInit {
   async webhookLink() {
     window.open("https://whatisawebhook.com/");
   }
+
+  addDomain = () => {
+    const input = document.getElementById('allowed-domains-input') as HTMLInputElement;
+    if (input) {
+      const domain = input.value;
+      if (domain) {
+        fetch('http://localhost:3000/add-domain/' + this.githubId, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            domain: domain,
+          }),
+        });
+      } else {
+        console.error('Domain input element is not found.');
+      }
+    } else {
+      console.error('Domain input element is not found.');
+    } 
+  }
 }
