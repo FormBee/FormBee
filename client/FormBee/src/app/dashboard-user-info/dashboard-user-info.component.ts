@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { OnInit } from '@angular/core';
-import { NgIf } from '@angular/common';
+import { NgIf, NgFor } from '@angular/common';
 import { DashboardReturnModalComponent } from '../dashboard-return-modal/dashboard-return-modal.component';
 import { ViewChild, ElementRef } from '@angular/core';
 import { DashboardTelegramWidgetComponent } from '../dashboard-telegram-widget/dashboard-telegram-widget.component';
@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
     DashboardReturnModalComponent,
     DashboardTelegramWidgetComponent,
     FormsModule,
+    NgFor,
    ],
   templateUrl: './dashboard-user-info.component.html',
   styleUrl: './dashboard-user-info.component.scss'
@@ -59,6 +60,7 @@ export class DashboardUserInfoComponent implements OnInit {
   webhookEnabled: boolean = false;
   webhookWebhook: string | undefined;
   themes: string[] = ['Default', 'elegent-theme', 'light-theme'];
+  domains: string[] = [];
 
 
   fetchApiKey = async (githubId: string) => {
@@ -112,6 +114,7 @@ export class DashboardUserInfoComponent implements OnInit {
         this.n8nWebhook = data.n8nWebhook;
         this.webhookEnabled = data.webhookBoolean;
         this.webhookWebhook = data.webhookWebhook;
+        this.domains = data.allowedDomains;
 
         if (this.apiKey) {
           this.displayApiKey = '*'.repeat(this.apiKey.length - 4) + this.apiKey.slice(this.apiKey.length - 4);
@@ -518,24 +521,50 @@ export class DashboardUserInfoComponent implements OnInit {
   }
 
   addDomain = () => {
-    const input = document.getElementById('allowed-domains-input') as HTMLInputElement;
-    if (input) {
-      const domain = input.value;
-      if (domain) {
-        fetch('http://localhost:3000/add-domain/' + this.githubId, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            domain: domain,
-          }),
-        });
+    if (this.domains.length <= 50) {
+      const input = document.getElementById('allowed-domains-input') as HTMLInputElement;
+      if (input) {
+        const domain = input.value;
+        const domains2 = domain.split(',');
+        if (domain) {
+          fetch('http://localhost:3000/add-domain/' + this.githubId, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              domain: domain,
+            }),
+          });
+          for (const domain of domains2) {
+            if (!this.domains.includes(domain)) {
+              this.domains.push(domain);
+            }
+          }
+          input.value = '';
+        } else {
+          console.error('Domain input element is not found.');
+        }
       } else {
         console.error('Domain input element is not found.');
-      }
+      } 
     } else {
-      console.error('Domain input element is not found.');
-    } 
+       alert("You can only add 50 domains");
+    }
+  }
+  removeDomain = async (domain: string) => {
+    const index = this.domains.indexOf(domain);
+    if (index > -1) {
+      this.domains.splice(index, 1);
+    }
+  fetch('http://localhost:3000/remove-domain/' + this.githubId, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        domain: domain,
+      }),
+    });
   }
 }

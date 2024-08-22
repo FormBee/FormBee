@@ -556,3 +556,54 @@ input:checked + .slider:before {
     margin: auto;
     justify-content: center;
 }
+
+.allowed-domains {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    position: relative; 
+    height: fit-content;
+    z-index: 1; /* Allow hover to increase if needed */
+    
+    p {
+        margin: .5rem;
+        color: var(--text-color);
+        font-size: .8rem;
+        background-color: var(--div-color);
+        padding: 3px;
+        border-radius: 10px;
+        box-shadow: 0 0 5px var(--shadow-color);
+        margin-top: 0px;
+    }
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.x {
+    position: absolute;
+    top: -1px; 
+    right: 0;
+    z-index: 100;
+    background: none; 
+    border: none; 
+    cursor: pointer; 
+    font-size: 0.7rem; 
+    color: var(--text-color); 
+} 
+
+.allowed-domains > div {
+    position: relative;
+    display: inline-block; /* Ensure each domain and button pair is inline */
+    margin-right: 1rem; /* Add some spacing between domain elements */
+}

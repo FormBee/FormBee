@@ -20,6 +20,7 @@ const redirectUrl = "http://localhost:4200";
 
 dotenv.config();
 AppDataSource.initialize().then(async () => {
+
     // create express app
     const app = express();
     app.use(bodyParser.json());
@@ -86,6 +87,14 @@ AppDataSource.initialize().then(async () => {
                     res.status(403).json('You have reached your submission limit');
                     return;
                 } else {
+                    console.log("origin: ", req.headers.origin);
+                    if (user.allowedDomains.length === 0 || user.allowedDomains.some(domain => req.headers.origin.includes(domain)) || req.headers.origin.includes("localhost")) {
+                        console.log("allowed domain");
+                    } else {
+                        console.log("not allowed domain");
+                        res.status(403).json('You are not allowed to submit from this domain');
+                        return;
+                    }
                     const recEmail = user.email;
                     // check if the users origin was from the local host
                     if (req.headers.origin.includes("localhost")) {
@@ -1124,6 +1133,37 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
     });
 
+    app.post('/add-domain/:githubId', async (req, res) => {
+        const githubId = parseInt(req.params.githubId, 10);
+        const domain = req.body.domain;
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+    
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } 
+        if (user.allowedDomains.length <= 50) {
+        user.allowedDomains.push(domain);
+        await AppDataSource.manager.save(user);
+        res.json({ message: 'Domain added successfully' });
+        } else {
+            res.status(400).send('You can only add 50 domains');
+        }
+    });
+
+    app.post('/remove-domain/:githubId', async (req, res) => {
+        const githubId = parseInt(req.params.githubId, 10);
+        const domain = req.body.domain;
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            user.allowedDomains = user.allowedDomains.filter(d => d !== domain);
+            await AppDataSource.manager.save(user);
+            res.json({ message: 'Domain removed successfully' });
+        }
+    });
     
 
     // register express routes from defined application routes

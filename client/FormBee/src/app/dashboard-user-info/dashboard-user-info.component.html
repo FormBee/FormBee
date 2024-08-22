@@ -51,8 +51,16 @@
   </div>
     <div class="api-key-handling email">
         <p>Allowed Domains</p>
+        <div class="flex-row">
         <input placeholder="example.com" id="allowed-domains-input">
         <button class="api-buttons" (click)="addDomain()">Add Domain</button>
+      </div>
+          <div class="allowed-domains">
+            <div *ngFor="let domain of domains">
+              <button class="x" (click)="removeDomain(domain)">x</button>
+              <p>{{ domain }}</p>
+            </div>
+          </div>
     </div>
 </div>
 <app-dashboard-return-modal *ngIf="returnEmailModal" 

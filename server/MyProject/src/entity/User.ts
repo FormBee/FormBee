@@ -148,5 +148,20 @@ export class User {
     @Column({nullable: true})
     webhookBoolean: boolean | null;
     // Misc Webhook settings end _________________________________________________________________
+
+@Column('text', {
+    nullable: true,
+    default: '',
+    transformer: {
+        to: (value: string[]): string => {
+            const uniqueValues = Array.from(new Set(value));
+            return uniqueValues.join(',');
+        },
+        from: (value: string): string[] => {
+            const uniqueValues = value ? Array.from(new Set(value.split(','))) : [];
+            return uniqueValues;
+        },
+    }
+})
+allowedDomains: string[];
 }
-    
