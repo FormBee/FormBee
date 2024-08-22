@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { NgFor } from '@angular/common';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-dashboard-nav',
   standalone: true,
@@ -43,6 +44,8 @@ export class DashboardNavComponent implements OnInit {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
+  constructor(private router: Router) {}
+
   logout(): void {
     console.log("Logging out");
     localStorage.removeItem("Fb-pA4lBUfsqVAWFN78eWDF");
@@ -59,5 +62,9 @@ export class DashboardNavComponent implements OnInit {
 
   toggleThemeMenu(): void {
     this.isThemeMenuOpen = !this.isThemeMenuOpen;
+  }
+
+  openBilling(): void {
+    this.router.navigate(['/billing']);
   }
 }
