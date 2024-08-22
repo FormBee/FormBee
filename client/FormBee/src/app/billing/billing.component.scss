@@ -1,0 +1,64 @@
+.billing {
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    background-color: var(--background-color1);
+}
+.billing-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--background-color1);
+    align-items: center;
+  }
+  .billing-header {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--background-color1);
+    margin-top: 10vh;
+    width: 100%;
+  }
+
+  .border-bottom {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80vw;
+    height: 2px;
+    background-color: var(--border-color);
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  .billing-header h2 {
+    color: var(--text-color);
+    font-size: 1.5rem;
+    margin-left: 10vw;
+  }
+  .billing-header p {
+    color: var(--text-color2);
+    margin-left: 10vw;
+
+  }
+
+  .billing-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80vw;
+    height: 100%;
+    background-color: var(--background-color1);
+    border: 1px solid var(--border-color);
+  }
+
+  .billing-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 80vw;
+    height: 100%;
+    background-color: var(--background-color1);
+  }

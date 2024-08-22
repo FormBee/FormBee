@@ -1,1 +1,27 @@
-<p>billing works!</p>
+
+<div class="billing">
+    <app-dashboard-nav [name]="name" [login]="login" [profilePic]="profilePic" [githubId]="githubId"></app-dashboard-nav>
+    <div class="billing-container">
+        <div class="billing-header">
+            <h2>Billing</h2>
+            <p>Manage your subscription and billing information</p>
+        </div>
+        <div class="border-bottom"></div>
+
+        <div style="margin-top: 0px;" class="">
+            <h2 >Active plan</h2>
+        </div>
+        <div class="billing-info">
+            <div class="billing-card">
+                <div class="current-plan">
+                    <p>You are currently on the {{subscriptionTier}} plan</p>
+                    <button class="manage-button">Manage Subscription</button>
+                </div>
+                <div class="plan-info">
+                    <div class="plan-item">
+                        <h4>Max Subscriptions {{maxSubs}}</h4>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>

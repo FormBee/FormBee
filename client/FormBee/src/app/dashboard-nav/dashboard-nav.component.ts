@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { Router } from '@angular/router';
+import { max } from 'rxjs';
 @Component({
   selector: 'app-dashboard-nav',
   standalone: true,
@@ -21,8 +22,42 @@ export class DashboardNavComponent implements OnInit {
   themes: string[] = ['dark', 'neutral', 'light-theme'];
   currentTheme: string = 'neutral';
   isThemeMenuOpen: boolean = false;
-
   ngOnInit(): void {
+    if (!this.githubId) {
+    const token = localStorage.getItem('Fb-pA4lBUfsqVAWFN78eWDF');
+    if (!token) {
+      this.router.navigate(['/login']);
+      return;
+    }
+    fetch('https://api.github.com/user', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (response.status === 401) {
+          this.router.navigate(['/login']);
+          return;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data) {
+          console.log("Data: ", data);
+          if (data.name) {
+            this.name = data.name;
+          } else {
+            this.name = data.login;
+          }
+          this.profilePic = data.avatar_url;
+          this.githubId = data.id;
+        }
+      }).finally(() => {
+        setTimeout(() => {
+          getUser(this.githubId);
+        }, 1000);
+      });
+    } 
     const getUser = async (githubId: string | undefined) => {
       if (githubId) {
         const response = await fetch('http://localhost:3000/api/user/' + githubId);
@@ -65,6 +100,11 @@ export class DashboardNavComponent implements OnInit {
   }
 
   openBilling(): void {
-    this.router.navigate(['/billing']);
+    // Pass the user's githubId to the billing component
+    this.router.navigate(['/billing'], {state: {githubId: this.githubId}});
+  }
+
+  dashboard(): void {
+    this.router.navigate(['/dashboard']);
   }
 }
