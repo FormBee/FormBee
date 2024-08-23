@@ -162,6 +162,10 @@ export class User {
             return uniqueValues;
         },
     }
-})
-allowedDomains: string[];
+    })
+    allowedDomains: string[];
+
+
+    @Column({nullable: true, default: 1})
+    maxPlugins: number;
 }

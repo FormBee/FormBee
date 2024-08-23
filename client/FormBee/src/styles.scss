@@ -23,6 +23,7 @@ $background-color1: rgb(0, 6, 14);
 $nav-hover-color: #32355c;
 $submenu-background-color: #161b28;
 $plugin-description-color: #c4b690;
+$background-color-seethrough: rgba(0, 6, 14, 0.638);
 
 // Dark Theme
 $elegent-primary-color: #576f8c; 
@@ -38,6 +39,7 @@ $elegent-secondary-color: #1C2541;
  $elegent-nav-hover-color: #33526c; 
  $elegent-submenu-background-color: #2C3E50; 
  $elegent-plugin-description-color: #232322;
+ $elegent-background-color-seethrough: #1f283392;
 
 // Light Theme
 $light-primary-color: #f8d17d;
@@ -53,6 +55,7 @@ $light-background-color: #f0f0f0;
 $light-nav-hover-color: #e1cd5b;
 $light-submenu-background-color: #d1d9dd;
 $light-plugin-description-color: #565252;
+$light-background-color-seethrough: #f0f0f08f;
 
 // src/styles/themes.scss
 
@@ -70,6 +73,7 @@ $light-plugin-description-color: #565252;
     --nav-hover-color: #{$nav-hover-color};
     --submenu-background-color: #{$submenu-background-color};
     --plugin-description-color: #{$plugin-description-color};
+    --background-color-seethrough: #{$background-color-seethrough};
   }
   
   .neutral {
@@ -86,6 +90,7 @@ $light-plugin-description-color: #565252;
     --nav-hover-color: #{$elegent-nav-hover-color};
     --submenu-background-color: #{$elegent-submenu-background-color};
     --plugin-description-color: #{$elegent-plugin-description-color};
+    --background-color-seethrough: #{$elegent-background-color-seethrough};
   }
   
   .light-theme {
@@ -102,5 +107,6 @@ $light-plugin-description-color: #565252;
     --nav-hover-color: #{$light-nav-hover-color};
     --submenu-background-color: #{$light-submenu-background-color};
     --plugin-description-color: #{$light-plugin-description-color};
+    --background-color-seethrough: #{$light-background-color-seethrough};
   }
   // Other themes as you defined above... 

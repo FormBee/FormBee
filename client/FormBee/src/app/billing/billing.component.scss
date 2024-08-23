@@ -2,13 +2,13 @@
     display: flex;
     flex-direction: column;
     height: fit-content;
+    min-height: 100vh;
     background-color: var(--background-color1);
 }
 .billing-container {
     display: flex;
     flex-direction: column;
     height: 100%;
-    background-color: var(--background-color1);
     align-items: center;
   }
   .billing-header {
@@ -33,13 +33,14 @@
   }
   .billing-header h2 {
     color: var(--text-color);
-    font-size: 1.5rem;
+    font-size: 2rem;
     margin-left: 10vw;
+    margin-bottom: 0px;
   }
   .billing-header p {
     color: var(--text-color2);
     margin-left: 10vw;
-
+    font-size: 1.2rem;
   }
 
   .billing-info {
@@ -49,16 +50,165 @@
     align-items: center;
     width: 80vw;
     height: 100%;
-    background-color: var(--background-color1);
-    border: 1px solid var(--border-color);
   }
 
   .billing-card {
+    position: relative;  /* Adjust for absolute positioning of hexagons */
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    width: 80vw;
+    width: 50vw;
     height: 100%;
-    background-color: var(--background-color1);
+    padding: 2rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    margin-top: 1rem;
+    overflow: hidden;
   }
+
+  .current-plan {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: max-content;
+    height: 200px;
+    z-index: 1;  /* Make sure content is above the transparent layer */
+    h1 {
+        font-size: 1.5rem;
+        color: var(--text-color);
+    }
+    p {
+        font-size: 1rem;
+        color: var(--text-color2);
+        margin-top: 0.5rem;
+    }
+  }
+
+  .plan-info {
+    width: 50%;
+    z-index: 1;  /* Make sure content is above the transparent layer */
+  }
+
+  .plan-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-color2)
+  }
+
+  .manage-button {
+    margin-top: 1rem;
+    background-color: var(--primary-color);
+    color: var(--text-color2);
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease-out, box-shadow 0.3s ease-out;
+    overflow: hidden;
+    border: solid 1px #c69245;
+    box-shadow: rgba(204, 155, 39, 0.2) 1.95px 1.95px 2.6px;
+  }
+  
+  .manage-button:hover {
+    background-color: #c69245;
+    color: black;
+    border: solid 1px #FFBD59;
+    box-shadow: rgba(204, 155, 39, 0.4) 5px 5px, rgba(204, 155, 39, 0.3) 10px 10px, rgba(204, 155, 39, 0.2) 15px 15px, rgba(204, 155, 39, 0.1) 20px 20px, rgba(204, 155, 39, 0.05) 25px 25px;
+  }
+
+  :host {
+    overflow: hidden;
+  }
+  
+  .glowing-hexagons-container {
+    position: absolute;  /* Ensures it's in the background */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 0;  /* Ensure it is below the transparent layer */
+    overflow: hidden;
+  }
+  
+  
+  .hexagon {
+    position: absolute;
+    width: 100px;
+    height: 55px;
+    background: linear-gradient(to bottom, #493414, #ff9b59);
+    box-shadow: 0 0 20px rgba(33, 29, 29, 0.8);
+    margin: 27.5px 0;
+    animation: float 5s infinite ease-in-out;
+    clip-path: polygon(
+        50% 0%, 
+        100% 25%, 
+        100% 75%, 
+        50% 100%, 
+        0% 75%, 
+        0% 25%
+      );
+      overflow: hidden;
+  }
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  .transparent-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--background-color-seethrough);
+    z-index: 1;
+    backdrop-filter: blur(3px);
+    
+  }
+
+  .loading-container {
+    position: relative;
+    width: 100%;
+    height: 40vh;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    p {
+        color: var(--text-color);
+        font-size: 1.5rem;
+    }
+  }
+  
+  .loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    border-top: 3px solid #ffbf1c;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+}
