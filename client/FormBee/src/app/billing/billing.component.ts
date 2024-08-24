@@ -29,6 +29,8 @@ export class BillingComponent implements OnInit {
   maxPlugins: number = 0;
   currentTheme: string = localStorage.getItem("theme") || "neutral";
   hexagons: Array<{ style: { [key: string]: string } }> = [];
+  fetchUrl: string = "https://pleasing-love-production.up.railway.app/";
+  // fetchUrl: string = "http://localhost:3000/";
 
   constructor(private Router: Router) {
     const navigator = this.Router.getCurrentNavigation();
@@ -70,7 +72,7 @@ export class BillingComponent implements OnInit {
           this.githubId = data.id;
         }
       }).then(() => {
-        fetch('http://localhost:3000/api/user/' + this.githubId).then(response => response.json()).then(data => {
+        fetch(this.fetchUrl + 'api/user/' + this.githubId).then(response => response.json()).then(data => {
           if (data.maxPlugins) {
             this.maxPlugins = data.maxPlugins;
             this.maxSubs = data.maxSubmissions;
