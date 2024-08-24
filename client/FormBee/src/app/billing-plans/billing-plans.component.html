@@ -1,9 +1,8 @@
 <div class="pricing-section" id="pricing-section">
-    <h1>Pricing</h1>
+    <h1>Other Plans</h1>
     <p>Empowering your apps forms with simple, transparent pricing.</p>
-    
     <div class="prices">
-        <div class="price-card free">
+        <div class="price-card free" *ngIf="subscriptionTier !== 'Starter'">
             <div class="price-header">Starter</div>
             <div class="price-amount">$0</div>
             <div class="price-description">Ideal for personal or hobby projects</div>
@@ -16,11 +15,11 @@
                 <li>- No CC required</li>
             </ul>
             <div class="price-action">
-                <button (click)="openLogin()">Start for Free</button>
+                <button>Start for Free</button>
             </div>
         </div>
 
-        <div class="price-card tier-1">
+        <div class="price-card tier-1" *ngIf="subscriptionTier != 'Growth'">
             <div class="price-header">Growth</div>
             <div class="price-amount">$5/month</div>
             <div class="price-description">Perfect for medium-sized or multiple projects</div>
@@ -32,11 +31,11 @@
                 <li>- Unlimited plugins active at a time</li>
             </ul>
             <div class="price-action">
-                <button>Get Started</button>
+                <button>Change Plan</button>
             </div>
         </div>
 
-        <div class="price-card tier-2">
+        <div class="price-card tier-2" *ngIf="subscriptionTier != 'Premium'">
             <div class="price-header">Premium</div>
             <div class="price-amount">$25/month</div>
             <div class="price-description">Well suited for large projects and organizations</div>
@@ -48,24 +47,7 @@
                 <li></li>
             </ul>
             <div class="price-action">
-                <button>Get Started</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="self-hosted">
-        <div class="self-hosted-tag">
-            <div class="self-hosted-description">Don't see a plan that fits your needs? Contact us.</div>
-            <div class="self-hosted-action">
-                <button (click)="openContact()">Contact</button>
-            </div>
-        </div>
-    </div>
-    <div class="learn-more">
-        <div class="self-hosted-tag">
-            <div class="self-hosted-description">FormBee is open source, learn about self-hosting.</div>
-            <div class="self-hosted-action">
-                <button onclick="location.href='https://your-docs-url.com'">Go to Docs</button>
+                <button>Change Plan</button>
             </div>
         </div>
     </div>

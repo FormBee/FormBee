@@ -1,0 +1,140 @@
+.pricing-section {
+    text-align: center;
+    padding: 50px;
+    padding-top: 0px;
+    background-color: var(--background-color1);
+    color: #333;
+    margin-top: 20vh;
+    h1 {
+        font-size: 36px;
+        margin-bottom: 10px;
+        color: var(--text-color);
+    }
+
+    p {
+        font-size: 16px;
+        margin-bottom: 40px;
+        color: var(--text-color2);
+    }
+
+    .prices {
+        display: flex;
+        justify-content: space-around;
+        align-items: stretch;  // Make sure all children are stretched to the same height
+        flex-wrap: wrap;
+        height: fit-content;
+
+        .price-card {
+            background-image: radial-gradient(circle at center, var(--background-color), var(--background-color-seethrough));
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(27,31,35,.12);
+            width: 300px;
+            margin: 10px;
+            padding: 20px;
+            transition: box-shadow 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;  // Ensure the internal content is stacked vertically
+
+            &:hover {
+                box-shadow: 0 4px 20px var(--border-color);
+            }
+            &.free {
+                background-image: radial-gradient(circle at center, var(--div-color), var(--submenu-background-color));
+            }
+            &.tier-1 {
+                background-image: radial-gradient(circle at center, var(--div-color), var(--submenu-background-color));
+            }
+            &.tier-2 {
+                background-image: radial-gradient(circle at center, var(--div-color), var(--submenu-background-color));
+            }
+            .price-header {
+                font-size: 24px;
+                font-weight: bold;
+                margin-bottom: 10px;
+                color: #FFBD59;
+
+            }
+
+            .price-amount {
+                font-size: 32px;
+                color: #FFBD59;
+                margin-bottom: 10px;
+            }
+
+            .price-description {
+                font-size: 14px;
+                color: var(--text-color2);
+                margin-bottom: 20px;
+            }
+
+            .price-features {
+                text-align: left;
+                list-style: none;
+                padding: 0;
+
+                li {
+                    margin-bottom: 10px;
+                    font-size: 14px;
+                    color: var(--text-color2);
+                }
+            }
+
+            .price-action {
+                margin-top: auto;  // Push the action button to the bottom
+                display: flex;
+                justify-content: center;
+
+                button {
+                    background-color: #FFBD59;
+                    color:#2a2624;
+                    padding: 4px;
+                    border: none;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    font-size: 16px;
+                    transition: background-color, box-shadow 0.3s ease-out;
+                    overflow: hidden;
+                    border: solid 1px #c69245;
+                    box-shadow: rgba(204, 155, 39, 0.2) 1.95px 1.95px 2.6px;
+                }
+                button:hover {
+                    background-color: #c69245;
+                    border: solid 1px #FFBD59;
+                    box-shadow: rgba(204, 155, 39, 0.4) 5px 5px, rgba(204, 155, 39, 0.3) 10px 10px, rgba(204, 155, 39, 0.2) 15px 15px, rgba(204, 155, 39, 0.1) 20px 20px, rgba(204, 155, 39, 0.05) 25px 25px;
+                
+                  }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .pricing-section {
+        padding: 20px;
+        
+        .prices {
+            flex-direction: column;
+            align-items: center;
+
+            .price-card {
+                margin: 0px;
+                margin-bottom: 20px;
+            }
+        }
+    }
+    .self-hosted-tag {
+        flex-direction: column;
+    }
+}
+@media screen and (max-width: 400px) {
+    .pricing-section {
+        .prices {
+            .price-card {
+                width: 250px;
+            }
+        }
+
+    }
+
+}

@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { OnInit } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { NgForOf, NgStyle } from '@angular/common';
+import { BillingPlansComponent } from '../billing-plans/billing-plans.component';
+
 @Component({
   selector: 'app-billing',
   standalone: true,
@@ -12,6 +14,7 @@ import { NgForOf, NgStyle } from '@angular/common';
     NgIf,
     NgForOf,
     NgStyle,
+    BillingPlansComponent,
   ],
   templateUrl: './billing.component.html',
   styleUrl: './billing.component.scss'
@@ -31,7 +34,6 @@ export class BillingComponent implements OnInit {
   hexagons: Array<{ style: { [key: string]: string } }> = [];
   // fetchUrl: string = "https://pleasing-love-production.up.railway.app/";
   fetchUrl: string = "http://localhost:3000/";
-
   constructor(private Router: Router) {
     const navigator = this.Router.getCurrentNavigation();
     if (navigator?.extras.state) {
@@ -106,6 +108,15 @@ export class BillingComponent implements OnInit {
     }
   }
 
+  viewPlans = () => {
+    let BillingSection = document.getElementById('BillingComponent');
+    if (BillingSection) {
+      BillingSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  }
   random(min: number, max: number): number {
     return Math.random() * (max - min) + min;
   }

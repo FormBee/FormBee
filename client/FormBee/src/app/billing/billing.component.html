@@ -30,8 +30,8 @@
                             <p *ngIf="subscriptionTier === 'Premium'">You are currently on the Premium plan which is $25/month</p>
                         </div>
                         <div>
-                            <button *ngIf="subscriptionTier !== 'Starter'" class="manage-button" >Manage Subscription</button>
-                            <button *ngIf="subscriptionTier === 'Starter'" class="manage-button" >View Premium Plans</button>
+                            <button *ngIf="subscriptionTier !== 'Starter'" class="manage-button" (click)="viewPlans()">Manage Subscription</button>
+                            <button *ngIf="subscriptionTier === 'Starter'" class="manage-button" (click)="viewPlans()">View Premium Plans</button>
                         </div>
                     </div>
                     <div class="plan-info">
@@ -49,8 +49,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card-info">
-            </div>
         </div>
-    </div>
+    <app-billing-plans id="BillingComponent" [githubId]="githubId" [subscriptionTier]="subscriptionTier" *ngIf="!loading"></app-billing-plans>
+
 </div>
