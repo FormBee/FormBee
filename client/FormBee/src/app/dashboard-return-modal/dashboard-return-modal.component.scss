@@ -78,7 +78,7 @@ $shadow-color: var(--shadow-color);
 }
 
 .modal-button:hover {
-    background-color: $secondary-color;
+    background-color: var(--text-color2);
     border: solid 1px $primary-color;
     box-shadow: rgba(9, 8, 7, 0.4) 2px 2px, $shadow-color 4px 4px, rgba(204, 155, 39, 0.2) 6px 6px, rgba(204, 155, 39, 0.1) 8px 8px, rgba(204, 155, 39, 0.05) 10px 10px;
 }

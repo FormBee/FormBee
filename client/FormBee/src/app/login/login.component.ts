@@ -39,7 +39,7 @@ export class LoginComponent  implements OnInit {
   }
 
   login() {
-    window.location.href = 'http://localhost:3000/auth/github';
+    window.location.href = 'api.formbee.dev/auth/github';
   }
 
   termsOfService() {

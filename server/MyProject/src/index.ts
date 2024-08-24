@@ -16,7 +16,8 @@ import createChallenge = require("./Alcha/Challenge.js");
 import axios from 'axios';
 
 // const redirectUrl = "https://ibex-causal-painfully.ngrok-free.app";
-const redirectUrl = "http://localhost:4200";
+// const redirectUrl = "http://localhost:4200";
+const redirectUrl = "https://formbee.dev";
 
 dotenv.config();
 AppDataSource.initialize().then(async () => {
