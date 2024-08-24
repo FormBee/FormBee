@@ -39,7 +39,7 @@ export class LoginComponent  implements OnInit {
   }
 
   login() {
-    window.location.href = 'pleasing-love-production.up.railway.app/auth/github';
+    window.location.href = 'https://pleasing-love-production.up.railway.app/auth/github';
   }
 
   termsOfService() {
