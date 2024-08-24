@@ -61,8 +61,8 @@ export class DashboardUserInfoComponent implements OnInit {
   webhookWebhook: string | undefined;
   themes: string[] = ['Default', 'elegent-theme', 'light-theme'];
   domains: string[] = [];
-  // fetchUrl: string = "http://localhost:3000/";
-  fetchUrl: string = "https://pleasing-love-production.up.railway.app/";
+  fetchUrl: string = "http://localhost:3000/";
+  // fetchUrl: string = "https://pleasing-love-production.up.railway.app/";
 
 
   fetchApiKey = async (githubId: string) => {

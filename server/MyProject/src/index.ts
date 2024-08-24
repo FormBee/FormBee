@@ -1,6 +1,5 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
-import * as multer from "multer";
 import * as nodemailer from "nodemailer";
 import * as cors from "cors";
 import * as dotenv from "dotenv";
@@ -16,8 +15,8 @@ import createChallenge = require("./Alcha/Challenge.js");
 import axios from 'axios';
 
 // const redirectUrl = "https://ibex-causal-painfully.ngrok-free.app";
-// const redirectUrl = "http://localhost:4200";
-const redirectUrl = "https://formbee.dev";
+const redirectUrl = "http://localhost:4200";
+// const redirectUrl = "https://formbee.dev";
 
 dotenv.config();
 AppDataSource.initialize().then(async () => {
@@ -26,7 +25,7 @@ AppDataSource.initialize().then(async () => {
     const app = express();
     app.use(bodyParser.json());
     const corsOptions = {
-        origin: ['http://localhost:4200', 'https://ibex-causal-painfully.ngrok-free.app'],
+        origin: ['http://localhost:4200', 'https://ibex-causal-painfully.ngrok-free.app', 'https://formbee.dev'],
         methods: ['GET', 'POST'],
         allowedHeaders: ['Content-Type', 'x-altcha-spam-filter', 'x-api-key'],
     };
@@ -54,12 +53,9 @@ AppDataSource.initialize().then(async () => {
         },
     }));
 
-    const upload = multer(); // Initialize multer
-
-
 
     // Basic post route, sends form data to the users email.
-    app.post('/formbee/:apikey', upload.none(), (req, res) => {
+    app.post('/formbee/:apikey', (req, res) => {
         const { apikey } = req.params;
         const { name, email, message } = req.body;
         let messageList = [];
@@ -327,8 +323,10 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
 
     app.get('/auth/github', (req, res) => {
+        console.log("in auth github");
         const githubAuthUrl = 'https://github.com/login/oauth/authorize';
         const clientId = process.env.GITHUB_CLIENT_ID;
+        console.log("client id: ", clientId);
         res.redirect(`${githubAuthUrl}?client_id=${clientId}`);
     });
 
@@ -422,6 +420,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                         apiResetDate: sameDayNextMonth,
                     })
                 );
+            console.log(redirectUrl + "/login?token=" + tokenData.access_token);
             res.redirect( redirectUrl + "/login?token=" + tokenData.access_token);
             } else {
                 res.redirect( redirectUrl + "/login?token=" + tokenData.access_token);

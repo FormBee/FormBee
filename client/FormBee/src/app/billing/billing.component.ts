@@ -29,8 +29,8 @@ export class BillingComponent implements OnInit {
   maxPlugins: number = 0;
   currentTheme: string = localStorage.getItem("theme") || "neutral";
   hexagons: Array<{ style: { [key: string]: string } }> = [];
-  fetchUrl: string = "https://pleasing-love-production.up.railway.app/";
-  // fetchUrl: string = "http://localhost:3000/";
+  // fetchUrl: string = "https://pleasing-love-production.up.railway.app/";
+  fetchUrl: string = "http://localhost:3000/";
 
   constructor(private Router: Router) {
     const navigator = this.Router.getCurrentNavigation();
