@@ -1165,6 +1165,8 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             res.json({ message: 'Domain removed successfully' });
         }
     });
+
+    //Stipe integration
     
 
     // register express routes from defined application routes
