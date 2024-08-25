@@ -5,7 +5,7 @@ import { OnInit } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { NgForOf, NgStyle } from '@angular/common';
 import { BillingPlansComponent } from '../billing-plans/billing-plans.component';
-import { Stripe } from '@stripe/stripe-js';
+import { StripeCardElementComponent } from '../stripe-card-element/stripe-card-element.component';
 @Component({
   selector: 'app-billing',
   standalone: true,
@@ -15,6 +15,7 @@ import { Stripe } from '@stripe/stripe-js';
     NgForOf,
     NgStyle,
     BillingPlansComponent,
+    StripeCardElementComponent,
   ],
   templateUrl: './billing.component.html',
   styleUrl: './billing.component.scss'

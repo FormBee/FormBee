@@ -50,6 +50,12 @@
                 </div>
             </div>
         </div>
+<app-stripe-card-element></app-stripe-card-element>
+
     </div>
     <app-billing-plans id="BillingComponent" [githubId]="githubId" [subscriptionTier]="subscriptionTier" *ngIf="!loading"></app-billing-plans>
+
 </div>
+
+
+<script src="https://js.stripe.com/v3/"></script>
