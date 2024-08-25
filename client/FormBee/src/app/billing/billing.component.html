@@ -8,7 +8,7 @@
         <div class="border-bottom"></div>
 
         <div style="margin-top: 0px;" class="billing-header">
-            <h2 >Active plan</h2>
+            <h2>Active Plan</h2>
         </div>
         <div *ngIf="loading" class="loading-container">
             <div class="loading-spinner"></div>
@@ -50,6 +50,6 @@
                 </div>
             </div>
         </div>
+    </div>
     <app-billing-plans id="BillingComponent" [githubId]="githubId" [subscriptionTier]="subscriptionTier" *ngIf="!loading"></app-billing-plans>
-
 </div>

@@ -19,8 +19,8 @@
 
     .prices {
         display: flex;
-        justify-content: space-around;
-        align-items: stretch;  // Make sure all children are stretched to the same height
+        justify-content: center;
+        align-items: stretch;
         flex-wrap: wrap;
         height: fit-content;
 

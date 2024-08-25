@@ -31,7 +31,8 @@
                 <li>- Unlimited plugins active at a time</li>
             </ul>
             <div class="price-action">
-                <button>Change Plan</button>
+                <button *ngIf="subscriptionTier !== 'Premium'">Upgrade Plan</button>
+                <button *ngIf="subscriptionTier === 'Premium'">Change Plan</button>
             </div>
         </div>
 
@@ -47,7 +48,7 @@
                 <li></li>
             </ul>
             <div class="price-action">
-                <button>Change Plan</button>
+                <button>Upgrade Plan</button>
             </div>
         </div>
     </div>

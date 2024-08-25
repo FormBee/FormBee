@@ -13,7 +13,8 @@ import { Routes } from "./routes";
 import { User } from "./entity/User";
 import createChallenge = require("./Alcha/Challenge.js");
 import axios from 'axios';
-
+const { Stripe } = require('stripe');
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 // const redirectUrl = "https://ibex-causal-painfully.ngrok-free.app";
 const redirectUrl = "http://localhost:4200";
 // const redirectUrl = "https://formbee.dev";
