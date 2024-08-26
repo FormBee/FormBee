@@ -1166,9 +1166,118 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    //Stipe integration
-    
+    // Stipe integration
+    // Stripe create customer
+    app.post('/stripe/create-customer/:githubId', async (req, res) => {
+        const githubId = parseInt(req.params.githubId, 10);
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            if (!user.stripeCustomerId) {
+            stripe.customers.create({
+                email: req.body.email,
+            }).then(async customer => {
+                res.json(customer);
+                user.stripeCustomerId = customer.id;
+                await AppDataSource.manager.save(user);
+            });
+            } else {
+                res.status(400).send('Customer already exists');
+            }
+        };
+    });
 
+    app.post('/stripe/create-payment-method/:githubId', async (req, res) => {
+        const githubId = parseInt(req.params.githubId, 10);
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            if (!user.stripeCustomerId) {
+                axios.post(redirectUrl + '/stripe/create-customer/' + githubId, {
+                    email: req.body.email,
+                }).then(async customer => {
+                    stripe.paymentMethods.create({
+                        customer: customer.data.id,
+                        type: 'card',
+                        card: req.body.card,
+                    }).then(async paymentMethod => {
+                        res.json(paymentMethod);
+                        user.stripeDefaultPaymentMethodId = paymentMethod.id;
+                        await AppDataSource.manager.save(user);
+                    }).catch(error => {
+                        console.log("Error creating payment method:", error);
+                        res.status(500).send('Internal Server Error');
+                        return;
+                    });
+                });
+                return;
+            } else {
+                stripe.paymentMethods.create({
+                    customer: user.stripeCustomerId,
+                    type: 'card',
+                    card: req.body.card,
+                }).then(async paymentMethod => {
+                    res.json(paymentMethod);
+                    user.stripeDefaultPaymentMethodId = paymentMethod.id;
+                    await AppDataSource.manager.save(user);
+                });
+            }
+        };
+    });
+
+    app.post('/stripe/create-payment-intent/:githubId', async (req, res) => {
+        const githubId = parseInt(req.params.githubId, 10);
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            if (!user.stripeCustomerId) {
+                res.status(400).send('Customer not found');
+                return;
+            } else {
+                stripe.paymentIntents.create({
+                    customer: user.stripeCustomerId,
+                    amount: req.body.amount,
+                    currency: req.body.currency,
+                }).then(async paymentIntent => {
+                    res.json(paymentIntent);
+                    user.stripePaymentIntentId = paymentIntent.id;
+                    await AppDataSource.manager.save(user);
+                });
+            }
+        };
+    });
+
+    app.post('/stripe/create-subscription/:githubId', async (req, res) => {
+        const githubId = parseInt(req.params.githubId, 10);
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            if (!user.stripeCustomerId) {
+                res.status(400).send('Customer not found');
+                return;
+            } else {
+                stripe.subscriptions.create({
+                    customer: user.stripeCustomerId,
+                    items: [{
+                        price: req.body.price,
+                    }],
+                    expand: ['latest_invoice.payment_intent'],
+                }).then(async subscription => {
+                    res.json(subscription);
+                    user.stripeSubscriptionId = subscription.id;
+                    await AppDataSource.manager.save(user);
+                });
+            }
+        };
+    });
     // register express routes from defined application routes
     Routes.forEach(route => {
         (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
