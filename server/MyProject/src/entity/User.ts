@@ -168,4 +168,29 @@ export class User {
 
     @Column({nullable: true, default: 1})
     maxPlugins: number;
+
+    //stripe data 
+    @Column({nullable: true, transformer: {
+        to: (value: string | null) => encrypt(value),
+        from: (value: string | null) => decrypt(value),
+    }})
+    stripeId: number | null;
+
+    @Column({nullable: true, transformer: {
+        to: (value: string | null) => encrypt(value),
+        from: (value: string | null) => decrypt(value),
+    }})
+    paymentIntentId: number | null;
+
+    @Column({nullable: true, transformer: {
+        to: (value: string | null) => encrypt(value),
+        from: (value: string | null) => decrypt(value),
+    }})
+    subscriptionId: number | null;
+
+    @Column({nullable: true, transformer: {
+        to: (value: string | null) => encrypt(value),
+        from: (value: string | null) => decrypt(value),
+    }})
+    billingEmail: string | null;
 }
