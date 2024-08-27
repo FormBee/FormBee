@@ -414,6 +414,10 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             }
             let currentDate = new Date();
             let sameDayNextMonth = await getSameDayNextMonth(currentDate);
+            const customer = await stripe.customers.create({
+                name: githubdata.data.login,
+            });
+            console.log("customer: ", await customer);
             if (!user) {
                 await AppDataSource.manager.save(
                     AppDataSource.manager.create(User, {
@@ -422,6 +426,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                         returnEmail: githubdata.data.email,
                         billingEmail: githubdata.data.email,
                         apiResetDate: sameDayNextMonth,
+                        stripeCustomerId: customer.id,
                     })
                 );
             console.log(redirectUrl + "/login?token=" + tokenData.access_token);
@@ -1173,28 +1178,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     });
 
     // Stipe integration
-    // Stripe create customer
-    app.post('/stripe/create-customer/:githubId', async (req, res) => {
-        console.log("in stripe/create-customer");
-        const githubId = parseInt(req.params.githubId);
-        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
-        if (!user) {
-            res.status(400).send('User not found');
-            return;
-        } else {
-            if (!user.stripeCustomerId) {
-            stripe.customers.create({
-                name: user.name,
-            }).then(async customer => {
-                res.json(customer);
-                user.stripeCustomerId = customer.id;
-                await AppDataSource.manager.save(user);
-            });
-            } else {
-                res.status(400).send('Customer already exists');
-            }
-        };
-    });
+
 
     // app.post('/stripe/create-payment-method/:githubId', async (req, res) => {
     //     console.log("in stripe/create-payment-method");
@@ -1368,7 +1352,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
     app.listen(3000);
 
-    // delete all users
+    // delete all users remove after we enter prod.
     // await AppDataSource.manager.clear(User);
 
     console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results");
