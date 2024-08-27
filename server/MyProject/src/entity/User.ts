@@ -174,19 +174,19 @@ export class User {
         to: (value: string | null) => encrypt(value),
         from: (value: string | null) => decrypt(value),
     }})
-    stripeCustomerId: number | null;
+    stripeCustomerId: string | null;
 
     @Column({nullable: true, transformer: {
         to: (value: string | null) => encrypt(value),
         from: (value: string | null) => decrypt(value),
     }})
-    stripePaymentIntentId: number | null;
+    stripePaymentIntentId: string | null;
 
     @Column({nullable: true, transformer: {
         to: (value: string | null) => encrypt(value),
         from: (value: string | null) => decrypt(value),
     }})
-    stripeSubscriptionId: number | null;
+    stripeSubscriptionId: string | null;
 
     @Column({nullable: true, transformer: {
         to: (value: string | null) => encrypt(value),
@@ -199,4 +199,10 @@ export class User {
         from: (value: string | null) => decrypt(value),
     }})
     stripeDefaultPaymentMethodId: string | null;
+
+    @Column({nullable: true, transformer: {
+        to: (value: string | null) => encrypt(value),
+        from: (value: string | null) => decrypt(value),
+    }})
+    setupIntentId: string | null;
 }

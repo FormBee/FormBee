@@ -50,9 +50,19 @@
                 </div>
             </div>
         </div>
-<app-stripe-card-element></app-stripe-card-element>
-
+        <div class="stripe-info">
+            <div class="billing-email">
+                <p>Update card info</p>
+                <app-stripe-card-element [githubId]="githubId"></app-stripe-card-element>
+            </div>
+            <div class="billing-email">
+                    <p>Update billing email</p>
+                    <input type="email" placeholder="Email">
+                    <button>Save</button>
+            </div>
+        </div>
     </div>
+
     <app-billing-plans id="BillingComponent" [githubId]="githubId" [subscriptionTier]="subscriptionTier" *ngIf="!loading"></app-billing-plans>
 
 </div>

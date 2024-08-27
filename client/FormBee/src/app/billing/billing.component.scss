@@ -214,3 +214,112 @@
       transform: rotate(360deg);
     }
 }
+
+.stripe-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 52vw;
+    height: 100%;
+    margin-top: 1rem;
+    justify-content: space-around;
+  }
+  .billing-email {
+    display: flex;
+    flex-direction: column;
+    max-width: 25vw;
+    height: 100%;
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 4px 4px 20px var(--border-color);
+  }
+  .billing-email p {
+    color: var(--text-color2);
+    font-size: 1.2rem;
+    text-align: left;
+  }
+  .billing-email input {
+    width: 20vw;
+    height: fit-content;
+    padding: 10px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    box-shadow: none;
+    -webkit-transition: box-shadow 150ms ease;
+    transition: box-shadow 150ms ease;
+    font-size: 16px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    background-color: var(--div-color);
+    color: #d6890e;
+
+  }
+
+  .billing-email input::placeholder {
+    color: #7a7979;
+  }
+  .billing-email button {
+    background-color: var(--primary-color);
+    color: var(--text-color2);
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease-out, box-shadow 0.3s ease-out;
+    overflow: hidden;
+    border: solid 1px var(--border-color);
+    box-shadow: rgba(204, 155, 39, 0.2) 1.95px 1.95px 2.6px;
+    width: fit-content;
+    align-self: center;
+  }
+
+  @media screen and (max-width: 1150px) {
+    .billing-card {
+      flex-direction: column;
+      width: 80vw;
+    }
+
+    .current-plan {
+      width: 100%;
+      height: fit-content;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .plan-info {
+      width: 100%;
+      height: fit-content;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+    .stripe-info {
+      flex-direction: column;
+      align-items: center;
+      width: 80vw;
+      height: 100%;
+      margin-top: 1rem;
+      justify-content: space-around;
+    }
+
+    .billing-email {
+      width: 80vw;
+
+      max-width: none;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .billing-email input {
+      width: 70vw;
+    }
+
+    .billing-email button {
+      width: fit-content;
+    }
+
+    .billing-email p {
+      text-align: center;
+    }
+  }

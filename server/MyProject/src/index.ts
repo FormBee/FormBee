@@ -13,8 +13,9 @@ import { Routes } from "./routes";
 import { User } from "./entity/User";
 import createChallenge = require("./Alcha/Challenge.js");
 import axios from 'axios';
+import { Auth } from "googleapis";
 const { Stripe } = require('stripe');
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe = Stripe(process.env.STRIPE_TEST_KEY);
 // const redirectUrl = "https://ibex-causal-painfully.ngrok-free.app";
 const redirectUrl = "http://localhost:4200";
 // const redirectUrl = "https://formbee.dev";
@@ -418,6 +419,8 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                     AppDataSource.manager.create(User, {
                         name: githubdata.data.login,
                         githubId: githubdata.data.id,
+                        returnEmail: githubdata.data.email,
+                        billingEmail: githubdata.data.email,
                         apiResetDate: sameDayNextMonth,
                     })
                 );
@@ -494,8 +497,11 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
     // Fetch the user by their github id
     app.get('/api/user/:githubId', (req: Request, res: Response) => {
+        console.log("isNaN I'm in here doggo");
+
         const githubId = parseInt(req.params.githubId, 10);
         if (isNaN(githubId)) {
+            console.log("isNaN I'm in here doggo");
             res.status(400).json('Invalid GitHub ID');
             return;
         }
@@ -1169,7 +1175,8 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     // Stipe integration
     // Stripe create customer
     app.post('/stripe/create-customer/:githubId', async (req, res) => {
-        const githubId = parseInt(req.params.githubId, 10);
+        console.log("in stripe/create-customer");
+        const githubId = parseInt(req.params.githubId);
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
         if (!user) {
             res.status(400).send('User not found');
@@ -1177,7 +1184,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         } else {
             if (!user.stripeCustomerId) {
             stripe.customers.create({
-                email: req.body.email,
+                name: user.name,
             }).then(async customer => {
                 res.json(customer);
                 user.stripeCustomerId = customer.id;
@@ -1190,47 +1197,84 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     });
 
     app.post('/stripe/create-payment-method/:githubId', async (req, res) => {
+        console.log("in stripe/create-payment-method");
         const githubId = parseInt(req.params.githubId, 10);
+        console.log("githubId: ", githubId);
+    
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
         if (!user) {
             res.status(400).send('User not found');
             return;
-        } else {
+        }
+    
+        try {
             if (!user.stripeCustomerId) {
-                axios.post(redirectUrl + '/stripe/create-customer/' + githubId, {
-                    email: req.body.email,
-                }).then(async customer => {
-                    stripe.paymentMethods.create({
-                        customer: customer.data.id,
-                        type: 'card',
+                console.log("Creating new Stripe customer");
+                const customerResponse = await axios.post('http://localhost:3000/stripe/create-customer/' + githubId);
+                const customer = customerResponse.data;
+    
+                if (user.stripeDefaultPaymentMethodId) {
+                    console.log("Updating existing payment method");
+                    const paymentMethod = await stripe.paymentMethods.update(user.stripeDefaultPaymentMethodId, {
                         card: req.body.card,
-                    }).then(async paymentMethod => {
-                        res.json(paymentMethod);
-                        user.stripeDefaultPaymentMethodId = paymentMethod.id;
-                        await AppDataSource.manager.save(user);
-                    }).catch(error => {
-                        console.log("Error creating payment method:", error);
-                        res.status(500).send('Internal Server Error');
-                        return;
                     });
-                });
-                return;
-            } else {
-                stripe.paymentMethods.create({
-                    customer: user.stripeCustomerId,
-                    type: 'card',
-                    card: req.body.card,
-                }).then(async paymentMethod => {
-                    res.json(paymentMethod);
                     user.stripeDefaultPaymentMethodId = paymentMethod.id;
                     await AppDataSource.manager.save(user);
-                });
-            }
-        };
-    });
+                    res.json(paymentMethod);
+                } else {
+                    console.log("Creating new payment method");
+                    const paymentMethod = await stripe.paymentMethods.create({
+                        customer: customer.id,
+                        type: 'card',
+                        card: req.body.card,
+                    });
+                    user.stripeDefaultPaymentMethodId = paymentMethod.id;
+                    await AppDataSource.manager.save(user);
+                    res.json(paymentMethod);
+                }
+            } else {
+                console.log("Customer exists");
+                if (user.setupIntentId && user.stripeDefaultPaymentMethodId) {
+                    console.log("Updating existing payment method");
+                    const paymentMethod = await stripe.paymentMethods.update(user.stripeDefaultPaymentMethodId, {
+                        card: req.body.card,
+                    });
+                    user.stripeDefaultPaymentMethodId = paymentMethod.id;
+                    await AppDataSource.manager.save(user);
+                    res.json(paymentMethod);
+                } else {
+                    console.log("Creating SetupIntent");
+                    const paymentMethod = await stripe.paymentMethods.retrieve(
+                        req.body.card.id
+                      );
+                        console.log("Really? after 10 seconds: ", paymentMethod)
+                      
+                    // const setupIntent = await stripe.setupIntents.create({
+                    //     customer: user.stripeCustomerId,
+                    //     payment_method_types: ['card'],
+                    // }).then(async setupIntent => {
+                    //     stripe.setupIntents.confirm(
+                    //         setupIntent.id,
+                    //         {
+                    //           payment_method: req.body.card.id,
+                    //         }
+                    //       );
+                    //     user.setupIntentId = setupIntent.id;
+                    //     user.stripeDefaultPaymentMethodId = setupIntent.payment_method;
+                    //     await AppDataSource.manager.save(user);
+                    //     res.json(setupIntent);
+                    // });
 
+                    // res.json(setupIntent);
+                }
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            res.status(500).send('Internal Server Error');
+        }
+    });
     app.post('/stripe/create-payment-intent/:githubId', async (req, res) => {
-        const githubId = parseInt(req.params.githubId, 10);
+        const githubId = parseInt(req.params.githubId);
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
         if (!user) {
             res.status(400).send('User not found');
@@ -1254,7 +1298,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     });
 
     app.post('/stripe/create-subscription/:githubId', async (req, res) => {
-        const githubId = parseInt(req.params.githubId, 10);
+        const githubId = parseInt(req.params.githubId);
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
         if (!user) {
             res.status(400).send('User not found');
