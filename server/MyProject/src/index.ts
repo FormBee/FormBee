@@ -414,11 +414,13 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             }
             let currentDate = new Date();
             let sameDayNextMonth = await getSameDayNextMonth(currentDate);
-            const customer = await stripe.customers.create({
-                name: githubdata.data.login,
-            });
-            console.log("customer: ", await customer);
+
+
             if (!user) {
+                const customer = await stripe.customers.create({
+                    name: githubdata.data.login,
+                });
+                console.log("customer: ", await customer);
                 await AppDataSource.manager.save(
                     AppDataSource.manager.create(User, {
                         name: githubdata.data.login,
@@ -1180,132 +1182,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     // Stipe integration
 
 
-    // app.post('/stripe/create-payment-method/:githubId', async (req, res) => {
-    //     console.log("in stripe/create-payment-method");
-    //     const githubId = parseInt(req.params.githubId, 10);
-    //     console.log("githubId: ", githubId);
-    
-    //     const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
-    //     if (!user) {
-    //         res.status(400).send('User not found');
-    //         return;
-    //     }
-    
-    //     try {
-    //         if (!user.stripeCustomerId) {
-    //             console.log("Creating new Stripe customer");
-    //             const customerResponse = await axios.post('http://localhost:3000/stripe/create-customer/' + githubId);
-    //             const customer = customerResponse.data;
-    
-    //             if (user.stripeDefaultPaymentMethodId) {
-    //                 console.log("Updating existing payment method");
-    //                 const paymentMethod = await stripe.paymentMethods.update(user.stripeDefaultPaymentMethodId, {
-    //                     card: req.body.card,
-    //                 });
-    //                 user.stripeDefaultPaymentMethodId = paymentMethod.id;
-    //                 await AppDataSource.manager.save(user);
-    //                 res.json(paymentMethod);
-    //             } else {
-    //                 console.log("Creating new payment method");
-    //                 const paymentMethod = await stripe.paymentMethods.create({
-    //                     customer: customer.id,
-    //                     type: 'card',
-    //                     card: req.body.card,
-    //                 });
-    //                 user.stripeDefaultPaymentMethodId = paymentMethod.id;
-    //                 await AppDataSource.manager.save(user);
-    //                 res.json(paymentMethod);
-    //             }
-    //         } else {
-    //             console.log("Customer exists");
-    //             if (user.setupIntentId && user.stripeDefaultPaymentMethodId) {
-    //                 console.log("Updating existing payment method");
-    //                 const paymentMethod = await stripe.paymentMethods.update(user.stripeDefaultPaymentMethodId, {
-    //                     card: req.body.card,
-    //                 });
-    //                 user.stripeDefaultPaymentMethodId = paymentMethod.id;
-    //                 await AppDataSource.manager.save(user);
-    //                 res.json(paymentMethod);
-    //             } else {
-    //                 console.log("Creating SetupIntent");
-    //                 const paymentMethod = await stripe.paymentMethods.retrieve(
-    //                     req.body.card.id
-    //                   );
-    //                     console.log("Really? after 10 seconds: ", paymentMethod)
-                      
-                    // const setupIntent = await stripe.setupIntents.create({
-                    //     customer: user.stripeCustomerId,
-                    //     payment_method_types: ['card'],
-                    // }).then(async setupIntent => {
-                    //     stripe.setupIntents.confirm(
-                    //         setupIntent.id,
-                    //         {
-                    //           payment_method: req.body.card.id,
-                    //         }
-                    //       );
-                    //     user.setupIntentId = setupIntent.id;
-                    //     user.stripeDefaultPaymentMethodId = setupIntent.payment_method;
-                    //     await AppDataSource.manager.save(user);
-                    //     res.json(setupIntent);
-                    // });
-
-                    // res.json(setupIntent);
-    //             }
-    //         }
-    //     } catch (error) {
-    //         console.error("Error:", error);
-    //         res.status(500).send('Internal Server Error');
-    //     }
-    // });
-    // app.post('/stripe/create-payment-intent/:githubId', async (req, res) => {
-    //     const githubId = parseInt(req.params.githubId);
-    //     const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
-    //     if (!user) {
-    //         res.status(400).send('User not found');
-    //         return;
-    //     } else {
-    //         if (!user.stripeCustomerId) {
-    //             res.status(400).send('Customer not found');
-    //             return;
-    //         } else {
-    //             stripe.paymentIntents.create({
-    //                 customer: user.stripeCustomerId,
-    //                 amount: req.body.amount,
-    //                 currency: req.body.currency,
-    //             }).then(async paymentIntent => {
-    //                 res.json(paymentIntent);
-    //                 user.stripePaymentIntentId = paymentIntent.id;
-    //                 await AppDataSource.manager.save(user);
-    //             });
-    //         }
-    //     };
-    // });
-
-    // app.post('/stripe/create-subscription/:githubId', async (req, res) => {
-    //     const githubId = parseInt(req.params.githubId);
-    //     const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
-    //     if (!user) {
-    //         res.status(400).send('User not found');
-    //         return;
-    //     } else {
-    //         if (!user.stripeCustomerId) {
-    //             res.status(400).send('Customer not found');
-    //             return;
-    //         } else {
-    //             stripe.subscriptions.create({
-    //                 customer: user.stripeCustomerId,
-    //                 items: [{
-    //                     price: req.body.price,
-    //                 }],
-    //                 expand: ['latest_invoice.payment_intent'],
-    //             }).then(async subscription => {
-    //                 res.json(subscription);
-    //                 user.stripeSubscriptionId = subscription.id;
-    //                 await AppDataSource.manager.save(user);
-    //             });
-    //         }
-    //     };
-    // });
     // register express routes from defined application routes
     Routes.forEach(route => {
         (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
