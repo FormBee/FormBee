@@ -1180,7 +1180,50 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     });
 
     // Stipe integration
+    app.post('/create-setup-intent/:githubId', async (req, res) => {
+        const githubId = parseInt(req.params.githubId, 10);
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            try {
+                const setupIntent = await stripe.setupIntents.create({
+                    customer: user.stripeCustomerId,
+                    payment_method_types: ['card'],
+                });
+                res.json({ clientSecret: setupIntent.client_secret });
+            } catch (error) {
+                res.status(500).send({ error: error.message });
+            }
+        }
+    });
 
+    app.post('/save-card/:githubId', async (req, res) => {
+        const githubId = parseInt(req.params.githubId, 10);
+        const { paymentMethodId } = req.body;
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            try {
+                //attach the payment method to the customer
+                await stripe.paymentMethods.attach(paymentMethodId, {
+                    customer: user.stripeCustomerId,
+                });
+
+                await stripe.customers.update(user.stripeCustomerId, {
+                    invoice_settings: {
+                        default_payment_method: paymentMethodId,
+                    },
+                });
+                res.json({ message: 'Payment method saved successfully' });
+            } catch (error) {
+                res.status(500).send({ error: error.message });
+            }
+        }  
+    });
 
     // register express routes from defined application routes
     Routes.forEach(route => {

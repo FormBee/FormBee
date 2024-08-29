@@ -18,7 +18,7 @@ export class StripeCardElementComponent implements OnInit {
 
   async ngOnInit() {
     try {
-      this.stripe = await loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
+      this.stripe = await loadStripe('pk_test_51Pr6BYP65EGyHpMvJu2vuS3MLMOhJZZP6jSH51HwgXuvUfwYjTXJFpab6JDmVKp9osFFPmiK18Hfd7HnY8ZrF2Q700AWZClCOT');
 
 
       this.elements = this.stripe.elements();
@@ -48,6 +48,32 @@ export class StripeCardElementComponent implements OnInit {
 
   async handleFormSubmit() {
     console.log("handling form submit");
+    const response = await fetch('http://localhost:3000/create-setup-intent/' + this.githubId, { method: 'POST' });
+        const { clientSecret } = await response.json();
+
+        const { error, setupIntent } = await this.stripe.confirmCardSetup(
+            clientSecret,
+            {
+                payment_method: {
+                    card: this.cardElement,
+                }
+            }
+        );
+        if (error) {
+            console.error(error);
+            // Display error.message in your UI
+        } else {
+            console.log('Payment method saved:', setupIntent.payment_method);
+            fetch('http://localhost:3000/save-card/' + this.githubId, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    paymentMethodId: setupIntent.payment_method,
+                }),
+            });
+        }
   }
       
 }
