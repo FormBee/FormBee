@@ -2,11 +2,14 @@ import { Component } from '@angular/core';
 import { loadStripe } from '@stripe/stripe-js';
 import { OnInit } from '@angular/core';
 import { Input } from '@angular/core';
-
+import { NgIf } from '@angular/common';
+import { CardStateService } from '../card-state.service';
 @Component({
   selector: 'app-stripe-card-element',
   standalone: true,
-  imports: [],
+  imports: [
+    NgIf,
+  ],
   templateUrl: './stripe-card-element.component.html',
   styleUrl: './stripe-card-element.component.scss'
 })
@@ -15,8 +18,15 @@ export class StripeCardElementComponent implements OnInit {
   cardElement: any;
   elements: any;
   @Input() githubId: string | undefined;
-
+  errorMessage: string | undefined;
+  constructor(public cardStateService: CardStateService) {
+  }
   async ngOnInit() {
+    fetch('http://localhost:3000/get-default-payment-method/' + this.githubId, { method: 'GET' }).then(response => response.json()).then(data => {
+      if (data.paymentMethod) {
+        this.cardStateService.cardState = true;
+      }
+    });
     try {
       this.stripe = await loadStripe('pk_test_51Pr6BYP65EGyHpMvJu2vuS3MLMOhJZZP6jSH51HwgXuvUfwYjTXJFpab6JDmVKp9osFFPmiK18Hfd7HnY8ZrF2Q700AWZClCOT');
 
@@ -46,6 +56,10 @@ export class StripeCardElementComponent implements OnInit {
     }
   }
 
+  cancel () {
+    this.cardStateService.cardState = false;
+  }
+
   async handleFormSubmit() {
     console.log("handling form submit");
     const response = await fetch('http://localhost:3000/create-setup-intent/' + this.githubId, { method: 'POST' });
@@ -61,7 +75,10 @@ export class StripeCardElementComponent implements OnInit {
         );
         if (error) {
             console.error(error);
-            // Display error.message in your UI
+            this.errorMessage = error.message;
+            setTimeout(() => {
+                this.errorMessage = undefined;
+            }, 10000);
         } else {
             console.log('Payment method saved:', setupIntent.payment_method);
             fetch('http://localhost:3000/save-card/' + this.githubId, {
@@ -73,6 +90,7 @@ export class StripeCardElementComponent implements OnInit {
                     paymentMethodId: setupIntent.payment_method,
                 }),
             });
+            this.cardStateService.updateCardState();
         }
   }
       

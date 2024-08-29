@@ -227,20 +227,22 @@
   .billing-email {
     display: flex;
     flex-direction: column;
-    max-width: 25vw;
+    max-width: 23vw;
     height: 100%;
     border: 1px solid var(--border-color);
     padding: 1rem;
     border-radius: 1rem;
     box-shadow: 4px 4px 20px var(--border-color);
     align-items: start;
+    height: 300px;
+
   }
   .billing-email p {
     color: var(--text-color2);
     font-size: 1.2rem;
     text-align: left;
   }
-  .billing-email input {
+  .billing-email .input {
     width: 20vw;
     height: fit-content;
     padding: 10px 12px;
