@@ -419,6 +419,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             if (!user) {
                 const customer = await stripe.customers.create({
                     name: githubdata.data.login,
+                    email: githubdata.data.email,
                 });
                 console.log("customer: ", await customer);
                 await AppDataSource.manager.save(
@@ -1236,7 +1237,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             try {
                 const customer = await stripe.customers.retrieve(user.stripeCustomerId);
                 const defaultPaymentMethodId = customer.invoice_settings.default_payment_method;
-        
                 if (defaultPaymentMethodId) {
                     const paymentMethod = await stripe.paymentMethods.retrieve(defaultPaymentMethodId);
                     res.json({ paymentMethod });
@@ -1247,6 +1247,22 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                 res.status(500).send({ error: error.message });
             }
         }
+    });
+
+    app.post('/update-billing-email/:githubId', async (req, res) => {
+        const githubId = parseInt(req.params.githubId);
+        const { email } = req.body;
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        }
+        await stripe.customers.update(user.stripeCustomerId, {
+            email,
+        });
+        user.billingEmail = email;
+        await AppDataSource.manager.save(user);
+        res.send('Email updated');
     });
 
 

@@ -65,8 +65,8 @@
             <div class="billing-email">
                     <p>Update billing email</p>
                     <p class="billing-desc">All receipts will be sent to this email.</p>
-                    <input class="input" type="email" placeholder="Email">
-                    <button>Save</button>
+                    <input id="billingEmail" class="input" type="email" placeholder="Email" value="{{billingEmail}}">
+                    <button (click)="updateBillingEmail()">Save</button>
             </div>
         </div>
     </div>

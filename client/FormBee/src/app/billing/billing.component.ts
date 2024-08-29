@@ -36,6 +36,7 @@ export class BillingComponent implements OnInit {
   currentTheme: string = localStorage.getItem("theme") || "neutral";
   hexagons: Array<{ style: { [key: string]: string } }> = [];
   last4Digits: string = "";
+  billingEmail: string | undefined;
 
   // fetchUrl: string = "https://pleasing-love-production.up.railway.app/";
   fetchUrl: string = "http://localhost:3000/";
@@ -90,6 +91,7 @@ export class BillingComponent implements OnInit {
             this.maxPlugins = data.maxPlugins;
             this.maxSubs = data.maxSubmissions;
             this.subscriptionTier = data.subscriptionTier;
+            this.billingEmail = data.billingEmail;
           }
         });
       })
@@ -102,6 +104,36 @@ export class BillingComponent implements OnInit {
 
   editPaymentMethod () {
     this.cardStateService.cardState = true;
+  }
+
+  updateBillingEmail() {
+    const emailElement = document.getElementById('billingEmail') as HTMLInputElement;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (emailElement) {
+      const email = emailElement.value;
+      if (!emailRegex.test(email)) {
+        alert('Please enter a valid email');
+        return;
+      }
+      if (email && emailRegex.test(email)) {
+        fetch('http://localhost:3000/update-billing-email/' + this.githubId, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email,
+          }),
+        }).then(response => response.json()).then(data => {
+          if (data.message) {
+            alert(data.message);
+          }
+        });
+      } else {
+        alert('Please enter a valid email');
+      }
+    }
   }
 
 
