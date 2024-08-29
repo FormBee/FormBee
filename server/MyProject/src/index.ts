@@ -1225,6 +1225,31 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }  
     });
 
+
+    app.get('/get-default-payment-method/:githubId', async (req, res) => {
+        const githubId = parseInt(req.params.githubId, 10);
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            try {
+                const customer = await stripe.customers.retrieve(user.stripeCustomerId);
+                const defaultPaymentMethodId = customer.invoice_settings.default_payment_method;
+        
+                if (defaultPaymentMethodId) {
+                    const paymentMethod = await stripe.paymentMethods.retrieve(defaultPaymentMethodId);
+                    res.json({ paymentMethod });
+                } else {
+                    res.status(404).send({ error: 'No default payment method found' });
+                }
+            } catch (error) {
+                res.status(500).send({ error: error.message });
+            }
+        }
+    });
+
+
     // register express routes from defined application routes
     Routes.forEach(route => {
         (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {

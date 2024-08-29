@@ -233,6 +233,7 @@
     padding: 1rem;
     border-radius: 1rem;
     box-shadow: 4px 4px 20px var(--border-color);
+    align-items: start;
   }
   .billing-email p {
     color: var(--text-color2);
@@ -307,7 +308,6 @@
       width: 80vw;
 
       max-width: none;
-      align-items: center;
       margin-bottom: 1rem;
     }
 

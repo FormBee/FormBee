@@ -33,6 +33,9 @@ export class BillingComponent implements OnInit {
   maxPlugins: number = 0;
   currentTheme: string = localStorage.getItem("theme") || "neutral";
   hexagons: Array<{ style: { [key: string]: string } }> = [];
+  defaultPaymentMethod: boolean = false;
+  last4Digits: string = "";
+
   // fetchUrl: string = "https://pleasing-love-production.up.railway.app/";
   fetchUrl: string = "http://localhost:3000/";
   constructor(private Router: Router) {
@@ -42,6 +45,12 @@ export class BillingComponent implements OnInit {
     }
   }
   ngOnInit(): void {
+    fetch('http://localhost:3000/get-default-payment-method/' + this.githubId, { method: 'GET' }).then(response => response.json()).then(data => {
+      if (data.paymentMethod) {
+        this.defaultPaymentMethod = true;
+        this.last4Digits = data.paymentMethod.card.last4;
+      }
+    });
     this.createHexagons(6); // Create 20 hexagons
     document.documentElement.className = this.currentTheme;
     console.log(this.githubId);

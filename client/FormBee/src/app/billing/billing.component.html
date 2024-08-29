@@ -51,12 +51,20 @@
             </div>
         </div>
         <div class="stripe-info">
-            <div class="billing-email">
-                <p>Update card info</p>
+            <div *ngIf="!defaultPaymentMethod" class="billing-email">
+                <p>Payment Info</p>
+                <p>Monthly subscriptions will be charged from this card.</p>
                 <app-stripe-card-element [githubId]="githubId"></app-stripe-card-element>
+            </div>
+            <div *ngIf="defaultPaymentMethod" class="billing-email">
+                <p>Payment Info</p>
+                <p>Monthly subscriptions will be charged from this card.</p>
+                <p>A card ending in {{last4Digits}}</p>
+                <button>Edit</button>
             </div>
             <div class="billing-email">
                     <p>Update billing email</p>
+                    <p>All receipts will be sent to this email.</p>
                     <input type="email" placeholder="Email">
                     <button>Save</button>
             </div>
