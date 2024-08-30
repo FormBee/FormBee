@@ -29,7 +29,8 @@
     height: 2px;
     background-color: var(--border-color);
     margin-top: 20px;
-    margin-bottom: 20px;
+    
+
   }
   .billing-header h2 {
     color: var(--text-color);
@@ -325,4 +326,27 @@
     .billing-email p {
       text-align: center;
     }
+  }
+  .invalid-email, .success-message {
+    position: fixed; /* Use fixed to stick to the bottom of the screen */
+    left: 50%; /* Position at the center horizontally */
+    bottom: 20px; /* Distance from the bottom */
+    transform: translateX(-50%); /* Shift left by 50% of its width to truly center it */
+    color: var(--text-color2);
+    font-size: 1.2rem;
+    text-align: center; /* Center the text */
+    padding: 10px;
+    border-radius: 4px;
+    width: fit-content; /* Fit content width */
+    height: fit-content; /* Fit content height */
+    justify-content: center;
+    z-index: 10000; /* Ensure it's above other content */
+  }
+  
+  .invalid-email {
+    background-color: #fa755a; /* Specific color for error messages */
+  }
+  
+  .success-message {
+    background-color: #55aa3d; /* Specific color for success messages */
   }

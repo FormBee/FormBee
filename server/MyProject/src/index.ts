@@ -1262,7 +1262,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         });
         user.billingEmail = email;
         await AppDataSource.manager.save(user);
-        res.send('Email updated');
+        res.json({ message: 'Email updated' });
     });
 
 

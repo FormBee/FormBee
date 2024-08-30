@@ -37,7 +37,8 @@ export class BillingComponent implements OnInit {
   hexagons: Array<{ style: { [key: string]: string } }> = [];
   last4Digits: string = "";
   billingEmail: string | undefined;
-
+  invalidEmail: string | undefined;
+  successMessage: string | undefined;
   // fetchUrl: string = "https://pleasing-love-production.up.railway.app/";
   fetchUrl: string = "http://localhost:3000/";
   constructor(private Router: Router, public cardStateService: CardStateService) {
@@ -113,7 +114,10 @@ export class BillingComponent implements OnInit {
     if (emailElement) {
       const email = emailElement.value;
       if (!emailRegex.test(email)) {
-        alert('Please enter a valid email');
+        this.invalidEmail = 'Please enter a valid email';
+        setTimeout(() => {
+          this.invalidEmail = undefined;
+        }, 5000);
         return;
       }
       if (email && emailRegex.test(email)) {
@@ -126,12 +130,16 @@ export class BillingComponent implements OnInit {
             email,
           }),
         }).then(response => response.json()).then(data => {
-          if (data.message) {
-            alert(data.message);
-          }
+          this.successMessage = data.message;
+          setTimeout(() => {
+            this.successMessage = undefined;
+          }, 5000);
         });
       } else {
-        alert('Please enter a valid email');
+        this.invalidEmail = 'Please enter a valid email';
+        setTimeout(() => {
+          this.invalidEmail = undefined;
+        }, 5000);
       }
     }
   }

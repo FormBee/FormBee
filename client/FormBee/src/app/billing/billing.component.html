@@ -66,7 +66,15 @@
                     <p>Update billing email</p>
                     <p class="billing-desc">All receipts will be sent to this email.</p>
                     <input id="billingEmail" class="input" type="email" placeholder="Email" value="{{billingEmail}}">
+
                     <button (click)="updateBillingEmail()">Save</button>
+                    <!-- @if (invalidEmail) {
+                        <p class="invalid-email">{{invalidEmail}}</p>
+                    }
+                    @if (successMessage) {
+                        <p class="success-message">{{successMessage}}</p>
+                    } -->
+
             </div>
         </div>
     </div>
@@ -74,6 +82,6 @@
     <app-billing-plans id="BillingComponent" [githubId]="githubId" [subscriptionTier]="subscriptionTier" *ngIf="!loading"></app-billing-plans>
 
 </div>
-
-
+<div *ngIf="invalidEmail" class="invalid-email">{{invalidEmail}}</div>
+<div *ngIf="successMessage" class="success-message">{{successMessage}}</div>
 <script src="https://js.stripe.com/v3/"></script>

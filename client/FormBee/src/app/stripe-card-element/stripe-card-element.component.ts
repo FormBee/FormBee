@@ -78,7 +78,7 @@ export class StripeCardElementComponent implements OnInit {
             this.errorMessage = error.message;
             setTimeout(() => {
                 this.errorMessage = undefined;
-            }, 10000);
+            }, 6000);
         } else {
             console.log('Payment method saved:', setupIntent.payment_method);
             fetch('http://localhost:3000/save-card/' + this.githubId, {
@@ -90,7 +90,7 @@ export class StripeCardElementComponent implements OnInit {
                     paymentMethodId: setupIntent.payment_method,
                 }),
             });
-            this.cardStateService.updateCardState();
+            window.location.reload();
         }
   }
       
