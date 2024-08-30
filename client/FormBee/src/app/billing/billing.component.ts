@@ -48,12 +48,6 @@ export class BillingComponent implements OnInit {
     }
   }
   ngOnInit(): void {
-    fetch('http://localhost:3000/get-default-payment-method/' + this.githubId, { method: 'GET' }).then(response => response.json()).then(data => {
-      if (data.paymentMethod) {
-        this.cardStateService.cardState = false;
-        this.last4Digits = data.paymentMethod.card.last4;
-      }
-    });
     this.createHexagons(6); // Create 20 hexagons
     document.documentElement.className = this.currentTheme;
     console.log(this.githubId);
@@ -95,7 +89,13 @@ export class BillingComponent implements OnInit {
             this.billingEmail = data.billingEmail;
           }
         });
-      })
+      }).then(() => {
+        fetch('http://localhost:3000/get-default-payment-method/' + this.githubId, { method: 'GET' }).then(response => response.json()).then(data => {
+          if (data.paymentMethod) {
+            this.cardStateService.cardState = false;
+            this.last4Digits = data.paymentMethod.card.last4;
+          }
+        })})
       .finally(() => {
         setTimeout(() => {
           this.loading = false;

@@ -505,7 +505,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
     // Fetch the user by their github id
     app.get('/api/user/:githubId', (req: Request, res: Response) => {
-        console.log("isNaN I'm in here doggo");
 
         const githubId = parseInt(req.params.githubId, 10);
         if (isNaN(githubId)) {
@@ -513,10 +512,8 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             res.status(400).json('Invalid GitHub ID');
             return;
         }
-        // console.log("Github ID: ", githubId);
         AppDataSource.manager.findOne(User, { where: { githubId } })
             .then(user => {
-                // console.log("User: ", user);
                 if (User) {
                     res.json(user);
                     console.log("User: ", user);
