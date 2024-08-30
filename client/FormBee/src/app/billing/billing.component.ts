@@ -85,7 +85,7 @@ export class BillingComponent implements OnInit {
           if (data.maxPlugins) {
             this.maxPlugins = data.maxPlugins;
             this.maxSubs = data.maxSubmissions;
-            this.subscriptionTier = data.subscriptionTier;
+            this.subscriptionTier = "Starter";
             this.billingEmail = data.billingEmail;
           }
         });
@@ -162,6 +162,13 @@ export class BillingComponent implements OnInit {
         }
       });
     }
+  }
+  managePlan() {
+  fetch('http://localhost:3000/manage-plan/' + this.githubId,{
+    method: 'POST',
+  }).then(response => response.json()).then(data => {
+    window.location.href = data.url;
+  })
   }
 
   viewPlans = () => {

@@ -25,13 +25,47 @@ AppDataSource.initialize().then(async () => {
 
     // create express app
     const app = express();
-    app.use(bodyParser.json());
     const corsOptions = {
-        origin: ['http://localhost:4200', 'https://ibex-causal-painfully.ngrok-free.app', 'https://formbee.dev'],
+        origin: ['*', 'http://localhost:4200', 'https://ibex-causal-painfully.ngrok-free.app', 'https://formbee.dev'],
         methods: ['GET', 'POST'],
         allowedHeaders: ['Content-Type', 'x-altcha-spam-filter', 'x-api-key'],
     };
     app.use(cors(corsOptions));
+
+
+    app.post('/stripe/webhook', express.raw({type: 'application/json'}), async (request, res) => {
+        const sig = request.headers['stripe-signature'];
+        let event;
+        try {
+            event = stripe.webhooks.constructEvent(request.body, sig, process.env.STRIPE_WHSEC);
+        } catch (err) {
+            console.log('⚠️  Webhook signature verification failed.');
+        }
+    
+        if (event.type === 'customer.subscription.deleted') {
+            console.log('🚀 Subscription deleted.', event.data.object.customer);
+            const user = await AppDataSource.manager.findOne(User, { where: { stripeCustomerId: event.data.object.customer } });
+            if (!user) {
+                console.log("User not found");
+            } else {
+                user.subscriptionTier = "Starter";
+                user.maxSubmissions = 250;
+                user.maxPlugins = 1;
+                user.n8nBoolean = false;
+                user.makeBoolean = false;
+                user.webhookBoolean = false;
+                user.discordBoolean = false;
+                user.slackBoolean = false;
+                user.telegramBoolean = false;
+                await AppDataSource.manager.save(user);
+                console.log("Resetting user to starter...");
+            }
+        }
+    
+        // Return a response to acknowledge receipt of the event
+        res.status(200).send();
+    });
+    app.use(bodyParser.json());
     
 
     const transporter = nodemailer.createTransport({
@@ -1261,6 +1295,38 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         await AppDataSource.manager.save(user);
         res.json({ message: 'Email updated' });
     });
+
+    app.post('/manage-plan/:githubId', async (req, res) => {
+        console.log("in manage plan");
+        const githubId = parseInt(req.params.githubId);
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            const configuration = await stripe.billingPortal.configurations.create({
+                business_profile: {
+                  headline: 'FormBee partners with Stripe for simplified billing.',
+                },
+                features: {
+                  invoice_history: {
+                    enabled: true,
+                  },
+                  subscription_cancel: {
+                    enabled: true,
+                  }
+                },
+              });
+            const session = await stripe.billingPortal.sessions.create({
+                customer: user.stripeCustomerId,
+                configuration: configuration.id,
+                return_url: 'http://localhost:4200/billing',
+              });
+              res.json({url: session.url})
+        }
+    });
+
+
 
 
     // register express routes from defined application routes

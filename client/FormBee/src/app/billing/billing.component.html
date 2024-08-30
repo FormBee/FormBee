@@ -30,7 +30,7 @@
                             <p *ngIf="subscriptionTier === 'Premium'">You are currently on the Premium plan which is $25/month</p>
                         </div>
                         <div>
-                            <button *ngIf="subscriptionTier !== 'Starter'" class="manage-button" (click)="viewPlans()">Manage Subscription</button>
+                            <button *ngIf="subscriptionTier !== 'Starter'" class="manage-button" (click)="managePlan()">Manage Subscription</button>
                             <button *ngIf="subscriptionTier === 'Starter'" class="manage-button" (click)="viewPlans()">View Premium Plans</button>
                         </div>
                     </div>
