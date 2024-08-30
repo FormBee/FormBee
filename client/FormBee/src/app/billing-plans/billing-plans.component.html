@@ -15,7 +15,7 @@
                 <li>- No CC required</li>
             </ul>
             <div class="price-action">
-                <button>Start for Free</button>
+                <button>Downgrade Plan</button>
             </div>
         </div>
 
@@ -31,7 +31,7 @@
                 <li>- Unlimited plugins active at a time</li>
             </ul>
             <div class="price-action">
-                <button *ngIf="subscriptionTier !== 'Premium'">Upgrade Plan</button>
+                <button  (click)="upgradeToGrowth()" *ngIf="subscriptionTier !== 'Premium'">Upgrade Plan</button>
                 <button *ngIf="subscriptionTier === 'Premium'">Change Plan</button>
             </div>
         </div>
