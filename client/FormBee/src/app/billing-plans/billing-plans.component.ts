@@ -20,4 +20,8 @@ export class BillingPlansComponent {
     console.log("upgrading to growth");
     this.router.navigate(['/growth-plan']);
   }
+  upgradeToPremium() {
+    console.log("upgrading to premium");
+    this.router.navigate(['/premium-plan']);
+  }
 }

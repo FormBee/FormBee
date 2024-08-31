@@ -5,15 +5,15 @@ import { OnInit } from '@angular/core';
 import { loadStripe } from '@stripe/stripe-js';
 
 @Component({
-  selector: 'app-upgrade-to-growth',
+  selector: 'app-upgrade-to-premium',
   standalone: true,
   imports: [
     DashboardNavComponent,
   ],
-  templateUrl: './upgrade-to-growth.component.html',
-  styleUrl: './upgrade-to-growth.component.scss'
+  templateUrl: './upgrade-to-premium.component.html',
+  styleUrl: './upgrade-to-premium.component.scss'
 })
-export class UpgradeToGrowthComponent implements OnInit {
+export class UpgradeToPremiumComponent implements OnInit {
   name: string | undefined;
   login: string | undefined;
   profilePic: string = "../assets/FormBee-logo2.png";

@@ -1,5 +1,28 @@
 <div class="upgrade-to-growth">
     <app-dashboard-nav></app-dashboard-nav>
-    <div class="upgrade-to-growth-container">
+    <div class="center-container">
+        <div class="upgrade-to-growth-container">
+            <h1>Join to Growth Plan</h1>
+            <p>Features in the Growth Plan</p>
+            <div class="features">
+                <p>1,000 Submissions/Month</p>
+                <p>All Captcha Solutions</p>
+                <p>Auto-Response Emails (Formbee email domain only)</p>
+                <p>All Plugins</p>
+                <p>Unlimited plugins active at a time</p>
+            </div>
+        </div>
+        <div class="upgrade-to-growth-container pay-pay-div">
+            <div class="payment-div">
+                <p>Start the Growth Plan</p>
+                <div id="card-element"></div>
+            </div>
+            <div class="button-div">
+                <button (click)="handleFormSubmit()">Subscribe to Growth Plan</button>
+            </div>
+            <p class="p-sub">a charge of $5/month will be applied, starting whenever you subscribe</p>
+
+        </div>
     </div>
 </div>
+<script src="https://js.stripe.com/v3/"></script>

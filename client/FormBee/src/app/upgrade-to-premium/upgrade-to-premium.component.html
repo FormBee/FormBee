@@ -1,0 +1,27 @@
+<div class="upgrade-to-growth">
+    <app-dashboard-nav></app-dashboard-nav>
+    <div class="center-container">
+        <div class="upgrade-to-growth-container">
+            <h1>Join to Premium Plan</h1>
+            <p>Features in the Premium Plan</p>
+            <div class="features">
+                <p>10,000 submissions/month</p>
+                <p>Auto-Response Emails from custom domains</p>
+                <p>All features from growth and starter plans</p>
+                <p>Priority support</p>
+            </div>
+        </div>
+        <div class="upgrade-to-growth-container pay-pay-div">
+            <div class="payment-div">
+                <p>Start the Premium Plan</p>
+                <div id="card-element"></div>
+            </div>
+            <div class="button-div">
+                <button (click)="handleFormSubmit()">Subscribe to Premium Plan</button>
+            </div>
+            <p class="p-sub">a charge of $25/month will be applied, starting whenever you subscribe</p>
+
+        </div>
+    </div>
+</div>
+<script src="https://js.stripe.com/v3/"></script>

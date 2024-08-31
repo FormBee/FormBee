@@ -9,6 +9,7 @@ import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.com
 import { CookiePolicyComponent } from './cookie-policy/cookie-policy.component';
 import { BillingComponent } from './billing/billing.component';
 import { UpgradeToGrowthComponent } from './upgrade-to-growth/upgrade-to-growth.component';
+import { UpgradeToPremiumComponent } from './upgrade-to-premium/upgrade-to-premium.component';
 
 export const routes: Routes = [
     { path: 'contact', component: ContactComponent },
@@ -20,5 +21,6 @@ export const routes: Routes = [
     { path: 'cookies-policy', component: CookiePolicyComponent },
     { path: 'billing', component: BillingComponent, canActivate: [AuthGuard], },
     { path: 'growth-plan', component: UpgradeToGrowthComponent, canActivate: [AuthGuard], },
+    { path: 'premium-plan', component: UpgradeToPremiumComponent, canActivate: [AuthGuard], },
     { path: '**', redirectTo: '/home'},
 ];
