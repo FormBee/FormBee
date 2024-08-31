@@ -3,11 +3,13 @@ import { DashboardNavComponent } from '../dashboard-nav/dashboard-nav.component'
 import { Router } from '@angular/router';
 import { OnInit } from '@angular/core';
 import { loadStripe } from '@stripe/stripe-js';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-upgrade-to-growth',
   standalone: true,
   imports: [
+    NgIf,
     DashboardNavComponent,
   ],
   templateUrl: './upgrade-to-growth.component.html',
@@ -25,6 +27,7 @@ export class UpgradeToGrowthComponent implements OnInit {
   elements: any;
   cardStateService: any;
   errorMessage: string | undefined;
+  last4Digits: string|undefined;
 
   constructor(private Router: Router) {
     }
@@ -71,7 +74,8 @@ export class UpgradeToGrowthComponent implements OnInit {
           }).then(async () => {
             fetch('http://localhost:3000/get-default-payment-method/' + this.githubId, { method: 'GET' }).then(response => response.json()).then(data => {
               if (data.paymentMethod) {
-                this.cardStateService.cardState = true;
+                this.last4Digits = data.paymentMethod.card.last4;
+                this.loading = false;
               }
             });
             try {
@@ -98,11 +102,12 @@ export class UpgradeToGrowthComponent implements OnInit {
                 }
               });
               this.cardElement.mount('#card-element');
+              this.loading = false;
+
             } catch (error) {
               console.error('Error in ngOnInit:', error);
             }
           }).finally(() => {
-            this.loading = false;
           });
       }
     }
