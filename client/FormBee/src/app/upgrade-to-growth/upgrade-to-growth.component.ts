@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { OnInit } from '@angular/core';
 import { loadStripe } from '@stripe/stripe-js';
 import { NgIf } from '@angular/common';
-
+import { ElementRef, afterRender } from '@angular/core';
 @Component({
   selector: 'app-upgrade-to-growth',
   standalone: true,
@@ -29,8 +29,41 @@ export class UpgradeToGrowthComponent implements OnInit {
   errorMessage: string | undefined;
   last4Digits: string|undefined;
 
-  constructor(private Router: Router) {
-    }
+
+  constructor(private Router: Router, elementRef: ElementRef) {
+    afterRender({
+      earlyRead: async () => {
+        console.log("rendered mfer")
+        try {
+          this.stripe = await loadStripe('pk_test_51Pr6BYP65EGyHpMvJu2vuS3MLMOhJZZP6jSH51HwgXuvUfwYjTXJFpab6JDmVKp9osFFPmiK18Hfd7HnY8ZrF2Q700AWZClCOT');
+    
+    
+          this.elements = this.stripe.elements();
+          this.cardElement = this.elements.create('card', {
+    
+            style: {
+              base: {
+                color: '#d6890e',
+                fontSmoothing: 'antialiased',
+                fontSize: '16px',
+                '::placeholder': {
+                  color: '#7a7979'
+                },
+                iconColor: '#7a7979'
+              },
+              invalid: {
+                color: '#fa755a',
+                iconColor: '#fa755a'
+              }
+            }
+          });
+          this.cardElement.mount('#card-element');
+        } catch (error) {
+          console.error('Error in ngOnInit:', error);
+        }
+      }
+    })
+  }
     async ngOnInit() {
       // Get the theme
       console.log(this.githubId);
@@ -78,39 +111,15 @@ export class UpgradeToGrowthComponent implements OnInit {
                 this.loading = false;
               }
             });
-            try {
-              this.stripe = await loadStripe('pk_test_51Pr6BYP65EGyHpMvJu2vuS3MLMOhJZZP6jSH51HwgXuvUfwYjTXJFpab6JDmVKp9osFFPmiK18Hfd7HnY8ZrF2Q700AWZClCOT');
-        
-        
-              this.elements = this.stripe.elements();
-              this.cardElement = this.elements.create('card', {
-        
-                style: {
-                  base: {
-                    color: '#d6890e',
-                    fontSmoothing: 'antialiased',
-                    fontSize: '16px',
-                    '::placeholder': {
-                      color: '#7a7979'
-                    },
-                    iconColor: '#7a7979'
-                  },
-                  invalid: {
-                    color: '#fa755a',
-                    iconColor: '#fa755a'
-                  }
-                }
-              });
-              this.cardElement.mount('#card-element');
-              this.loading = false;
-
-            } catch (error) {
-              console.error('Error in ngOnInit:', error);
-            }
           }).finally(() => {
           });
       }
     }
+
+    goToBilling() {
+      this.Router.navigate(['/billing']);
+    }
+    
     async handleFormSubmit() {
       console.log("handling form submit");
       const response = await fetch('http://localhost:3000/create-setup-intent/' + this.githubId, { method: 'POST' });

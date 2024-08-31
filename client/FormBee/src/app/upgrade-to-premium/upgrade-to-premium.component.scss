@@ -21,10 +21,13 @@
 
     p {
         font-size: 1.2rem;
-        margin-bottom: 1rem;
         color: var(--text-color2);
         padding: .5rem;
         text-align: center;
+    }
+    .start-plan {
+        color: var(--text-color);
+        font-size: 1.5rem;
     }
 }
 .payment-div {
@@ -32,6 +35,7 @@
     margin-top: 0px;
     align-items: center;
     justify-content: space-around;
+    flex-direction: column;
 }
 
 .pay-pay-div {
@@ -143,4 +147,82 @@ button {
     .StripeElement {
         width: 90%;
     }
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    border-top: 3px solid #ffbf1c;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 5rem;
+  }
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+}
+
+h2 {
+    margin: 0px;
+    height: fit-content;
+    color: var(--text-color2);
+    font-size: 1.5rem;
+    margin: 1rem;
+}
+
+.method-div {
+    display: flex;
+    flex-direction: row;   
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+}
+
+.last-4 {
+    background-color: var(--div-color);
+    height: fit-content;
+    padding: 10px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    box-shadow: none;
+    font-size: 16px;
+    margin: 1rem;
+}
+
+@media screen and (max-width: 680px) {
+    .method-div {
+        flex-direction: column;
+    }
+
+    .last-4 {
+        margin: 0px;
+    }
+
+    .row {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-evenly;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+    }
+}  
+
+.edit-button {
+    width: fit-content;
+    height: fit-content;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    align-items: center;
 }

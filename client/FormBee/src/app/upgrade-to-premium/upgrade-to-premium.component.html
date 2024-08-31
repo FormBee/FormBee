@@ -11,10 +11,19 @@
                 <p>Priority support</p>
             </div>
         </div>
-        <div class="upgrade-to-growth-container pay-pay-div">
+        <div *ngIf="!loading" class="upgrade-to-growth-container pay-pay-div">
             <div class="payment-div">
-                <p>Start the Premium Plan</p>
-                <div id="card-element"></div>
+                <p class="start-plan">Start the Premium Plan</p>
+                <div class="method-div">
+                    <h2 *ngIf="last4Digits">Payment Method</h2>
+                    <div class="row">
+                        <div *ngIf="last4Digits"><p class="last-4">Your card ending in {{last4Digits}}</p></div>
+                        <button class="edit-button" (click)="goToBilling()">Edit</button>
+                    </div>
+                </div>
+                <div class="method-div">
+                    <div *ngIf="!last4Digits" id="card-element"></div>
+                </div>
             </div>
             <div class="button-div">
                 <button (click)="handleFormSubmit()">Subscribe to Premium Plan</button>
@@ -22,6 +31,7 @@
             <p class="p-sub">a charge of $25/month will be applied, starting whenever you subscribe</p>
 
         </div>
+        <div *ngIf="loading" class="loading-spinner"></div>
     </div>
 </div>
 <script src="https://js.stripe.com/v3/"></script>
