@@ -1326,6 +1326,35 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
+    app.post('/stripe/growth-plan', async (req, res) => {
+        const user = await AppDataSource.manager.findOne(User, { where: { stripeCustomerId: req.body.stripeCustomerId } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            let paymentMethod: string | undefined;
+            try {
+                const customer = await stripe.customers.retrieve(user.stripeCustomerId);
+                const defaultPaymentMethodId = customer.invoice_settings.default_payment_method;
+                if (defaultPaymentMethodId) {
+                    paymentMethod = await stripe.paymentMethods.retrieve(defaultPaymentMethodId);
+                } else {
+                    console.log("No default payment method found");
+                }
+            } catch (error) {
+                res.status(500).send({ error: error.message });
+            }
+            const subscription = await stripe.subscriptions.create({
+                customer: user.stripeCustomerId,
+                items: [{
+                    price: "price_1Pu4WyP65EGyHpMvSt1eYedS"
+                }],
+                default_payment_method: paymentMethod,
+            });
+            res.json({ subscription });
+        }
+    });
+
 
 
 

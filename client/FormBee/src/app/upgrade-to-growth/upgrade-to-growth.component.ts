@@ -5,6 +5,7 @@ import { OnInit } from '@angular/core';
 import { loadStripe } from '@stripe/stripe-js';
 import { NgIf } from '@angular/common';
 import { ElementRef, afterRender } from '@angular/core';
+
 @Component({
   selector: 'app-upgrade-to-growth',
   standalone: true,
@@ -28,6 +29,7 @@ export class UpgradeToGrowthComponent implements OnInit {
   cardStateService: any;
   errorMessage: string | undefined;
   last4Digits: string|undefined;
+  customerId: string | undefined;
 
 
   constructor(private Router: Router, elementRef: ElementRef) {
@@ -59,7 +61,6 @@ export class UpgradeToGrowthComponent implements OnInit {
           });
           this.cardElement.mount('#card-element');
         } catch (error) {
-          console.error('Error in ngOnInit:', error);
         }
       }
     })
@@ -99,6 +100,7 @@ export class UpgradeToGrowthComponent implements OnInit {
               }
               this.profilePic = data.avatar_url;
               this.githubId = data.id;
+              this.customerId = data.stripeCustomerId;
             }
           }).then(() => {
             fetch(this.fetchUrl + 'api/user/' + this.githubId).then(response => response.json()).then(data => {
@@ -122,7 +124,21 @@ export class UpgradeToGrowthComponent implements OnInit {
     
     async handleFormSubmit() {
       console.log("handling form submit");
-      const response = await fetch('http://localhost:3000/create-setup-intent/' + this.githubId, { method: 'POST' });
+      if (this.last4Digits) { 
+        console.log("cardOnFile: ", this.last4Digits);
+        const response = await fetch('http://localhost:3000/stripe/growth-plan', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            stripeCustomerId: this.customerId,
+          }),
+        });
+        const { subscription } = await response.json();
+        console.log("Subscription: ", subscription);
+      } else {
+          const response = await fetch('http://localhost:3000/create-setup-intent/' + this.githubId, { method: 'POST' });
           const { clientSecret } = await response.json();
   
           const { error, setupIntent } = await this.stripe.confirmCardSetup(
@@ -152,5 +168,6 @@ export class UpgradeToGrowthComponent implements OnInit {
               });
               window.location.reload();
           }
+        }
     }
   }
