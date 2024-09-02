@@ -1365,7 +1365,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                     
 
                 } else {
-                    console.log("No default payment method found");
+                    console.log("No default payment method found, need to create one");
                 }
             } catch (error) {
                 res.status(500).send({ error: error.message });
