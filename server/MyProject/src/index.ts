@@ -1326,32 +1326,50 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/stripe/growth-plan', async (req, res) => {
-        const user = await AppDataSource.manager.findOne(User, { where: { stripeCustomerId: req.body.stripeCustomerId } });
+    app.post('/stripe/growth-plan/:githubId', async (req, res) => {
+        const githubId = parseInt(req.params.githubId);
+        console.log("in growth plan: ", githubId);
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId }, });
         if (!user) {
+            console.log("user not found");
             res.status(400).send('User not found');
             return;
         } else {
+            console.log("in else, user found.");
             let paymentMethod: string | undefined;
             try {
+                console.log("in try");
                 const customer = await stripe.customers.retrieve(user.stripeCustomerId);
+                console.log("customer: ", customer);
                 const defaultPaymentMethodId = customer.invoice_settings.default_payment_method;
+                console.log("defaultPaymentMethodId: ", defaultPaymentMethodId);
                 if (defaultPaymentMethodId) {
                     paymentMethod = await stripe.paymentMethods.retrieve(defaultPaymentMethodId);
+                    console.log("Default payment method found: ", paymentMethod);
+                    console.log("creating subscription");
+                    try {
+                        console.log("in try for subscription");
+                        console.log(user.stripeCustomerId);
+                        const subscription = await stripe.subscriptions.create({
+                            customer: user.stripeCustomerId,
+                            items: [{
+                                price: "price_1Pu4WyP65EGyHpMvSt1eYedS"
+                            }],
+                            default_payment_method: defaultPaymentMethodId.id,
+                        });
+                        console.log("Subscription done");
+                        res.json({ subscription });
+                    } catch (error) {
+                        res.status(500).send({ error: error.message });
+                    }
+                    
+
                 } else {
                     console.log("No default payment method found");
                 }
             } catch (error) {
                 res.status(500).send({ error: error.message });
             }
-            const subscription = await stripe.subscriptions.create({
-                customer: user.stripeCustomerId,
-                items: [{
-                    price: "price_1Pu4WyP65EGyHpMvSt1eYedS"
-                }],
-                default_payment_method: paymentMethod,
-            });
-            res.json({ subscription });
         }
     });
 

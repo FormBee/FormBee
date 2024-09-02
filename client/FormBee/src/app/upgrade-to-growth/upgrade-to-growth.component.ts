@@ -100,11 +100,11 @@ export class UpgradeToGrowthComponent implements OnInit {
               }
               this.profilePic = data.avatar_url;
               this.githubId = data.id;
-              this.customerId = data.stripeCustomerId;
             }
           }).then(() => {
             fetch(this.fetchUrl + 'api/user/' + this.githubId).then(response => response.json()).then(data => {
               console.log("fetched user data");
+              this.customerId = data.stripeCustomerId;
             });
           }).then(async () => {
             fetch('http://localhost:3000/get-default-payment-method/' + this.githubId, { method: 'GET' }).then(response => response.json()).then(data => {
@@ -126,18 +126,16 @@ export class UpgradeToGrowthComponent implements OnInit {
       console.log("handling form submit");
       if (this.last4Digits) { 
         console.log("cardOnFile: ", this.last4Digits);
-        const response = await fetch('http://localhost:3000/stripe/growth-plan', {
+        const response = await fetch('http://localhost:3000/stripe/growth-plan/' + this.githubId, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            stripeCustomerId: this.customerId,
-          }),
         });
         const { subscription } = await response.json();
         console.log("Subscription: ", subscription);
       } else {
+        console.log("no card on file");
           const response = await fetch('http://localhost:3000/create-setup-intent/' + this.githubId, { method: 'POST' });
           const { clientSecret } = await response.json();
   
