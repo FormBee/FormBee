@@ -1357,7 +1357,10 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                             }],
                             default_payment_method: defaultPaymentMethodId.id,
                         });
-                        console.log("Subscription done");
+                        user.subscriptionTier = "Growth";
+                        user.maxSubmissions = 1000;
+                        user.maxPlugins = null;
+                        await AppDataSource.manager.save(user);
                         res.json({ subscription });
                     } catch (error) {
                         res.status(500).send({ error: error.message });

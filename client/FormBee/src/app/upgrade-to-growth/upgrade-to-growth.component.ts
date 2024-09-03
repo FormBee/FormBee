@@ -134,6 +134,11 @@ export class UpgradeToGrowthComponent implements OnInit {
         });
         const { subscription } = await response.json();
         console.log("Subscription: ", subscription);
+        if (subscription.status === 'active') {
+          this.Router.navigate(['/dashboard']);
+        } else {
+          console.log("Subscription not active, add error message");
+        }
       } else {
         console.log("no card on file");
           const response = await fetch('http://localhost:3000/create-setup-intent/' + this.githubId, { method: 'POST' });
