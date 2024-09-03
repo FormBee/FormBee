@@ -82,12 +82,10 @@ export class BillingComponent implements OnInit {
         }
       }).then(() => {
         fetch(this.fetchUrl + 'api/user/' + this.githubId).then(response => response.json()).then(data => {
-          if (data.maxPlugins) {
             this.maxPlugins = data.maxPlugins;
             this.maxSubs = data.maxSubmissions;
-            this.subscriptionTier = "Starter";
+            this.subscriptionTier = data.subscriptionTier;
             this.billingEmail = data.billingEmail;
-          }
         });
       }).then(() => {
         fetch('http://localhost:3000/get-default-payment-method/' + this.githubId, { method: 'GET' }).then(response => response.json()).then(data => {

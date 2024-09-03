@@ -1335,43 +1335,49 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             res.status(400).send('User not found');
             return;
         } else {
-            console.log("in else, user found.");
-            let paymentMethod: string | undefined;
-            try {
-                console.log("in try");
-                const customer = await stripe.customers.retrieve(user.stripeCustomerId);
-                console.log("customer: ", customer);
-                const defaultPaymentMethodId = customer.invoice_settings.default_payment_method;
-                console.log("defaultPaymentMethodId: ", defaultPaymentMethodId);
-                if (defaultPaymentMethodId) {
-                    paymentMethod = await stripe.paymentMethods.retrieve(defaultPaymentMethodId);
-                    console.log("Default payment method found: ", paymentMethod);
-                    console.log("creating subscription");
-                    try {
-                        console.log("in try for subscription");
-                        console.log(user.stripeCustomerId);
-                        const subscription = await stripe.subscriptions.create({
-                            customer: user.stripeCustomerId,
-                            items: [{
-                                price: "price_1Pu4WyP65EGyHpMvSt1eYedS"
-                            }],
-                            default_payment_method: defaultPaymentMethodId.id,
-                        });
-                        user.subscriptionTier = "Growth";
-                        user.maxSubmissions = 1000;
-                        user.maxPlugins = null;
-                        await AppDataSource.manager.save(user);
-                        res.json({ subscription });
-                    } catch (error) {
-                        res.status(500).send({ error: error.message });
-                    }
-                    
+            if (user.subscriptionTier === "Growth") {
+                console.log("user already on growth plan");
+                res.status(400).send('User already on growth plan');
+                return;
+            } else {
+                console.log("in else, user found.");
+                let paymentMethod: string | undefined;
+                try {
+                    console.log("in try");
+                    const customer = await stripe.customers.retrieve(user.stripeCustomerId);
+                    console.log("customer: ", customer);
+                    const defaultPaymentMethodId = customer.invoice_settings.default_payment_method;
+                    console.log("defaultPaymentMethodId: ", defaultPaymentMethodId);
+                    if (defaultPaymentMethodId) {
+                        paymentMethod = await stripe.paymentMethods.retrieve(defaultPaymentMethodId);
+                        console.log("Default payment method found: ", paymentMethod);
+                        console.log("creating subscription");
+                        try {
+                            console.log("in try for subscription");
+                            console.log(user.stripeCustomerId);
+                            const subscription = await stripe.subscriptions.create({
+                                customer: user.stripeCustomerId,
+                                items: [{
+                                    price: "price_1Pu4WyP65EGyHpMvSt1eYedS"
+                                }],
+                                default_payment_method: defaultPaymentMethodId.id,
+                            });
+                            user.subscriptionTier = "Growth";
+                            user.maxSubmissions = 1000;
+                            user.maxPlugins = null;
+                            await AppDataSource.manager.save(user);
+                            res.json({ subscription });
+                        } catch (error) {
+                            res.status(500).send({ error: error.message });
+                        }
+                        
 
-                } else {
-                    console.log("No default payment method found, need to create one");
+                    } else {
+                        console.log("No default payment method found, need to create one");
+                    }
+                } catch (error) {
+                    res.status(500).send({ error: error.message });
                 }
-            } catch (error) {
-                res.status(500).send({ error: error.message });
             }
         }
     });
