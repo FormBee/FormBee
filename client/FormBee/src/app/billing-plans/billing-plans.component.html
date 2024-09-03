@@ -15,7 +15,7 @@
                 <li>- No CC required</li>
             </ul>
             <div class="price-action">
-                <button>Downgrade Plan</button>
+                <button (click)="downGradeToFree()">Downgrade Plan</button>
             </div>
         </div>
         <div class="price-card tier-1" *ngIf="subscriptionTier != 'Growth'">

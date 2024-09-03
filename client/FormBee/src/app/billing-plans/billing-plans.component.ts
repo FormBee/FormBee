@@ -24,4 +24,13 @@ export class BillingPlansComponent {
     console.log("upgrading to premium");
     this.router.navigate(['/premium-plan']);
   }
+
+  downGradeToFree() {
+    console.log("downgrading to free");
+    fetch('http://localhost:3000/manage-plan/' + this.githubId,{
+      method: 'POST',
+    }).then(response => response.json()).then(data => {
+      window.location.href = data.url;
+    })
+  }
 }
