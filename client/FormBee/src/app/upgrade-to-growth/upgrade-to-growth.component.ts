@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { DashboardNavComponent } from '../dashboard-nav/dashboard-nav.component';
 import { Router } from '@angular/router';
 import { OnInit } from '@angular/core';
 import { loadStripe } from '@stripe/stripe-js';
 import { NgIf } from '@angular/common';
 import { ElementRef, afterRender } from '@angular/core';
+import { AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-upgrade-to-growth',
@@ -16,7 +17,7 @@ import { ElementRef, afterRender } from '@angular/core';
   templateUrl: './upgrade-to-growth.component.html',
   styleUrl: './upgrade-to-growth.component.scss'
 })
-export class UpgradeToGrowthComponent implements OnInit {
+export class UpgradeToGrowthComponent implements OnInit, AfterViewInit {
   name: string | undefined;
   login: string | undefined;
   profilePic: string = "../assets/FormBee-logo2.png";
@@ -31,15 +32,11 @@ export class UpgradeToGrowthComponent implements OnInit {
   last4Digits: string|undefined;
   customerId: string | undefined;
 
+  constructor(private Router: Router, elementRef: ElementRef) {}
 
-  constructor(private Router: Router, elementRef: ElementRef) {
-    afterRender({
-      earlyRead: async () => {
-        console.log("rendered mfer")
+  async ngAfterViewInit() {
         try {
           this.stripe = await loadStripe('pk_test_51Pr6BYP65EGyHpMvJu2vuS3MLMOhJZZP6jSH51HwgXuvUfwYjTXJFpab6JDmVKp9osFFPmiK18Hfd7HnY8ZrF2Q700AWZClCOT');
-    
-    
           this.elements = this.stripe.elements();
           this.cardElement = this.elements.create('card', {
     
@@ -59,11 +56,15 @@ export class UpgradeToGrowthComponent implements OnInit {
               }
             }
           });
-          this.cardElement.mount('#card-element');
+          // tech debt: this is a hack to make sure the element exists before mounting it.
+          for (let i = 0; i <=3; i++) {
+            console.log("i: ", i);
+            setTimeout(() => {
+              this.cardElement.mount('#card-element');
+            }, i * 1000);
+          }
         } catch (error) {
         }
-      }
-    })
   }
     async ngOnInit() {
       // Get the theme
@@ -114,6 +115,7 @@ export class UpgradeToGrowthComponent implements OnInit {
               }
             });
           }).finally(() => {
+            this.loading = false;
           });
       }
     }
@@ -168,8 +170,22 @@ export class UpgradeToGrowthComponent implements OnInit {
                   body: JSON.stringify({
                       paymentMethodId: setupIntent.payment_method,
                   }),
+                  
+              }).then(async () => {
+                const response = await fetch('http://localhost:3000/stripe/growth-plan/' + this.githubId, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                });
+                const { subscription } = await response.json();
+                if (subscription.status === 'active') {
+                  this.Router.navigate(['/dashboard']);
+                } else {
+                  console.log("Subscription unsuccessful.");
+                }
               });
-              window.location.reload();
+              
           }
         }
     }

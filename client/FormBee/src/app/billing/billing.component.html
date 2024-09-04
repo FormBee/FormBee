@@ -50,12 +50,12 @@
                 </div>
             </div>
             <div class="stripe-info">
-                <div *ngIf="cardStateService.cardState" class="billing-email">
+                <div *ngIf="cardStateService.cardState || !last4Digits" class="billing-email">
                     <p>Payment Info</p>
                     <p class="billing-desc">Monthly subscriptions will be charged from this card.</p>
                     <app-stripe-card-element [githubId]="githubId"></app-stripe-card-element>
                 </div>
-                <div *ngIf="!cardStateService.cardState" class="billing-email">
+                <div *ngIf="!cardStateService.cardState && last4Digits" class="billing-email">
                     <p>Payment Info</p>
                     <p class="billing-desc">Monthly subscriptions will be charged from this card.</p>
                     <p class="input">A card ending in {{last4Digits}}</p>
