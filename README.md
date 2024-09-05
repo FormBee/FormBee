@@ -5,6 +5,8 @@
 The open-source form solution for data privacy conscious developers.
 
 # TODO
+- [] Add loading wheel after the user clicks subscribe.
+- [] Add error message to card input on both premium and growth upgrade to routes.
 - [] Integrate enforcement of max plugens enabled, and return email domains.
 - [] Change stripe production values
     - [] PriceIds
