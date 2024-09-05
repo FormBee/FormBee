@@ -1342,6 +1342,14 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             } else {
                 console.log("in else, user found.");
                 let paymentMethod: string | undefined;
+                if (user.subscriptionId) {
+                    try {
+                        const cancellation = await stripe.subscriptions.cancel(user.subscriptionId);
+                        console.log("Subscription cancelled successfully:", cancellation);
+                    } catch (error) {
+                        console.log("Error cancelling subscription: ", error);
+                    }
+                }
                 try {
                     console.log("in try");
                     const customer = await stripe.customers.retrieve(user.stripeCustomerId);
@@ -1365,6 +1373,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                             user.subscriptionTier = "Growth";
                             user.maxSubmissions = 1000;
                             user.maxPlugins = null;
+                            user.subscriptionId = subscription.id;
                             await AppDataSource.manager.save(user);
                             res.json({ subscription });
                         } catch (error) {
@@ -1381,6 +1390,72 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             }
         }
     });
+
+    app.post('/stripe/premium-plan/:githubId', async (req, res) => {
+        const githubId = parseInt(req.params.githubId);
+        console.log("in growth plan: ", githubId);
+        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId }, });
+        if (!user) {
+            console.log("user not found");
+            res.status(400).send('User not found');
+            return;
+        } else {
+            if (user.subscriptionTier === "Premium") {
+                console.log("user already on premium plan");
+                res.status(400).send('User already on premium plan');
+                return;
+            } else {
+                console.log("in else, user found.");
+                let paymentMethod: string | undefined;
+                if (user.subscriptionId) {
+                    try {
+                        const cancellation = await stripe.subscriptions.cancel(user.subscriptionId);
+                        console.log("Subscription cancelled successfully:", cancellation);
+                    } catch (error) {
+                        console.log("Error cancelling subscription: ", error);
+                    }
+                }
+                try {
+                    console.log("in try");
+                    const customer = await stripe.customers.retrieve(user.stripeCustomerId);
+                    console.log("customer: ", customer);
+                    const defaultPaymentMethodId = customer.invoice_settings.default_payment_method;
+                    console.log("defaultPaymentMethodId: ", defaultPaymentMethodId);
+                    if (defaultPaymentMethodId) {
+                        paymentMethod = await stripe.paymentMethods.retrieve(defaultPaymentMethodId);
+                        console.log("Default payment method found: ", paymentMethod);
+                        console.log("creating subscription");
+                        try {
+                            console.log("in try for subscription");
+                            console.log(user.stripeCustomerId);
+                            const subscription = await stripe.subscriptions.create({
+                                customer: user.stripeCustomerId,
+                                items: [{
+                                    price: "price_1PvSA7P65EGyHpMviY41JNmy"
+                                }],
+                                default_payment_method: defaultPaymentMethodId.id,
+                            });
+                            user.subscriptionTier = "Premium";
+                            user.maxSubmissions = 10000;
+                            user.maxPlugins = null;
+                            user.subscriptionId = subscription.id;
+                            await AppDataSource.manager.save(user);
+                            res.json({ subscription });
+                        } catch (error) {
+                            res.status(500).send({ error: error.message });
+                        }
+                        
+
+                    } else {
+                        console.log("No default payment method found, need to create one");
+                    }
+                } catch (error) {
+                    res.status(500).send({ error: error.message });
+                }
+            }
+        }
+    });
+
 
 
 
@@ -1432,7 +1507,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     app.listen(3000);
 
     // delete all users remove after we enter prod.
-    // await AppDataSource.manager.clear(User);
+    await AppDataSource.manager.clear(User);
 
     console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results");
 }).catch(error => console.log(error));

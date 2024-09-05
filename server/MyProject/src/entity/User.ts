@@ -205,4 +205,7 @@ export class User {
         from: (value: string | null) => decrypt(value),
     }})
     setupIntentId: string | null;
+
+    @Column({nullable: true})
+    subscriptionId: string | null;
 }

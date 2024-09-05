@@ -31,7 +31,7 @@
             </ul>
             <div class="price-action">
                 <button  (click)="upgradeToGrowth()" *ngIf="subscriptionTier !== 'Premium'">Upgrade Plan</button>
-                <button *ngIf="subscriptionTier === 'Premium'">Change Plan</button>
+                <button *ngIf="subscriptionTier === 'Premium'" (click)="upgradeToGrowth()">Change Plan</button>
             </div>
         </div>
 

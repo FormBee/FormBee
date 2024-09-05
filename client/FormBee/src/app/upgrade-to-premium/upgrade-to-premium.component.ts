@@ -5,6 +5,7 @@ import { OnInit } from '@angular/core';
 import { loadStripe } from '@stripe/stripe-js';
 import { ElementRef, afterRender } from '@angular/core';
 import { NgIf } from '@angular/common';
+import { AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-upgrade-to-premium',
@@ -16,7 +17,7 @@ import { NgIf } from '@angular/common';
   templateUrl: './upgrade-to-premium.component.html',
   styleUrl: './upgrade-to-premium.component.scss'
 })
-export class UpgradeToPremiumComponent implements OnInit {
+export class UpgradeToPremiumComponent implements OnInit, AfterViewInit {
   name: string | undefined;
   login: string | undefined;
   profilePic: string = "../assets/FormBee-logo2.png";
@@ -29,45 +30,45 @@ export class UpgradeToPremiumComponent implements OnInit {
   cardStateService: any;
   errorMessage: string | undefined;
   last4Digits: string|undefined;
+  customerId: string | undefined;
 
+  constructor(private Router: Router, elementRef: ElementRef) {}
 
-  constructor(private Router: Router, elementRef: ElementRef) {
-    afterRender({
-      earlyRead: async () => {
-        console.log("rendered mfer")
-        try {
-          this.stripe = await loadStripe('pk_test_51Pr6BYP65EGyHpMvJu2vuS3MLMOhJZZP6jSH51HwgXuvUfwYjTXJFpab6JDmVKp9osFFPmiK18Hfd7HnY8ZrF2Q700AWZClCOT');
-    
-    
-          this.elements = this.stripe.elements();
-          this.cardElement = this.elements.create('card', {
-    
-            style: {
-              base: {
-                color: '#d6890e',
-                fontSmoothing: 'antialiased',
-                fontSize: '16px',
-                '::placeholder': {
-                  color: '#7a7979'
-                },
-                iconColor: '#7a7979'
-              },
-              invalid: {
-                color: '#fa755a',
-                iconColor: '#fa755a'
-              }
-            }
-          });
-          this.cardElement.mount('#card-element');
-        } catch (error) {
-          console.error('Error in ngOnInit:', error);
+  async ngAfterViewInit() {
+    try {
+      this.stripe = await loadStripe('pk_test_51Pr6BYP65EGyHpMvJu2vuS3MLMOhJZZP6jSH51HwgXuvUfwYjTXJFpab6JDmVKp9osFFPmiK18Hfd7HnY8ZrF2Q700AWZClCOT');
+      this.elements = this.stripe.elements();
+      this.cardElement = this.elements.create('card', {
+
+        style: {
+          base: {
+            color: '#d6890e',
+            fontSmoothing: 'antialiased',
+            fontSize: '16px',
+            '::placeholder': {
+              color: '#7a7979'
+            },
+            iconColor: '#7a7979'
+          },
+          invalid: {
+            color: '#fa755a',
+            iconColor: '#fa755a'
+          }
         }
+      });
+      // tech debt: this is a hack to make sure the element exists before mounting it.
+      for (let i = 0; i <=3; i++) {
+        console.log("i: ", i);
+        setTimeout(() => {
+          this.cardElement.mount('#card-element');
+        }, i * 1000);
       }
-    })
+    } catch (error) {
+    }
   }
+
     async ngOnInit() {
       // Get the theme
-      console.log(this.githubId);
       const theme = localStorage.getItem("theme");
       if (theme) {
         document.documentElement.className = theme;
@@ -104,6 +105,7 @@ export class UpgradeToPremiumComponent implements OnInit {
           }).then(() => {
             fetch(this.fetchUrl + 'api/user/' + this.githubId).then(response => response.json()).then(data => {
               console.log("fetched user data");
+              this.customerId = data.stripeCustomerId;
             });
           }).then(async () => {
             fetch('http://localhost:3000/get-default-payment-method/' + this.githubId, { method: 'GET' }).then(response => response.json()).then(data => {
@@ -113,6 +115,7 @@ export class UpgradeToPremiumComponent implements OnInit {
               }
             });
           }).finally(() => {
+            this.loading = false;
           });
       }
     }
@@ -123,7 +126,24 @@ export class UpgradeToPremiumComponent implements OnInit {
 
     async handleFormSubmit() {
       console.log("handling form submit");
-      const response = await fetch('http://localhost:3000/create-setup-intent/' + this.githubId, { method: 'POST' });
+      if (this.last4Digits) { 
+        console.log("cardOnFile: ", this.last4Digits);
+        const response = await fetch('http://localhost:3000/stripe/premium-plan/' + this.githubId, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const { subscription } = await response.json();
+        console.log("Subscription: ", subscription);
+        if (subscription.status === 'active') {
+          this.Router.navigate(['/dashboard']);
+        } else {
+          console.log("Subscription not active, add error message");
+        }
+      } else {
+        console.log("no card on file");
+          const response = await fetch('http://localhost:3000/create-setup-intent/' + this.githubId, { method: 'POST' });
           const { clientSecret } = await response.json();
   
           const { error, setupIntent } = await this.stripe.confirmCardSetup(
@@ -150,8 +170,23 @@ export class UpgradeToPremiumComponent implements OnInit {
                   body: JSON.stringify({
                       paymentMethodId: setupIntent.payment_method,
                   }),
+                  
+              }).then(async () => {
+                const response = await fetch('http://localhost:3000/stripe/premium-plan/' + this.githubId, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                });
+                const { subscription } = await response.json();
+                if (subscription.status === 'active') {
+                  this.Router.navigate(['/dashboard']);
+                } else {
+                  console.log("Subscription unsuccessful.");
+                }
               });
-              window.location.reload();
+              
           }
+        }
     }
   }
