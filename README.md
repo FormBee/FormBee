@@ -23,5 +23,6 @@ The open-source form solution for data privacy conscious developers.
 
 
 ## Docs todo
+### Docusaurus
 - [] Discord channel webhook docs.
 - - [] After docs are complete make sure to connect link to plugin modal. 
