@@ -1519,7 +1519,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     app.listen(3000);
 
     // delete all users remove after we enter prod.
-    await AppDataSource.manager.clear(User);
+    // await AppDataSource.manager.clear(User);
 
     console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results");
 }).catch(error => console.log(error));
