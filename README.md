@@ -6,7 +6,7 @@ The open-source form solution for data privacy conscious developers.
 
 # TODO
 - [] Add loading wheel after the user clicks subscribe.
-- [] Add error message to card input on both premium and growth upgrade to routes.
+- [] Add error message to card input on both premium and growth upgrade routes.
 - [] Integrate enforcement of max plugens enabled, and return email domains.
 - [] Change stripe production values
     - [] PriceIds
@@ -23,5 +23,6 @@ The open-source form solution for data privacy conscious developers.
 
 
 ## Docs todo
+### Docusaurus
 - [] Discord channel webhook docs.
 - - [] After docs are complete make sure to connect link to plugin modal. 
