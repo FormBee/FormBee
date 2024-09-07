@@ -5,7 +5,6 @@
 The open-source form solution for data privacy conscious developers.
 
 # TODO
-- [] Add error message to card input on both premium and growth upgrade routes.
 - [] Integrate enforcement of max plugens enabled, and return email domains.
 - [] Change stripe production values
     - [] PriceIds
