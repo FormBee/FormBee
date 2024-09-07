@@ -25,6 +25,7 @@
                     <div *ngIf="subscriptionLoading" class="loading-spinner"></div>
                     <div *ngIf="!last4Digits" id="card-element"></div>
                 </div>
+                <p *ngIf="errorMessage" class="error-message">{{errorMessage}}</p>
             </div>
             <div class="button-div">
                 <button (click)="handleFormSubmit()">Subscribe to Premium Plan</button>

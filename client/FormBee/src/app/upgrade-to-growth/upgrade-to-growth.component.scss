@@ -226,3 +226,16 @@ h2 {
     margin-top: 1rem;
     align-items: center;
 }
+
+.error-message {
+    color: var(--text-color2);
+    font-size: 1.2rem;
+    text-align: left;
+    position: absolute;
+    background-color: #fa755a;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 1rem;
+    width: 50vw;
+    height: fit-content;
+  }

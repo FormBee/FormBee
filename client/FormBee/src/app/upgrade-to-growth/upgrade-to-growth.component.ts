@@ -59,7 +59,6 @@ export class UpgradeToGrowthComponent implements OnInit, AfterViewInit {
           });
           // tech debt: this is a hack to make sure the element exists before mounting it.
           for (let i = 0; i <=3; i++) {
-            console.log("i: ", i);
             setTimeout(() => {
               this.cardElement.mount('#card-element');
             }, i * 1000);
@@ -130,6 +129,7 @@ export class UpgradeToGrowthComponent implements OnInit, AfterViewInit {
       console.log("handling form submit");
       if (this.last4Digits) { 
         console.log("cardOnFile: ", this.last4Digits);
+        try {
         const response = await fetch('http://localhost:3000/stripe/growth-plan/' + this.githubId, {
           method: 'POST',
           headers: {
@@ -138,13 +138,18 @@ export class UpgradeToGrowthComponent implements OnInit, AfterViewInit {
         });
         const { subscription } = await response.json();
         console.log("Subscription: ", subscription);
-        if (subscription.status === 'active') {
+        this.subscriptionLoading = false;
+        this.Router.navigate(['/dashboard']);
+        } catch (error) {
           this.subscriptionLoading = false;
-          this.Router.navigate(['/dashboard']);
-        } else {
+          console.log("Error: ", error);
+          this.errorMessage = "Something went wrong, please try again later.";
           this.subscriptionLoading = false;
-          console.log("Subscription not active, add error message");
+          setTimeout(() => {
+            this.errorMessage = undefined;
+          }, 6000);
         }
+        
       } else {
         console.log("no card on file");
           const response = await fetch('http://localhost:3000/create-setup-intent/' + this.githubId, { method: 'POST' });
@@ -159,7 +164,7 @@ export class UpgradeToGrowthComponent implements OnInit, AfterViewInit {
               }
           );
           if (error) {
-              console.error(error);
+              this.subscriptionLoading = false;
               this.errorMessage = error.message;
               setTimeout(() => {
                   this.errorMessage = undefined;
@@ -176,6 +181,7 @@ export class UpgradeToGrowthComponent implements OnInit, AfterViewInit {
                   }),
                   
               }).then(async () => {
+                try {
                 const response = await fetch('http://localhost:3000/stripe/growth-plan/' + this.githubId, {
                   method: 'POST',
                   headers: {
@@ -189,6 +195,15 @@ export class UpgradeToGrowthComponent implements OnInit, AfterViewInit {
                 } else {
                   this.subscriptionLoading = false;
                   console.log("Subscription unsuccessful.");
+                }
+                } catch (error) {
+                  this.subscriptionLoading = false;
+                  console.log("Error: ", error);
+                  this.errorMessage = "Something went wrong, please try again later.";
+                  this.subscriptionLoading = false;
+                  setTimeout(() => {
+                    this.errorMessage = undefined;
+                  }, 6000);
                 }
               });
               

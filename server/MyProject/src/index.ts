@@ -1370,12 +1370,18 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                                 }],
                                 default_payment_method: defaultPaymentMethodId.id,
                             });
-                            user.subscriptionTier = "Growth";
-                            user.maxSubmissions = 1000;
-                            user.maxPlugins = null;
-                            user.subscriptionId = subscription.id;
-                            await AppDataSource.manager.save(user);
-                            res.json({ subscription });
+                            if (subscription.status === 'active') {
+                                console.log("Subscription created successfully");
+                                user.subscriptionTier = "Growth";
+                                user.maxSubmissions = 1000;
+                                user.maxPlugins = null;
+                                user.subscriptionId = subscription.id;
+                                await AppDataSource.manager.save(user);
+                                res.json({ subscription });
+                            } else {
+                                res.status(500).send({ error: "Subscription not active" });
+                            }
+                            
                         } catch (error) {
                             res.status(500).send({ error: error.message });
                         }
@@ -1435,12 +1441,18 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                                 }],
                                 default_payment_method: defaultPaymentMethodId.id,
                             });
-                            user.subscriptionTier = "Premium";
-                            user.maxSubmissions = 10000;
-                            user.maxPlugins = null;
-                            user.subscriptionId = subscription.id;
-                            await AppDataSource.manager.save(user);
-                            res.json({ subscription });
+                            if (subscription.status === 'active') {
+                                console.log("Subscription created successfully");
+                                user.subscriptionTier = "Premium";
+                                user.maxSubmissions = 10000;
+                                user.maxPlugins = null;
+                                user.subscriptionId = subscription.id;
+                                await AppDataSource.manager.save(user);
+                                res.json({ subscription });
+                            } else {
+                                res.status(500).send({ error: "Subscription not active" });
+                            }
+                            
                         } catch (error) {
                             res.status(500).send({ error: error.message });
                         }

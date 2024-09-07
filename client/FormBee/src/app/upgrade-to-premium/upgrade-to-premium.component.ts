@@ -130,6 +130,7 @@ export class UpgradeToPremiumComponent implements OnInit, AfterViewInit {
       console.log("handling form submit");
       if (this.last4Digits) { 
         console.log("cardOnFile: ", this.last4Digits);
+        try {
         const response = await fetch('http://localhost:3000/stripe/premium-plan/' + this.githubId, {
           method: 'POST',
           headers: {
@@ -138,13 +139,17 @@ export class UpgradeToPremiumComponent implements OnInit, AfterViewInit {
         });
         const { subscription } = await response.json();
         console.log("Subscription: ", subscription);
-        if (subscription.status === 'active') {
-          this.subscriptionLoading = false;
-          this.Router.navigate(['/dashboard']);
-        } else {
-          this.subscriptionLoading = false;
-          console.log("Subscription not active, add error message");
-        }
+        this.subscriptionLoading = false;
+        this.Router.navigate(['/dashboard']);
+      } catch (error) {
+        this.subscriptionLoading = false;
+        console.log("Error: ", error);
+        this.errorMessage = "Something went wrong, please try again later.";
+        this.subscriptionLoading = false;
+        setTimeout(() => {
+          this.errorMessage = undefined;
+        }, 6000);
+      }
       } else {
         console.log("no card on file");
           const response = await fetch('http://localhost:3000/create-setup-intent/' + this.githubId, { method: 'POST' });
@@ -159,7 +164,7 @@ export class UpgradeToPremiumComponent implements OnInit, AfterViewInit {
               }
           );
           if (error) {
-              console.error(error);
+              this.subscriptionLoading = false;
               this.errorMessage = error.message;
               setTimeout(() => {
                   this.errorMessage = undefined;
@@ -174,8 +179,8 @@ export class UpgradeToPremiumComponent implements OnInit, AfterViewInit {
                   body: JSON.stringify({
                       paymentMethodId: setupIntent.payment_method,
                   }),
-                  
               }).then(async () => {
+                try {
                 const response = await fetch('http://localhost:3000/stripe/premium-plan/' + this.githubId, {
                   method: 'POST',
                   headers: {
@@ -190,6 +195,15 @@ export class UpgradeToPremiumComponent implements OnInit, AfterViewInit {
                   this.subscriptionLoading = false;
                   console.log("Subscription unsuccessful.");
                 }
+              } catch (error) {
+                this.subscriptionLoading = false;
+                console.log("Error: ", error);
+                this.errorMessage = "Something went wrong, please try again later.";
+                this.subscriptionLoading = false;
+                setTimeout(() => {
+                  this.errorMessage = undefined;
+                }, 6000);
+              }
               });
               
           }
