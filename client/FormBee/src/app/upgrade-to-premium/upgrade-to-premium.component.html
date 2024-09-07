@@ -22,6 +22,7 @@
                     </div>
                 </div>
                 <div class="method-div">
+                    <div *ngIf="subscriptionLoading" class="loading-spinner"></div>
                     <div *ngIf="!last4Digits" id="card-element"></div>
                 </div>
             </div>

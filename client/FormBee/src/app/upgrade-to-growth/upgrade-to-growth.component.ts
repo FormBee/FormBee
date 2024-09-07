@@ -31,6 +31,7 @@ export class UpgradeToGrowthComponent implements OnInit, AfterViewInit {
   errorMessage: string | undefined;
   last4Digits: string|undefined;
   customerId: string | undefined;
+  subscriptionLoading: boolean = false;
 
   constructor(private Router: Router, elementRef: ElementRef) {}
 
@@ -125,6 +126,7 @@ export class UpgradeToGrowthComponent implements OnInit, AfterViewInit {
     }
     
     async handleFormSubmit() {
+      this.subscriptionLoading = true;
       console.log("handling form submit");
       if (this.last4Digits) { 
         console.log("cardOnFile: ", this.last4Digits);
@@ -137,8 +139,10 @@ export class UpgradeToGrowthComponent implements OnInit, AfterViewInit {
         const { subscription } = await response.json();
         console.log("Subscription: ", subscription);
         if (subscription.status === 'active') {
+          this.subscriptionLoading = false;
           this.Router.navigate(['/dashboard']);
         } else {
+          this.subscriptionLoading = false;
           console.log("Subscription not active, add error message");
         }
       } else {
@@ -180,8 +184,10 @@ export class UpgradeToGrowthComponent implements OnInit, AfterViewInit {
                 });
                 const { subscription } = await response.json();
                 if (subscription.status === 'active') {
+                  this.subscriptionLoading = false;
                   this.Router.navigate(['/dashboard']);
                 } else {
+                  this.subscriptionLoading = false;
                   console.log("Subscription unsuccessful.");
                 }
               });
