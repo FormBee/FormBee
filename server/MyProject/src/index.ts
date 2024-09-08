@@ -22,6 +22,7 @@ const redirectUrl = "http://localhost:4200";
 
 dotenv.config();
 AppDataSource.initialize().then(async () => {
+    // await AppDataSource.manager.clear(User);
 
     // create express app
     const app = express();

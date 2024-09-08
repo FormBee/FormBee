@@ -143,11 +143,15 @@
         </div>
     </div>
     <div class="flex-row telegram-switch">
-      <p class="plugin-description toggle">Enable/Disable Telegram</p>
-      <label class="switch">
-        <input [(ngModel)]="telegramEnabled" type="checkbox"  id="teleSwitch" (click)="teleSwitch()" />
-        <span class="slider round"></span>
-      </label>
+      @if (maxPlugins != null && currentPlugins != null && currentPlugins >= maxPlugins || telegramEnabled) {
+        <p class="plugin-description toggle">Enable/Disable Telegram</p>
+        <label class="switch">
+          <input [(ngModel)]="telegramEnabled" type="checkbox"  id="teleSwitch" (click)="teleSwitch()" />
+          <span class="slider round"></span>
+        </label>
+      } @else {
+        <p>Max plugins reached</p>
+      }
     </div>
   </div>
 </div>
@@ -166,11 +170,15 @@
       <button class="api-buttons" (click)="saveDiscordWebhook()">Save</button>
     </div>
     <div class="flex-row telegram-switch">
-      <p class="plugin-description toggle">Enable/Disable Discord</p>
-      <label class="switch">
-        <input [(ngModel)]="discordEnabled" type="checkbox"  id="teleSwitch" (click)="discordSwitch()" />
-        <span class="slider round"></span>
-      </label>
+      @if (maxPlugins != null && currentPlugins != null && currentPlugins < maxPlugins) {
+        <p class="plugin-description toggle">Enable/Disable Discord</p>
+        <label class="switch">
+          <input [(ngModel)]="discordEnabled" type="checkbox"  id="teleSwitch" (click)="discordSwitch()" />
+          <span class="slider round"></span>
+        </label>
+      } @else {
+        <p>Max plugins reached</p>
+      }
     </div>
   </div>
 </div>
@@ -188,15 +196,17 @@
       <button *ngIf="slackChannelName==null" class="telegram-unlink-button" (click)="connectToSlack()">Connect to slack</button>
     </div>
     <button *ngIf="slackChannelName" class="telegram-unlink-button center-align" (click)="unlinkSlack()">Unlink Slack</button>
-
     <div class="flex-row slack-switch">
-      <p class="plugin-description toggle">Enable/Disable Slack</p>
-      <label class="switch">
-        <input [(ngModel)]="slackEnabled" type="checkbox"  id="slackSwitch" (click)="slackSwitch()" />
-        <span class="slider round"></span>
-      </label>
+      @if (maxPlugins != null && currentPlugins != null && currentPlugins < maxPlugins) {
+        <p class="plugin-description toggle">Enable/Disable Slack</p>
+        <label class="switch">
+          <input [(ngModel)]="slackEnabled" type="checkbox"  id="slackSwitch" (click)="slackSwitch()" />
+          <span class="slider round"></span>
+        </label>
+      } @else {
+        <p>Max plugins reached</p>
+      }
     </div>
-
   </div>
 </div>
 
@@ -213,11 +223,15 @@
       <button class="api-buttons" (click)="saveMakeWebhook()">Save</button>
     </div>
     <div class="flex-row telegram-switch">
-      <p class="plugin-description toggle">Enable/Disable Make</p>
-      <label class="switch">
-        <input [(ngModel)]="makeEnabled" type="checkbox"  id="teleSwitch" (click)="makeSwitch()" />
-        <span class="slider round"></span>
-      </label>
+      @if (maxPlugins != null && currentPlugins != null && currentPlugins < maxPlugins) {
+        <p class="plugin-description toggle">Enable/Disable Make</p>
+        <label class="switch">
+          <input [(ngModel)]="makeEnabled" type="checkbox"  id="teleSwitch" (click)="makeSwitch()" />
+          <span class="slider round"></span>
+        </label>
+      } @else {
+        <p>Max plugins reached</p>
+      }
     </div>
   </div>
 </div>
@@ -235,11 +249,15 @@
       <button class="api-buttons" (click)="saveN8nWebhook()">Save</button>
     </div>
     <div class="flex-row telegram-switch">
-      <p class="plugin-description toggle">Enable/Disable n8n</p>
-      <label class="switch">
-        <input [(ngModel)]="n8nEnabled" type="checkbox"  id="teleSwitch" (click)="n8nSwitch()" />
-        <span class="slider round"></span>
-      </label>
+      @if (maxPlugins != null && currentPlugins != null && currentPlugins < maxPlugins) {
+        <p class="plugin-description toggle">Enable/Disable n8n</p>
+        <label class="switch">
+          <input [(ngModel)]="n8nEnabled" type="checkbox"  id="teleSwitch" (click)="n8nSwitch()" />
+          <span class="slider round"></span>
+        </label>
+      } @else {
+        <p>Max plugins reached</p>
+      }
     </div>
   </div>
 </div>
@@ -257,11 +275,15 @@
         <button class="api-buttons" (click)="saveWebhookWebhook()">Save</button>
       </div>
       <div class="flex-row telegram-switch">
-        <p class="plugin-description toggle">Enable/Disable webhook</p>
-        <label class="switch">
-          <input [(ngModel)]="webhookEnabled" type="checkbox"  id="teleSwitch" (click)="webhookSwitch()" />
-          <span class="slider round"></span>
-        </label>
+        @if (maxPlugins != null && currentPlugins != null && currentPlugins >= maxPlugins || webhookEnabled) {
+          <p class="plugin-description toggle">Enable/Disable webhook</p>
+          <label class="switch">
+            <input [(ngModel)]="webhookEnabled" type="checkbox"  id="teleSwitch" (click)="webhookSwitch()" />
+            <span class="slider round"></span>
+          </label>
+        } @else {
+          <p>Max plugins reached</p>
+        }
       </div>
     </div>
   </div>

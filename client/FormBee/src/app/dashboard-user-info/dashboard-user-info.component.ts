@@ -59,6 +59,8 @@ export class DashboardUserInfoComponent implements OnInit {
   webhookModal: boolean = false;
   webhookEnabled: boolean = false;
   webhookWebhook: string | undefined;
+  maxPlugins: number | null = 0;
+  currentPlugins: number | null = 0;
   themes: string[] = ['Default', 'elegent-theme', 'light-theme'];
   domains: string[] = [];
   fetchUrl: string = "http://localhost:3000/";
@@ -116,6 +118,8 @@ export class DashboardUserInfoComponent implements OnInit {
         this.n8nWebhook = data.n8nWebhook;
         this.webhookEnabled = data.webhookBoolean;
         this.webhookWebhook = data.webhookWebhook;
+        this.maxPlugins = data.maxPlugins;
+        this.currentPlugins = data.currentPlugins;
         this.domains = data.allowedDomains;
 
         if (this.apiKey) {
@@ -247,7 +251,11 @@ export class DashboardUserInfoComponent implements OnInit {
 
   async teleSwitch() {
     this.telegramEnabled = !this.telegramEnabled;
-
+    if (this.telegramEnabled && this.currentPlugins !== null) {
+      this.currentPlugins += 1;
+    } else if (!this.telegramEnabled && this.currentPlugins !== null) {
+      this.currentPlugins -= 1;
+    }
     await fetch(this.fetchUrl + 'telegram/toogle/' + this.githubId, {
       method: 'POST',
       headers: {
@@ -277,7 +285,11 @@ export class DashboardUserInfoComponent implements OnInit {
 
   async discordSwitch() {
     this.discordEnabled = !this.discordEnabled;
-
+    if (this.discordEnabled && this.currentPlugins !== null) {
+      this.currentPlugins += 1;
+    } else if (!this.discordEnabled && this.currentPlugins !== null) {
+      this.currentPlugins -= 1;
+    }
     await fetch(this.fetchUrl + 'discord/toogle/' + this.githubId, {
       method: 'POST',
       headers: {
@@ -330,7 +342,11 @@ export class DashboardUserInfoComponent implements OnInit {
 
   async slackSwitch() {
     this.slackEnabled = !this.slackEnabled;
-
+    if (this.slackEnabled && this.currentPlugins !== null) {
+      this.currentPlugins += 1;
+    } else if (!this.slackEnabled && this.currentPlugins !== null) {
+      this.currentPlugins -= 1;
+    }
     await fetch(this.fetchUrl + 'slack/toogle/' + this.githubId, {
       method: 'POST',
       headers: {
@@ -370,7 +386,11 @@ export class DashboardUserInfoComponent implements OnInit {
 
   async makeSwitch() {
     this.makeEnabled = !this.makeEnabled;
-
+    if (this.makeEnabled && this.currentPlugins !== null) {
+      this.currentPlugins += 1;
+    } else if (!this.makeEnabled && this.currentPlugins !== null) {
+      this.currentPlugins -= 1;
+    }
     await fetch(this.fetchUrl + 'make/toogle/' + this.githubId, {
       method: 'POST',
       headers: {
@@ -423,7 +443,11 @@ export class DashboardUserInfoComponent implements OnInit {
 
   async n8nSwitch() {
     this.n8nEnabled = !this.n8nEnabled;
-
+    if (this.n8nEnabled && this.currentPlugins !== null) {
+      this.currentPlugins += 1;
+    } else if (!this.n8nEnabled && this.currentPlugins !== null) {
+      this.currentPlugins -= 1;
+    }
     await fetch(this.fetchUrl + 'n8n/toogle/' + this.githubId, {
       method: 'POST',
       headers: {
@@ -476,7 +500,11 @@ export class DashboardUserInfoComponent implements OnInit {
 
   async webhookSwitch() {
     this.webhookEnabled = !this.webhookEnabled;
-
+    if (this.webhookEnabled && this.currentPlugins !== null) {
+      this.currentPlugins += 1;
+    } else if (!this.webhookEnabled && this.currentPlugins !== null) {
+      this.currentPlugins -= 1;
+    }
     await fetch(this.fetchUrl + 'webhook/toogle/' + this.githubId, {
       method: 'POST',
       headers: {

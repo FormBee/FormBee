@@ -89,8 +89,8 @@ export class User {
 
 
     //Telegram settings start _________________________________________________________________
-    @Column({nullable: true, default: false})
-    telegramBoolean: boolean | null;
+    @Column({nullable: false, default: false})
+    telegramBoolean: boolean;
 
     @Column({nullable: true})
     telegramChatId: number | null;
@@ -98,8 +98,8 @@ export class User {
     //Telegram settings end ____________________________________________________________________
 
     //Discord settings start _________________________________________________________________
-    @Column({nullable: true, default: false})
-    discordBoolean: boolean | null;
+    @Column({nullable: false, default: false})
+    discordBoolean: boolean;
 
     @Column({nullable: true})
     discordWebhook: string | null;
@@ -108,8 +108,8 @@ export class User {
 
     //Slack settings start _________________________________________________________________
 
-    @Column({nullable: true, default: false})
-    slackBoolean: boolean | null;
+    @Column({nullable: false, default: false})
+    slackBoolean: boolean;
 
     @Column({nullable: true})
     slackChannelId: string | null;
@@ -127,8 +127,8 @@ export class User {
     @Column({nullable: true})
     makeWebhook: string | null;
 
-    @Column({nullable: true})
-    makeBoolean: boolean | null;
+    @Column({nullable: false, default: false})
+    makeBoolean: boolean;
     //Make settings end ____________________________________________________________________
 
     //n8n settings start ___________________________________________________________________
@@ -136,8 +136,8 @@ export class User {
     @Column({nullable: true})
     n8nWebhook: string | null;
 
-    @Column({nullable: true})
-    n8nBoolean: boolean | null;
+    @Column({nullable: false, default: false})
+    n8nBoolean: boolean;
     //n8n settings end ____________________________________________________________________
 
     // Misc Webhook settings start _____________________________________________________________
@@ -145,8 +145,8 @@ export class User {
     @Column({nullable: true})
     webhookWebhook: string | null;
 
-    @Column({nullable: true})
-    webhookBoolean: boolean | null;
+    @Column({nullable: false, default: false})
+    webhookBoolean: boolean;
     // Misc Webhook settings end _________________________________________________________________
 
 @Column('text', {
