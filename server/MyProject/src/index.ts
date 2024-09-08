@@ -374,10 +374,21 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             res.status(400).send('User not found');
             return;
         } else {
-            user.telegramBoolean = telegramBoolean;
-            await AppDataSource.manager.save(user);
-            console.log("Telegram settings updated successfully", user.telegramBoolean);
-            res.json({ message: 'Telegram settings updated successfully' });
+            if (telegramBoolean == true && user.currentPlugins + 1 > user.maxPlugins && user.maxPlugins !== null) {
+                console.log("Can't toggle telegram, max plugins reached");
+                res.status(400).send('You have reached your plugin limit');
+                return;
+            } else {
+                console.log("update allowed")
+                user.telegramBoolean = telegramBoolean;
+                if (telegramBoolean == true) {
+                    user.currentPlugins = user.currentPlugins + 1;
+                } else {
+                    user.currentPlugins = user.currentPlugins - 1;
+                }
+                await AppDataSource.manager.save(user);
+                res.json({ message: 'Telegram settings updated successfully' });
+            }
         }
     });
 
@@ -389,10 +400,21 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             res.status(400).send('User not found');
             return;
         } else {
-            user.discordBoolean = discordBoolean;
-            await AppDataSource.manager.save(user);
-            console.log("Discord settings updated successfully", user.discordBoolean);
-            res.json({ message: 'Discord settings updated successfully' });
+            if (discordBoolean == true && user.currentPlugins + 1 > user.maxPlugins && user.maxPlugins !== null) {
+                console.log("Can't toggle discord, max plugins reached");
+                res.status(400).send('You have reached your plugin limit');
+                return;
+            } else {
+                console.log("update allowed")
+                user.discordBoolean = discordBoolean;
+                if (discordBoolean == true) {
+                    user.currentPlugins = user.currentPlugins + 1;
+                } else {
+                    user.currentPlugins = user.currentPlugins - 1;
+                }
+                await AppDataSource.manager.save(user);
+                res.json({ message: 'Discord settings updated successfully' });
+            }
         }
     });
 
@@ -885,10 +907,21 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             res.status(400).send('User not found');
             return;
         } else {
-            user.slackBoolean = slackBoolean;
-            await AppDataSource.manager.save(user);
-            console.log("Slack settings updated successfully", user.slackBoolean);
-            res.json({ message: 'Slack settings updated successfully' });
+            if (slackBoolean == true && user.currentPlugins + 1 > user.maxPlugins && user.maxPlugins !== null) {
+                console.log("Can't toggle slack, max plugins reached");
+                res.status(400).send('You have reached your plugin limit');
+                return;
+            } else {
+                console.log("update allowed")
+                user.slackBoolean = slackBoolean;
+                if (slackBoolean == true) {
+                    user.currentPlugins = user.currentPlugins + 1;
+                } else {
+                    user.currentPlugins = user.currentPlugins - 1;
+                }
+                await AppDataSource.manager.save(user);
+                res.json({ message: 'Slack settings updated successfully' });
+            }
         }
     });
 
@@ -1020,10 +1053,21 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             res.status(400).send('User not found');
             return;
         } else {
-            user.makeBoolean = makeBoolean;
-            await AppDataSource.manager.save(user);
-            console.log("Make settings updated successfully", user.makeBoolean);
-            res.json({ message: 'Make settings updated successfully' });
+            if (makeBoolean == true && user.currentPlugins + 1 > user.maxPlugins && user.maxPlugins !== null) {
+                console.log("Can't toggle make, max plugins reached");
+                res.status(400).send('You have reached your plugin limit');
+                return;
+            } else {
+                console.log("update allowed")
+                user.makeBoolean = makeBoolean;
+                if (makeBoolean == true) {
+                    user.currentPlugins = user.currentPlugins + 1;
+                } else {
+                    user.currentPlugins = user.currentPlugins - 1;
+                }
+                await AppDataSource.manager.save(user);
+                res.json({ message: 'Make settings updated successfully' });
+            }
         }
     });
 
@@ -1083,10 +1127,21 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             res.status(400).send('User not found');
             return;
         } else {
-            user.n8nBoolean = n8nBoolean;
-            await AppDataSource.manager.save(user);
-            console.log("N8n settings updated successfully", user.n8nBoolean);
-            res.json({ message: 'N8n settings updated successfully' });
+            if (n8nBoolean == true && user.currentPlugins + 1 > user.maxPlugins && user.maxPlugins !== null) {
+                console.log("Can't toggle n8n, max plugins reached");
+                res.status(400).send('You have reached your plugin limit');
+                return;
+            } else {
+                console.log("update allowed")
+                user.n8nBoolean = n8nBoolean;
+                if (n8nBoolean == true) {
+                    user.currentPlugins = user.currentPlugins + 1;
+                } else {
+                    user.currentPlugins = user.currentPlugins - 1;
+                }
+                await AppDataSource.manager.save(user);
+                res.json({ message: 'N8n settings updated successfully' });
+            }
         }
     });
 
@@ -1125,10 +1180,21 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             res.status(400).send('User not found');
             return;
         } else {
-            user.webhookBoolean = webhookBoolean;
-            await AppDataSource.manager.save(user);
-            console.log("Webhook settings updated successfully", user.webhookBoolean);
-            res.json({ message: 'Webhook settings updated successfully' });
+            if (webhookBoolean == true && user.currentPlugins + 1 > user.maxPlugins && user.maxPlugins !== null) {
+                console.log("Can't toggle webhook, max plugins reached");
+                res.status(400).send('You have reached your plugin limit');
+                return;
+            } else {
+                console.log("update allowed")
+                user.webhookBoolean = webhookBoolean;
+                if (webhookBoolean == true) {
+                    user.currentPlugins = user.currentPlugins + 1;
+                } else {
+                    user.currentPlugins = user.currentPlugins - 1;
+                }
+                await AppDataSource.manager.save(user);
+                res.json({ message: 'Webhook settings updated successfully' });
+            }
         }
     });
 
@@ -1519,7 +1585,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     app.listen(3000);
 
     // delete all users remove after we enter prod.
-    // await AppDataSource.manager.clear(User);
+    await AppDataSource.manager.clear(User);
 
     console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results");
 }).catch(error => console.log(error));

@@ -169,6 +169,8 @@ export class User {
     @Column({nullable: true, default: 1})
     maxPlugins: number;
 
+    @Column({nullable: true, default: 0})
+    currentPlugins: number;
     //stripe data 
     @Column({nullable: true, transformer: {
         to: (value: string | null) => encrypt(value),
