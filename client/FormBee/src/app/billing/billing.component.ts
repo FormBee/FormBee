@@ -32,7 +32,7 @@ export class BillingComponent implements OnInit {
   subscriptionTier: string = "Loading...";
   maxSubs: number = 0;
   currentSubs: number = 0;
-  maxPlugins: number = 0;
+  maxPlugins: number | string = 0;
   currentTheme: string = localStorage.getItem("theme") || "neutral";
   hexagons: Array<{ style: { [key: string]: string } }> = [];
   last4Digits: string = "";
@@ -86,6 +86,9 @@ export class BillingComponent implements OnInit {
             this.maxSubs = data.maxSubmissions;
             this.subscriptionTier = data.subscriptionTier;
             this.billingEmail = data.billingEmail;
+            if (this.maxPlugins === null) {
+              this.maxPlugins = "Unlimited";
+            }
         });
       }).then(() => {
         fetch('http://localhost:3000/get-default-payment-method/' + this.githubId, { method: 'GET' }).then(response => response.json()).then(data => {
