@@ -383,11 +383,18 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                 console.log("update allowed")
                 user.telegramBoolean = telegramBoolean;
                 if (telegramBoolean == true) {
-                    user.currentPlugins = user.currentPlugins + 1;
+                    user.currentPlugins += 1;
                 } else {
-                    user.currentPlugins = user.currentPlugins - 1;
+                    user.currentPlugins -= 1;
+                }
+                if (user.currentPlugins < 0) {
+                    user.currentPlugins = 0;
+                } else if (user.currentPlugins > user.maxPlugins) {
+                    user.currentPlugins = user.maxPlugins;
                 }
                 await AppDataSource.manager.save(user);
+                console.log("current plugins: ", user.currentPlugins);
+                console.log("max plugins: ", user.maxPlugins);
                 res.json({ message: 'Telegram settings updated successfully' });
             }
         }
@@ -409,11 +416,13 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                 console.log("update allowed")
                 user.discordBoolean = discordBoolean;
                 if (discordBoolean == true) {
-                    user.currentPlugins = user.currentPlugins + 1;
+                    user.currentPlugins += 1;
                 } else {
-                    user.currentPlugins = user.currentPlugins - 1;
+                    user.currentPlugins -= 1;
                 }
                 await AppDataSource.manager.save(user);
+                console.log("current plugins: ", user.currentPlugins);
+                console.log("max plugins: ", user.maxPlugins);
                 res.json({ message: 'Discord settings updated successfully' });
             }
         }
@@ -916,11 +925,13 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                 console.log("update allowed")
                 user.slackBoolean = slackBoolean;
                 if (slackBoolean == true) {
-                    user.currentPlugins = user.currentPlugins + 1;
+                    user.currentPlugins += 1;
                 } else {
-                    user.currentPlugins = user.currentPlugins - 1;
+                    user.currentPlugins -= 1;
                 }
                 await AppDataSource.manager.save(user);
+                console.log("current plugins: ", user.currentPlugins);
+                console.log("max plugins: ", user.maxPlugins);
                 res.json({ message: 'Slack settings updated successfully' });
             }
         }
@@ -1062,11 +1073,13 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                 console.log("update allowed")
                 user.makeBoolean = makeBoolean;
                 if (makeBoolean == true) {
-                    user.currentPlugins = user.currentPlugins + 1;
+                    user.currentPlugins += 1;
                 } else {
-                    user.currentPlugins = user.currentPlugins - 1;
+                    user.currentPlugins -= 1;
                 }
                 await AppDataSource.manager.save(user);
+                console.log("current plugins: ", user.currentPlugins);
+                console.log("max plugins: ", user.maxPlugins);
                 res.json({ message: 'Make settings updated successfully' });
             }
         }
@@ -1136,11 +1149,13 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                 console.log("update allowed")
                 user.n8nBoolean = n8nBoolean;
                 if (n8nBoolean == true) {
-                    user.currentPlugins = user.currentPlugins + 1;
+                    user.currentPlugins += 1;
                 } else {
-                    user.currentPlugins = user.currentPlugins - 1;
+                    user.currentPlugins -= 1;
                 }
                 await AppDataSource.manager.save(user);
+                console.log("current plugins: ", user.currentPlugins);
+                console.log("max plugins: ", user.maxPlugins);
                 res.json({ message: 'N8n settings updated successfully' });
             }
         }
@@ -1189,11 +1204,13 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                 console.log("update allowed")
                 user.webhookBoolean = webhookBoolean;
                 if (webhookBoolean == true) {
-                    user.currentPlugins = user.currentPlugins + 1;
+                    user.currentPlugins += 1;
                 } else {
-                    user.currentPlugins = user.currentPlugins - 1;
+                    user.currentPlugins -= 1;
                 }
                 await AppDataSource.manager.save(user);
+                console.log("current plugins: ", user.currentPlugins);
+                console.log("max plugins: ", user.maxPlugins);
                 res.json({ message: 'Webhook settings updated successfully' });
             }
         }
