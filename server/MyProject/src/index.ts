@@ -93,6 +93,7 @@ AppDataSource.initialize().then(async () => {
 
     // Basic post route, sends form data to the users email.
     app.post('/formbee/:apikey', (req, res) => {
+        console.log("sending email.")
         const { apikey } = req.params;
         const { name, email, message } = req.body;
         let messageList = [];
@@ -132,8 +133,10 @@ AppDataSource.initialize().then(async () => {
                     const recEmail = user.email;
                     // check if the users origin was from the local host
                     if (req.headers.origin.includes("localhost")) {
-                        // add back in for prod
-                        // user.localHostCurrentSubmissions++;
+
+                        // Add 1 to localhost submissions.
+                        user.localHostCurrentSubmissions++;
+
                         await sendMail(recEmail, name, email, message, null, res);
                         if (user.returnBoolean === true) {
                             const returnEmail = email;
@@ -266,7 +269,7 @@ AppDataSource.initialize().then(async () => {
 
     // Sends the return email to the user's client's.
 app.post('/formbee/return/:apikey', async (req, res) => {
-
+    console.log("return email");
     const isValidEmail = async (email: string): Promise<boolean> => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         console.log(emailRegex.test(email))
@@ -281,7 +284,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                 return;
             } else {
                 if (user.subscriptionTier == "Starter") {
-                    res.status(400).send('You can only send emails to users with a subscription tier of Premium or Growth.');
                     return;
                 } else if (user.subscriptionTier == "Growth" && user.returnBoolean === true && user.emailSubject && user.emailBody) {
                     const emailSubject = user.emailSubject;
@@ -301,74 +303,91 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                         }
                     });
                 } else if (user.subscriptionTier == "Premium" && user.returnBoolean === true && user.emailSubject && user.emailBody) {
-                const email = user.fromEmail;
-                const accessToken = user.fromEmailAccessToken;
-                const refreshToken = user.fromEmailRefreshToken;
-                const smtpHost = user.smtpHost;
-                const smtpPort = user.smtpPort;
-                const smtpUsername = user.smtpUsername;
-                const smtpPassword = user.smtpPassword;
-                const emailSubject = user.emailSubject;
-                const emailBody = user.emailBody;
-                const returnMessage = user.returnBoolean;
-                if (smtpHost && smtpPort && smtpUsername && smtpPassword && emailSubject && emailBody && returnMessage && await isValidEmail(emailToSendTo) === true) {
-                    const transporter = nodemailer.createTransport({
-                        host: smtpHost,
-                        port: smtpPort,
-                        secure: true,
-                        auth: {
-                            user: smtpUsername,
-                            pass: smtpPassword,
-                        },
-                    });
-                    const mailMessage = {
-                        from: smtpUsername,
-                        to: emailToSendTo,
-                        subject: emailSubject,
-                        text: emailBody,
-                    }
-                    transporter.sendMail(mailMessage, (error) => {
-                        if (error) {
-                            console.error(error);
-                            res.status(500).json('Error sending email');
-                        } else {
-                            res.json({ message: 'Email sent successfully' });
+                    const email = user.fromEmail;
+                    const accessToken = user.fromEmailAccessToken;
+                    const refreshToken = user.fromEmailRefreshToken;
+                    const smtpHost = user.smtpHost;
+                    const smtpPort = user.smtpPort;
+                    const smtpUsername = user.smtpUsername;
+                    const smtpPassword = user.smtpPassword;
+                    const emailSubject = user.emailSubject;
+                    const emailBody = user.emailBody;
+                    const returnMessage = user.returnBoolean;
+                    if (smtpHost && smtpPort && smtpUsername && smtpPassword && emailSubject && emailBody && returnMessage && await isValidEmail(emailToSendTo) === true) {
+                        console.log("sending from smtp server.")
+                        const transporter = nodemailer.createTransport({
+                            host: smtpHost,
+                            port: smtpPort,
+                            secure: true,
+                            auth: {
+                                user: smtpUsername,
+                                pass: smtpPassword,
+                            },
+                        });
+                        const mailMessage = {
+                            from: smtpUsername,
+                            to: emailToSendTo,
+                            subject: emailSubject,
+                            text: emailBody,
                         }
-                    });
-                } else if (email && accessToken && refreshToken && await isValidEmail(emailToSendTo) === true) {
-
-                    const transporter = nodemailer.createTransport({
-                        host: 'smtp.gmail.com',
-                        port: 465,
-                        secure: true,
-                        auth: {
-                            type: 'OAuth2',
-                            user: email,
-                            accessToken: accessToken,
-                            refreshToken: refreshToken,
-                            clientId: process.env.GOOGLE_CLIENT_ID,
-                            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-                        },
-                    });
-                    const mailMessage = {
-                        from: email,
-                        to: emailToSendTo,
-                        subject: emailSubject,
-                        text: emailBody,
-                    }
-                    transporter.sendMail(mailMessage, (error) => {
-                        if (error) {
-                            console.error(error);
-                            res.status(500).json('Error sending email');
-                        } else {
-                            res.json({ message: 'Email sent successfully' });
+                        transporter.sendMail(mailMessage, (error) => {
+                            if (error) {
+                                console.log("Error sending email: ", error);
+                                return;
+                            } else {
+                                res.json({ message: 'Email sent successfully' });
+                            }
+                        }); 
+                    } else if (email &&accessToken && refreshToken && await isValidEmail(emailToSendTo) === true) {
+                        console.log("sending from gmail.")
+                        const transporter = nodemailer.createTransport({
+                            host: 'smtp.gmail.com',
+                            port: 465,
+                            secure: true,
+                            auth: {
+                                type: 'OAuth2',
+                                user: email,
+                                accessToken: accessToken,
+                                refreshToken: refreshToken,
+                                clientId: process.env.GOOGLE_CLIENT_ID,
+                                clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+                            },
+                        });
+                        const mailMessage = {
+                            from: email,
+                            to: emailToSendTo,
+                            subject: emailSubject,
+                            text: emailBody,
                         }
-                    });
-                } else {
-                    // If the user 
-                    return
+                        transporter.sendMail(mailMessage, (error) => {
+                            if (error) {
+                                console.error(error);
+                                res.status(500).json('Error sending email');
+                            } else {
+                                res.json({ message: 'Email sent successfully' });
+                            }
+                        });
+                    } else {
+                        console.log("Sending from formbee email.")
+                        const emailSubject = user.emailSubject;
+                        const emailBody = user.emailBody;
+                        const mailMessage = {
+                            from: process.env.ZOHO_USER,
+                            to: emailToSendTo,
+                            subject: emailSubject,
+                            text: emailBody,
+                        };
+                        transporter.sendMail(mailMessage, (error) => {
+                            if (error) {
+                                console.error(error);
+                                res.status(500).json('Error sending email');
+                            } else {
+                                res.json({ message: 'Email sent successfully' });
+                            }
+                        });
+                        return
+                    }
                 }
-            }
             }
 
         } catch (error) {
@@ -908,7 +927,10 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                 res.status(400).send('User not found');
                 return;
             } else {
-                user.returnBoolean = returnMessage;
+                if (user.subscriptionTier !== "Starter") {
+                    console.log("not allowed in Starter plan.");
+                    user.returnBoolean = returnMessage;
+                }
                 user.emailSubject = emailSubject;
                 user.emailBody = emailBody;
                 await AppDataSource.manager.save(user);
@@ -1625,7 +1647,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     app.listen(3000);
 
     // delete all users remove after we enter prod.
-    await AppDataSource.manager.clear(User);
+    // await AppDataSource.manager.clear(User);
 
     console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results");
 }).catch(error => console.log(error));
