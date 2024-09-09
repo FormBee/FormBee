@@ -272,7 +272,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         console.log(emailRegex.test(email))
         return emailRegex.test(email);
     }
-
     try {
         const { emailToSendTo } = req.body;
             const apiKey = req.params.apikey;
@@ -281,6 +280,27 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                 res.status(400).send('User not found');
                 return;
             } else {
+                if (user.subscriptionTier == "Starter") {
+                    res.status(400).send('You can only send emails to users with a subscription tier of Premium or Growth.');
+                    return;
+                } else if (user.subscriptionTier == "Growth" && user.returnBoolean === true && user.emailSubject && user.emailBody) {
+                    const emailSubject = user.emailSubject;
+                    const emailBody = user.emailBody;
+                    const mailMessage = {
+                        from: process.env.ZOHO_USER,
+                        to: emailToSendTo,
+                        subject: emailSubject,
+                        text: emailBody,
+                    }
+                    transporter.sendMail(mailMessage, (error) => {
+                        if (error) {
+                            console.error(error);
+                            res.status(500).send('Error sending email');
+                        } else {
+                            res.json({ message: 'Email sent successfully' });
+                        }
+                    });
+                } else if (user.subscriptionTier == "Premium" && user.returnBoolean === true && user.emailSubject && user.emailBody) {
                 const email = user.fromEmail;
                 const accessToken = user.fromEmailAccessToken;
                 const refreshToken = user.fromEmailRefreshToken;
@@ -345,8 +365,10 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                         }
                     });
                 } else {
+                    // If the user 
                     return
                 }
+            }
             }
 
         } catch (error) {
