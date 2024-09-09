@@ -21,6 +21,7 @@ export class DashboardReturnModalComponent implements OnInit {
   @Input() emailBody: string | undefined;
   @Input() returnEmailBoolean: boolean = false;
   @Input() githubId: string | undefined;
+  @Input() subscriptionTier: string | undefined;
 
   ngOnInit(): void {
     this.setSwitch();

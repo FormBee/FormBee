@@ -27,6 +27,7 @@ export class DashboardUserInfoComponent implements OnInit {
   displayApiKey: string | undefined;
   usagePercent = 50;
   currentSubs: number = 0.0;
+  subscriptionTier: string | undefined;
   maxSubs: number = 0.0;
   localHostCurrentSubs: number = 0.0;
   localHostMaxSubs: number = 0.0;
@@ -119,6 +120,7 @@ export class DashboardUserInfoComponent implements OnInit {
         this.webhookEnabled = data.webhookBoolean;
         this.webhookWebhook = data.webhookWebhook;
         this.maxPlugins = data.maxPlugins;
+        this.subscriptionTier = data.subscriptionTier;
         this.currentPlugins = data.currentPlugins;
         this.domains = data.allowedDomains;
 

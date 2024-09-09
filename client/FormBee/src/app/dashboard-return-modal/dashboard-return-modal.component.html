@@ -6,12 +6,17 @@
         </div>
 
         <div class="modal">
+            @if (subscriptionTier == "Starter") {
+                <p style="color: rgb(189, 0, 0);">Return emails only available on Growth and Premium plans.</p>
+            }
 
+            @if (subscriptionTier == "Growth") {
+                <p style="color: rgb(50, 161, 148);">Upgrade to Premium to send return emails from custom email addresses. For now they are sent from a FormBee email address.</p>
+            }
             <div class="modal-header">
                 <h2 class="modal-header-text">Return Email Settings</h2>
             </div>
             <p class="modal-p">Customize the address, and the email that will be sent to users who submit your forms.</p>
-
             <div class="modal-header-switch">
                 <div class="stacked-div">
                     <h2 class="modal-p modal-h2">Toggle Return Email</h2>
