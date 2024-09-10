@@ -5,7 +5,6 @@
 The open-source form solution for data privacy conscious developers.
 
 # TODO
-- [] Verify CRON job's logic is working for after the user updates their plan.
 
 - [] Change stripe production values
     - [] PriceIds
