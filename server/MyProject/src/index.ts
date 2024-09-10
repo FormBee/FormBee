@@ -13,6 +13,7 @@ import { Routes } from "./routes";
 import { User } from "./entity/User";
 import createChallenge = require("./Alcha/Challenge.js");
 import axios from 'axios';
+import * as multer from 'multer';
 import { Auth } from "googleapis";
 const { Stripe } = require('stripe');
 const stripe = Stripe(process.env.STRIPE_TEST_KEY);
@@ -32,7 +33,7 @@ AppDataSource.initialize().then(async () => {
         allowedHeaders: ['Content-Type', 'x-altcha-spam-filter', 'x-api-key'],
     };
     app.use(cors(corsOptions));
-
+    const upload = multer();
 
     app.post('/stripe/webhook', express.raw({type: 'application/json'}), async (request, res) => {
         const sig = request.headers['stripe-signature'];
@@ -84,10 +85,11 @@ AppDataSource.initialize().then(async () => {
 
 
     // Basic post route, sends form data to the users email.
-    app.post('/formbee/:apikey', (req, res) => {
+    app.post('/formbee/:apikey', upload.none(), (req, res) => {
         console.log("sending email.")
         const { apikey } = req.params;
         const { name, email, message } = req.body;
+        console.log("req.body: ", req.body);
         let messageList = [];
             // Loop through the message object and format it to be sent to Telegram
             for (const [key, value] of Object.entries(req.body)) {
@@ -191,6 +193,7 @@ AppDataSource.initialize().then(async () => {
                     // else the user is not from the local host, we need to update the current submissions
                     } else {
                         console.log("Not local host");
+                        await sendMail(recEmail, name, email, message, null, res);
                         if (user.returnBoolean === true) {
                             const returnEmail = email;
                             axios.post('http://localhost:3000/formbee/return/' + apikey, {
@@ -238,7 +241,8 @@ AppDataSource.initialize().then(async () => {
                 res.status(500).json('Internal Server Error');
             });
 
-        async function sendMail(recEmail, name, email, message, file, res) {        
+        async function sendMail(recEmail, name, email, message, file, res) {      
+            console.log("in sendMail.")  
             const mailMessage = {
                 from: process.env.ZOHO_USER,
                 to: [recEmail,],
@@ -246,7 +250,7 @@ AppDataSource.initialize().then(async () => {
                 text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
                 attachments: file ? [{ filename: file.originalname, content: file.buffer }] : [],
             };
-
+            console.log("mailMessage: ", mailMessage);
             transporter.sendMail(mailMessage, (error) => {
                 if (error) {
                     console.error(error);
@@ -1678,7 +1682,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     app.listen(3000);
 
     // delete all users remove after we enter prod.
-    await AppDataSource.manager.clear(User);
+    // await AppDataSource.manager.clear(User);
 
     console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results");
 }).catch(error => console.log(error));
