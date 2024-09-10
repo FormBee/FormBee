@@ -97,6 +97,14 @@ AppDataSource.initialize().then(async () => {
                 }
             }
         let niceMessage = messageList.join('\n\n');
+        if (niceMessage.length > 4000) {
+            // If the message is too long, return.
+            return;
+        }
+        if (niceMessage === "") {
+            // If the message is empty, return.
+            return;
+        }
         //wrap nice message in ``` to make it look better
         let niceMessageDiscord = `\`\`\`${niceMessage}\`\`\``;
         // Find the user in the database with API key, then increment the current submissions
@@ -145,7 +153,6 @@ AppDataSource.initialize().then(async () => {
                             console.log("Discord webhook");
                             const sendMessage = async (message) => {
                                 console.log("Sendding to discord");
-                                console.log(user.discordWebhook, message);
                                 await axios.post(user.discordWebhook, {
                                     content: message,
                                 });
@@ -248,7 +255,6 @@ AppDataSource.initialize().then(async () => {
                 text: `${niceMessage}`,
                 attachments: file ? [{ filename: file.originalname, content: file.buffer }] : [],
             };
-            console.log("mailMessage: ", mailMessage);
             transporter.sendMail(mailMessage, (error) => {
                 if (error) {
                     console.error(error);
