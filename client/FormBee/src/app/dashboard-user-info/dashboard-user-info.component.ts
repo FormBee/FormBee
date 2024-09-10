@@ -74,7 +74,6 @@ export class DashboardUserInfoComponent implements OnInit {
     const data = await response.json();
     console.log(data);
     if (!data.apiKey) {
-      console.log("No API key found");
       fetch( this.fetchUrl + 'create-api-key/' + githubId, {
         method: 'POST',
       })
@@ -82,8 +81,15 @@ export class DashboardUserInfoComponent implements OnInit {
         .then((dataman) => {
           if (dataman.apiKey) {
             this.apiKey = dataman.apiKey;
+            if (this.apiKey) {
+              // Only show the last 4 characters of the API key
+              this.displayApiKey = '*'.repeat(this.apiKey.length - 4) + this.apiKey.slice(this.apiKey.length - 4);
+            }
           }
-          console.log(dataman);
+          this.currentSubs = data.currentSubmissions;
+          this.maxSubs = data.maxSubmissions;
+          this.localHostMaxSubs = data.localHostMaxSubmissions;
+          this.email = data.email;
         });
     } else {
       console.log("API key found");
