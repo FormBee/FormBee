@@ -210,4 +210,7 @@ export class User {
 
     @Column({nullable: true})
     subscriptionId: string | null;
+
+    @Column({nullable: true})
+    nextMonthTier: string | null;
 }

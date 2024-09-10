@@ -49,15 +49,7 @@ AppDataSource.initialize().then(async () => {
             if (!user) {
                 console.log("User not found");
             } else {
-                user.subscriptionTier = "Starter";
-                user.maxSubmissions = 250;
-                user.maxPlugins = 1;
-                user.n8nBoolean = false;
-                user.makeBoolean = false;
-                user.webhookBoolean = false;
-                user.discordBoolean = false;
-                user.slackBoolean = false;
-                user.telegramBoolean = false;
+                user.nextMonthTier = "Starter";
                 await AppDataSource.manager.save(user);
                 console.log("Resetting user to starter...");
             }
@@ -512,12 +504,17 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             const getSameDayNextMonth = async (date: Date) => {
                 let nextMonth = new Date(date);
                 nextMonth.setMonth(nextMonth.getMonth() + 1);
-            
                 // Handle edge cases where the next month might have fewer days
                 if (nextMonth.getDate() < date.getDate()) {
                     nextMonth.setDate(0); // Sets to the last day of the previous month
                 } 
-                return nextMonth;
+                nextMonth.setHours(0, 0, 0, 0);
+                const year = nextMonth.getFullYear();
+                const month = String(nextMonth.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+                const day = String(nextMonth.getDate()).padStart(2, '0');
+                console.log(nextMonth);
+                console.log(year, month, day);
+                return `${year}-${month}-${day}`;
             }
             let currentDate = new Date();
             let sameDayNextMonth = await getSameDayNextMonth(currentDate);
@@ -1500,10 +1497,17 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                             });
                             if (subscription.status === 'active') {
                                 console.log("Subscription created successfully");
-                                user.subscriptionTier = "Growth";
-                                user.maxSubmissions = 1000;
-                                user.maxPlugins = null;
-                                user.subscriptionId = subscription.id;
+                                if (user.subscriptionTier == "Premium") {
+                                    user.nextMonthTier = "Growth";
+                                } else {
+                                    user.subscriptionTier = "Growth";
+                                    user.maxSubmissions = 1000;
+                                    user.maxPlugins = null;
+                                    user.subscriptionId = subscription.id;
+                                    const today = new Date();
+                                    user.apiResetDate = addMonths(today, 1);
+                                }
+
                                 await AppDataSource.manager.save(user);
                                 res.json({ subscription });
                             } else {
@@ -1575,6 +1579,8 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                                 user.maxSubmissions = 10000;
                                 user.maxPlugins = null;
                                 user.subscriptionId = subscription.id;
+                                const today = new Date();
+                                user.apiResetDate = addMonths(today, 1);
                                 await AppDataSource.manager.save(user);
                                 res.json({ subscription });
                             } else {
@@ -1614,6 +1620,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
 
     cron.schedule('0 0 * * *', async () => { // Run the cron job every day at midnight
+    // cron.schedule('* * * * *', async () => { // Run the cron job once a minute.
         console.log("Running cron job to reset API usage");
     
         try {
@@ -1627,6 +1634,30 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                     user.currentSubmissions = 0;
                     user.localHostCurrentSubmissions = 0;
                     user.apiResetDate = addMonths(today, 1); // Set the next reset date to 1 month from now
+                    if (user.subscriptionTier != user.nextMonthTier && user.nextMonthTier != null) {
+                        console.log("Changing subscription tier to ", user.nextMonthTier);
+                        user.subscriptionTier = user.nextMonthTier;
+                        user.nextMonthTier = null;
+                        if (user.subscriptionTier == "Premium") {
+                            user.maxPlugins = null;
+                            user.maxSubmissions = 10000;
+                            user.nextMonthTier = null;
+                        } else if (user.subscriptionTier == "Growth") {
+                            user.maxPlugins = null;
+                            user.maxSubmissions = 1000;
+                            user.nextMonthTier = null;
+                        } else if (user.subscriptionTier == "Starter") {
+                            user.maxPlugins = 1;
+                            user.maxSubmissions = 250;
+                            user.telegramBoolean = false;
+                            user.discordBoolean = false;
+                            user.slackBoolean = false;
+                            user.makeBoolean = false;
+                            user.n8nBoolean = false;
+                            user.webhookBoolean = false;
+                            user.nextMonthTier = null;
+                        }
+                    }
                     await AppDataSource.manager.save(user); // Save the updated user
                     console.log(`Reset API usage for user with ID ${user.id}`);
                 } else {
