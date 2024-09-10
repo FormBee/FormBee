@@ -39,6 +39,7 @@ export class BillingComponent implements OnInit {
   billingEmail: string | undefined;
   invalidEmail: string | undefined;
   successMessage: string | undefined;
+  resetDate: string | undefined;
   // fetchUrl: string = "https://pleasing-love-production.up.railway.app/";
   fetchUrl: string = "http://localhost:3000/";
   constructor(private Router: Router, public cardStateService: CardStateService) {
@@ -86,6 +87,7 @@ export class BillingComponent implements OnInit {
             this.maxSubs = data.maxSubmissions;
             this.subscriptionTier = data.subscriptionTier;
             this.billingEmail = data.billingEmail;
+            this.resetDate = data.apiResetDate.split("T")[0];
             if (this.maxPlugins === null) {
               this.maxPlugins = "Unlimited";
             }
