@@ -6,6 +6,8 @@ The open-source form solution for data privacy conscious developers.
 
 # TODO
 
+- [] Verify users can use various configurations of their html structure/post data.
+
 - [] Change stripe production values
     - [] PriceIds
     - [] test keys to live keys
