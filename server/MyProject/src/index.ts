@@ -91,14 +91,9 @@ AppDataSource.initialize().then(async () => {
         const { name, email, message } = req.body;
         console.log("req.body: ", req.body);
         let messageList = [];
-            // Loop through the message object and format it to be sent to Telegram
             for (const [key, value] of Object.entries(req.body)) {
-                if (typeof value === 'string') {
+                if (typeof value === 'string' && value !== "") {
                     messageList.push(`${key}: ${value}`);
-                } else if (Array.isArray(value)) {
-                    messageList.push(`${key}: ${value.join(', ')}`);
-                } else {
-                    messageList.push(`${key}: ${JSON.stringify(value)}`);
                 }
             }
         let niceMessage = messageList.join('\n\n');
@@ -243,11 +238,14 @@ AppDataSource.initialize().then(async () => {
 
         async function sendMail(recEmail, name, email, message, file, res) {      
             console.log("in sendMail.")  
+            if (niceMessage === "") {
+                return;
+            }
             const mailMessage = {
                 from: process.env.ZOHO_USER,
                 to: [recEmail,],
-                subject: 'New form submission',
-                text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+                subject: 'New Form Submission',
+                text: `${niceMessage}`,
                 attachments: file ? [{ filename: file.originalname, content: file.buffer }] : [],
             };
             console.log("mailMessage: ", mailMessage);
