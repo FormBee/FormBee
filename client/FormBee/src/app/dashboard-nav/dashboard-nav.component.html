@@ -5,7 +5,7 @@
     <div class="user-section">
       <div class="user-info">
         <div class="user-details">
-          <button class="tier-button">{{subscriptionTier}}</button>
+          <button class="tier-button" (click)="goToBilling()">{{subscriptionTier}}</button>
           <div class="divider"></div>
           <p>{{currentSubs}} / {{maxSubs}}</p>
         </div>

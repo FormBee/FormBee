@@ -77,6 +77,10 @@ export class DashboardNavComponent implements OnInit {
     getUser(this.githubId);
   }
 
+  goToBilling() {
+    this.router.navigate(['/billing']);
+  }
+
   toggleDropdown(): void {
     this.isDropdownOpen = !this.isDropdownOpen;
   }

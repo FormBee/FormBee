@@ -17,4 +17,7 @@ export class LandingPricingComponent {
   openLogin() {
     this.router.navigate(['/login']);
   }
+  openBilling() {
+    this.router.navigate(['/billing']);
+  }
 }
