@@ -28,8 +28,8 @@ AppDataSource.initialize().then(async () => {
     // create express app
     const app = express();
     const corsOptions = {
-        origin: ['*', 'http://localhost:4200', 'https://ibex-causal-painfully.ngrok-free.app', 'https://formbee.dev'],
-        methods: ['GET', 'POST'],
+        origin: "*",
+        methods: ['GET', 'POST', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'x-altcha-spam-filter', 'x-api-key'],
     };
     app.use(cors(corsOptions));
