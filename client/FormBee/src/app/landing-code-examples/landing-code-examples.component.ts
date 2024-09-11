@@ -28,15 +28,63 @@ export class LandingCodeExamplesComponent implements OnInit{
   }
 
   frameworks: Record<'vanilla' | 'angular' | 'react' , string[]> = {
-    angular: ['app.component.ts', 'app.module.ts'],
+    angular: ['app.component.ts', 'app.component.html'],
     react: ['App.tsx'],
     vanilla: ['form.html', 'main.js']
   };
 
   codeSnippets: Record<'vanilla' | 'angular' | 'react', Record<string, { content: string, language: string }>> = {
     angular: {
-      'app.component.ts': { content: 'console.log("Angular app.component.ts code here")', language: 'typescript' },
-      'app.module.ts': { content: '/* Angular app.module.ts code here */', language: 'typescript' },
+      'app.component.ts': { content: `import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { ElementRef, Renderer2 } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [ReactiveFormsModule],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+  contactForm: FormGroup;
+  messageElement: HTMLElement | null = null;
+  emailElement: HTMLElement | null = null;
+
+  constructor(
+    private fb: FormBuilder, 
+    private http: HttpClient, 
+    private elRef: ElementRef<HTMLElement>,
+    private renderer: Renderer2
+  ) {
+    this.contactForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      message: ['', Validators.required]
+    });
+  }
+
+  ngOnInit(): void {
+    this.messageElement = this.elRef.nativeElement.querySelector('#message');
+    this.emailElement = this.elRef.nativeElement.querySelector('#email');
+  }
+
+  onSubmit(): void {
+    console.log(this.contactForm.value);
+    this.http.post('http://localhost:3000/formbee/b27ed43d-5d46-469e-a99b-d656991e0c05', this.contactForm.value).subscribe(response => {
+      console.log(response);
+    });
+  }
+}
+`, language: 'typescript' },
+      'app.component.html': { content: `<h1>FormBee Angular Example</h1>
+<form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+  <label for="email">Email</label>
+  <input type="email" id="email" formControlName="email">
+  <label for="message">Message</label>
+  <textarea id="message" formControlName="message"></textarea>
+  <button type="submit">Submit</button>
+</form>`, language: 'markup' },
     },
     react: {
       'App.tsx': { content: `import { useState } from 'react';
