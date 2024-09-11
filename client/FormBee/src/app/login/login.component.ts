@@ -40,7 +40,8 @@ export class LoginComponent  implements OnInit {
 
   login() {
     // window.location.href = 'https://pleasing-love-production.up.railway.app/auth/github';
-    window.location.href = 'http://localhost:3000/auth/github';
+    // window.location.href = 'http://localhost:3000/auth/github';
+    window.location.href = 'https://api.formbee.dev/auth/github';
   }
 
   termsOfService() {
