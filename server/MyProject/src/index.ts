@@ -18,8 +18,8 @@ import { Auth } from "googleapis";
 const { Stripe } = require('stripe');
 const stripe = Stripe(process.env.STRIPE_TEST_KEY);
 // const redirectUrl = "https://ibex-causal-painfully.ngrok-free.app";
-const redirectUrl = "http://localhost:4200";
-// const redirectUrl = "https://formbee.dev";
+// const redirectUrl = "http://localhost:4200";
+const redirectUrl = "https://formbee.dev";
 
 dotenv.config();
 AppDataSource.initialize().then(async () => {
@@ -1519,7 +1519,8 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                             const subscription = await stripe.subscriptions.create({
                                 customer: user.stripeCustomerId,
                                 items: [{
-                                    price: "price_1Pu4WyP65EGyHpMvSt1eYedS"
+                                    //growth price
+                                    price: "price_1Pr6lhP65EGyHpMvWCpkydvk"
                                 }],
                                 default_payment_method: defaultPaymentMethodId.id,
                             });
@@ -1597,7 +1598,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                             const subscription = await stripe.subscriptions.create({
                                 customer: user.stripeCustomerId,
                                 items: [{
-                                    price: "price_1PvSA7P65EGyHpMviY41JNmy"
+                                    price: "price_1PrBWpP65EGyHpMvnFTGkl4e"
                                 }],
                                 default_payment_method: defaultPaymentMethodId.id,
                             });
