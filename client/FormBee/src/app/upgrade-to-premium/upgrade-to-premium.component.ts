@@ -38,7 +38,7 @@ export class UpgradeToPremiumComponent implements OnInit, AfterViewInit {
 
   async ngAfterViewInit() {
     try {
-      this.stripe = await loadStripe('pk_test_51Pr6BYP65EGyHpMvJu2vuS3MLMOhJZZP6jSH51HwgXuvUfwYjTXJFpab6JDmVKp9osFFPmiK18Hfd7HnY8ZrF2Q700AWZClCOT');
+      this.stripe = await loadStripe('pk_live_51Pr6BYP65EGyHpMvxUcAi3vWtb50ReyDoHAHfTZK4xLcHCuiNnb28CXDtyN8HgOFFt0rm5mv1HSkpwJjd7DcmLNY00nG6HJap2');
       this.elements = this.stripe.elements();
       this.cardElement = this.elements.create('card', {
 
