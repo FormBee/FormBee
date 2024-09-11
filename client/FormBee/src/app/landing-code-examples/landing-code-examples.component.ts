@@ -71,7 +71,7 @@ export class AppComponent implements OnInit {
 
   onSubmit(): void {
     console.log(this.contactForm.value);
-    this.http.post('http://localhost:3000/formbee/b27ed43d-5d46-469e-a99b-d656991e0c05', this.contactForm.value).subscribe(response => {
+    this.http.post('https://formbee.dev/formbee/[APIKEY]', this.contactForm.value).subscribe(response => {
       console.log(response);
     });
   }
@@ -107,7 +107,7 @@ function App() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // send form data to FormBee
-    fetch('http://localhost:3000/formbee/\${apiKey}', {
+    fetch('https://formbee.dev/formbee/\${apiKey}', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
