@@ -87,7 +87,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
         return;
       }
       if (this.isVerified) {
-        this.http.post('http://localhost:3000/formbee/9e68f4d6-1be6-42e2-be80-503ff6b8c4b9', this.contactForm.value).subscribe(res => {
+        this.http.post('https://api.formbee.dev/formbee/0880fd20-1f9c-4522-97d8-91c772ba9a09', this.contactForm.value).subscribe(res => {
         });
       } else {
         if (!this.isVerified) {

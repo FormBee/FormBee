@@ -35,7 +35,7 @@ AppDataSource.initialize().then(async () => {
     app.use(cors(corsOptions));
 
     const strictCorsOptions = {
-        origin: "http://localhost:4200",
+        origin: "https://formbee.dev",
         methods: ['GET', 'POST'],
         allowedHeaders: ['Content-Type', 'x-altcha-spam-filter', 'x-api-key'],
     };
