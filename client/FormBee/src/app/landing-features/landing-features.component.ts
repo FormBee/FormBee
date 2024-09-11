@@ -13,4 +13,7 @@ export class LandingFeaturesComponent {
     this.router.navigate(['/privacy-policy']);
     window.scrollTo(0, 0);
   }
+  goToGithub() {
+    window.open("https://github.com/FormBee");
+  }
 }
