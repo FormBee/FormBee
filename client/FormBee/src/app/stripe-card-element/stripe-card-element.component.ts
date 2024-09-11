@@ -22,7 +22,7 @@ export class StripeCardElementComponent implements OnInit {
   constructor(public cardStateService: CardStateService) {
   }
   async ngOnInit() {
-    fetch('http://localhost:3000/get-default-payment-method/' + this.githubId, { method: 'GET' }).then(response => response.json()).then(data => {
+    fetch('https://api.formbee.dev/get-default-payment-method/' + this.githubId, { method: 'GET' }).then(response => response.json()).then(data => {
       if (data.paymentMethod) {
         this.cardStateService.cardState = true;
       }
@@ -62,7 +62,7 @@ export class StripeCardElementComponent implements OnInit {
 
   async handleFormSubmit() {
     console.log("handling form submit");
-    const response = await fetch('http://localhost:3000/create-setup-intent/' + this.githubId, { method: 'POST' });
+    const response = await fetch('https://api.formbee.dev/create-setup-intent/' + this.githubId, { method: 'POST' });
         const { clientSecret } = await response.json();
 
         const { error, setupIntent } = await this.stripe.confirmCardSetup(
@@ -81,7 +81,7 @@ export class StripeCardElementComponent implements OnInit {
             }, 6000);
         } else {
             console.log('Payment method saved:', setupIntent.payment_method);
-            fetch('http://localhost:3000/save-card/' + this.githubId, {
+            fetch('https://api.formbee.dev/save-card/' + this.githubId, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -27,7 +27,7 @@ export class BillingPlansComponent {
 
   downGradeToFree() {
     console.log("downgrading to free");
-    fetch('http://localhost:3000/manage-plan/' + this.githubId,{
+    fetch('https://api.formbee.dev/manage-plan/' + this.githubId,{
       method: 'POST',
     }).then(response => response.json()).then(data => {
       window.location.href = data.url;

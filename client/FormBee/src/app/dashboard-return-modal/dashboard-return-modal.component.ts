@@ -68,7 +68,8 @@ export class DashboardReturnModalComponent implements OnInit {
   }
 
   gmailLogin = () => {
-    window.location.href = "http://localhost:3000/oauth/google/" + this.githubId;
+    // window.location.href = "http://localhost:3000/oauth/google/" + this.githubId;
+    window.location.href = "https://api.formbee.dev/oauth/google/" + this.githubId;
   }
 
   saveChanges = async () => {
@@ -92,7 +93,7 @@ export class DashboardReturnModalComponent implements OnInit {
     this.emailSubjectOutput.emit(this.emailSubject);
     this.emailBodyOutput.emit(this.emailBody);
     this.returnEmailBooleanOutput.emit(this.returnEmailBoolean);
-    await fetch('http://localhost:3000/update-return-settings/' + this.githubId, {
+    await fetch('https://api.formbee.dev/update-return-settings/' + this.githubId, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

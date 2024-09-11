@@ -23,7 +23,8 @@ export class UpgradeToGrowthComponent implements OnInit, AfterViewInit {
   profilePic: string = "../assets/FormBee-logo2.png";
   githubId: string | undefined;
   loading: boolean = true;
-  fetchUrl: string = "http://localhost:3000/";
+  // fetchUrl: string = "http://localhost:3000/";
+  fetchUrl: string = "https://api.formbee.dev/";
   stripe: any;
   cardElement: any;
   elements: any;
@@ -108,7 +109,7 @@ export class UpgradeToGrowthComponent implements OnInit, AfterViewInit {
               this.customerId = data.stripeCustomerId;
             });
           }).then(async () => {
-            fetch('http://localhost:3000/get-default-payment-method/' + this.githubId, { method: 'GET' }).then(response => response.json()).then(data => {
+            fetch('https://api.formbee.dev/get-default-payment-method/' + this.githubId, { method: 'GET' }).then(response => response.json()).then(data => {
               if (data.paymentMethod) {
                 this.last4Digits = data.paymentMethod.card.last4;
                 this.loading = false;
@@ -130,7 +131,7 @@ export class UpgradeToGrowthComponent implements OnInit, AfterViewInit {
       if (this.last4Digits) { 
         console.log("cardOnFile: ", this.last4Digits);
         try {
-        const response = await fetch('http://localhost:3000/stripe/growth-plan/' + this.githubId, {
+        const response = await fetch('https://api.formbee.dev/stripe/growth-plan/' + this.githubId, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -152,7 +153,7 @@ export class UpgradeToGrowthComponent implements OnInit, AfterViewInit {
         
       } else {
         console.log("no card on file");
-          const response = await fetch('http://localhost:3000/create-setup-intent/' + this.githubId, { method: 'POST' });
+          const response = await fetch('https://api.formbee.dev/create-setup-intent/' + this.githubId, { method: 'POST' });
           const { clientSecret } = await response.json();
   
           const { error, setupIntent } = await this.stripe.confirmCardSetup(
@@ -171,7 +172,7 @@ export class UpgradeToGrowthComponent implements OnInit, AfterViewInit {
               }, 6000);
           } else {
               console.log('Payment method saved:', setupIntent.payment_method);
-              fetch('http://localhost:3000/save-card/' + this.githubId, {
+              fetch('https://api.formbee.dev/save-card/' + this.githubId, {
                   method: 'POST',
                   headers: {
                       'Content-Type': 'application/json',
@@ -182,7 +183,7 @@ export class UpgradeToGrowthComponent implements OnInit, AfterViewInit {
                   
               }).then(async () => {
                 try {
-                const response = await fetch('http://localhost:3000/stripe/growth-plan/' + this.githubId, {
+                const response = await fetch('https://api.formbee.dev/stripe/growth-plan/' + this.githubId, {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',

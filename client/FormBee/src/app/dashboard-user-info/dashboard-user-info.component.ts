@@ -64,8 +64,9 @@ export class DashboardUserInfoComponent implements OnInit {
   currentPlugins: number | null = 0;
   themes: string[] = ['Default', 'elegent-theme', 'light-theme'];
   domains: string[] = [];
-  fetchUrl: string = "http://localhost:3000/";
+  // fetchUrl: string = "http://localhost:3000/";
   // fetchUrl: string = "https://pleasing-love-production.up.railway.app/";
+  fetchUrl: string = "https://api.formbee.dev/";
 
 
   fetchApiKey = async (githubId: string) => {
@@ -245,7 +246,7 @@ export class DashboardUserInfoComponent implements OnInit {
     script.src = 'https://telegram.org/js/telegram-widget.js?22';
     script.setAttribute('data-telegram-login', "FormbeeBot");
     script.setAttribute('data-size', 'large');
-    script.setAttribute('data-auth-url', 'http://localhost:3000/oauth/telegram/' + this.githubId);
+    script.setAttribute('data-auth-url', 'https://api.formbee.dev/oauth/telegram/' + this.githubId);
     script.setAttribute('data-request-access', 'write');
   }
 

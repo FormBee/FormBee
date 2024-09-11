@@ -23,7 +23,8 @@ export class DashboardNavComponent implements OnInit {
   currentTheme: string = 'neutral';
   isThemeMenuOpen: boolean = false;
   // fetchUrl: string = "https://pleasing-love-production.up.railway.app/api/user/";
-  fetchUrl: string = "http://localhost:3000/api/user/";
+  // fetchUrl: string = "http://localhost:3000/api/user/";
+  fetchUrl: string = "https://api.formbee.dev/api/user/";
   ngOnInit(): void {
     if (!this.githubId) {
     const token = localStorage.getItem('Fb-pA4lBUfsqVAWFN78eWDF');
