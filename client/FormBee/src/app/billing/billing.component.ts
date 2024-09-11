@@ -41,7 +41,8 @@ export class BillingComponent implements OnInit {
   successMessage: string | undefined;
   resetDate: string | undefined;
   // fetchUrl: string = "https://pleasing-love-production.up.railway.app/";
-  fetchUrl: string = "http://localhost:3000/";
+  // fetchUrl: string = "http://localhost:3000/";
+  fetchUrl: string = "https://api.formbee.dev/";
   constructor(private Router: Router, public cardStateService: CardStateService) {
     const navigator = this.Router.getCurrentNavigation();
     if (navigator?.extras.state) {
@@ -93,7 +94,7 @@ export class BillingComponent implements OnInit {
             }
         });
       }).then(() => {
-        fetch('http://localhost:3000/get-default-payment-method/' + this.githubId, { method: 'GET' }).then(response => response.json()).then(data => {
+        fetch('https://api.formbee.dev/get-default-payment-method/' + this.githubId, { method: 'GET' }).then(response => response.json()).then(data => {
           if (data.paymentMethod) {
             this.cardStateService.cardState = false;
             this.last4Digits = data.paymentMethod.card.last4;
@@ -124,7 +125,7 @@ export class BillingComponent implements OnInit {
         return;
       }
       if (email && emailRegex.test(email)) {
-        fetch('http://localhost:3000/update-billing-email/' + this.githubId, {
+        fetch('https://api.formbee.dev/update-billing-email/' + this.githubId, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -167,7 +168,7 @@ export class BillingComponent implements OnInit {
     }
   }
   managePlan() {
-  fetch('http://localhost:3000/manage-plan/' + this.githubId,{
+  fetch('https://api.formbee.dev/manage-plan/' + this.githubId,{
     method: 'POST',
   }).then(response => response.json()).then(data => {
     window.location.href = data.url;
