@@ -33,6 +33,12 @@ AppDataSource.initialize().then(async () => {
         allowedHeaders: ['Content-Type', 'x-altcha-spam-filter', 'x-api-key'],
     };
     app.use(cors(corsOptions));
+
+    const strictCorsOptions = {
+        origin: "http://localhost:4200",
+        methods: ['GET', 'POST'],
+        allowedHeaders: ['Content-Type', 'x-altcha-spam-filter', 'x-api-key'],
+    };
     const upload = multer();
 
     app.post('/stripe/webhook', express.raw({type: 'application/json'}), async (request, res) => {
@@ -400,7 +406,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     });
 
 
-    app.get('/auth/github', (req, res) => {
+    app.get('/auth/github', cors(strictCorsOptions), (req, res) => {
         console.log("in auth github");
         const githubAuthUrl = 'https://github.com/login/oauth/authorize';
         const clientId = process.env.GITHUB_CLIENT_ID;
@@ -408,7 +414,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         res.redirect(`${githubAuthUrl}?client_id=${clientId}`);
     });
 
-    app.post('/telegram/toogle/:githubId', async (req, res) => {
+    app.post('/telegram/toogle/:githubId', cors(strictCorsOptions), async (req, res) => {
         const { githubId } = req.params;
         const { telegramBoolean } = req.body;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
@@ -441,7 +447,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/discord/toogle/:githubId', async (req, res) => {
+    app.post('/discord/toogle/:githubId', cors(strictCorsOptions), async (req, res) => {
         const { githubId } = req.params;
         const { discordBoolean } = req.body;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
@@ -469,7 +475,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/discord/webhook/:githubId', async (req, res) => {
+    app.post('/discord/webhook/:githubId', cors(strictCorsOptions), async (req, res) => {
         const { githubId } = req.params;
         const { discordWebhook } = req.body;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
@@ -483,7 +489,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
     
-    app.get('/auth/github/callback', async (req, res) => {
+    app.get('/auth/github/callback', cors(strictCorsOptions), async (req, res) => {
         const code = req.query.code;
     
         try {
@@ -557,7 +563,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
 
     //Route for creating a new API key for the user
-    app.post('/create-api-key/:githubId', (req, res) => {
+    app.post('/create-api-key/:githubId', cors(strictCorsOptions), (req, res) => {
         const githubId = parseInt(req.params.githubId);
         console.log("in create-api-key: ", githubId)
         const userPromise = AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
@@ -590,7 +596,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
 
     // Delete old API key, create new one
-    app.post('/regenerate-api-key/:githubId', (req, res) => {
+    app.post('/regenerate-api-key/:githubId', cors(strictCorsOptions), (req, res) => {
         const githubId = parseInt(req.params.githubId);
         console.log("in regenerate-api-key: ", githubId)
         const userPromise = AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
@@ -616,7 +622,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
 
     // Fetch the user by their github id
-    app.get('/api/user/:githubId', (req: Request, res: Response) => {
+    app.get('/api/user/:githubId', cors(strictCorsOptions), (req: Request, res: Response) => {
 
         const githubId = parseInt(req.params.githubId, 10);
         if (isNaN(githubId)) {
@@ -641,7 +647,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
 
     // // Update email
-    app.post('/update-email/:githubId', (req, res) => {
+    app.post('/update-email/:githubId', cors(strictCorsOptions), (req, res) => {
         const githubId = parseInt(req.params.githubId);
         const userPromise = AppDataSource.manager.findOne(User, { where: { githubId } });
         userPromise.then(user => {
@@ -658,7 +664,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
     // Telegram oauth
 
-    app.get('/oauth/telegram/:githubId', async (req, res) => {
+    app.get('/oauth/telegram/:githubId', cors(strictCorsOptions), async (req, res) => {
         const githubId = parseInt(req.params.githubId);
         console.log("in telegram oauth: ", githubId);
         const verifyTelegramHash = (authData, botToken) => {
@@ -767,7 +773,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/telegram/unlink/:githubId', async (req, res) => {
+    app.post('/telegram/unlink/:githubId', cors(strictCorsOptions), async (req, res) => {
         const githubId = parseInt(req.params.githubId);
         const user = await AppDataSource.manager.findOne(User, { where: { githubId } });
         if (!user) {
@@ -787,7 +793,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
 
     // Google OAuth
-    app.get('/oauth/google/:githubId', async(req, res) => {
+    app.get('/oauth/google/:githubId', cors(strictCorsOptions), async(req, res) => {
         console.log("in google oauth");
         const githubId = parseInt(req.params.githubId);  // Convert githubId to integer
         const user = await AppDataSource.manager.findOne(User, { where: { githubId } });
@@ -922,7 +928,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/update-return-settings/:githubId', async (req: Request, res: Response) => {
+    app.post('/update-return-settings/:githubId', cors(strictCorsOptions), async (req: Request, res: Response) => {
         const githubId = parseInt(req.params.githubId);
         const { smtpHost, smtpPort, smtpUsername, smtpPassword, emailSubject, emailBody, returnMessage } = req.body;
         try {
@@ -958,7 +964,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/slack/toogle/:githubId', async (req, res) => {
+    app.post('/slack/toogle/:githubId', cors(strictCorsOptions), async (req, res) => {
         const githubId = parseInt(req.params.githubId);
         const { slackBoolean } = req.body;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
@@ -1046,7 +1052,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
     
-    app.post('/slack/send-message', async (req, res) => {
+    app.post('/slack/send-message', cors(strictCorsOptions), async (req, res) => {
         const { message, slackChannelId, slackAccessToken } = req.body;
             try {
                 const response = await axios.post(
@@ -1069,7 +1075,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     );
         
-    app.post('/slack/unlink/:githubId', async (req, res) => {
+    app.post('/slack/unlink/:githubId', cors(strictCorsOptions), async (req, res) => {
         const githubId = parseInt(req.params.githubId);
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
         if (!user) {
@@ -1085,7 +1091,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     });
 
     // Make integration
-    app.post('/make/:apikey', async (req, res) => {
+    app.post('/make/:apikey', cors(strictCorsOptions), async (req, res) => {
             const githubId = req.params.apikey;
             const message = req.body;
             const user = await AppDataSource.manager.findOne(User, { where: { apiKey: githubId } });
@@ -1106,7 +1112,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
     });
 
-    app.post('/make/toogle/:apikey', async (req, res) => {
+    app.post('/make/toogle/:apikey', cors(strictCorsOptions), async (req, res) => {
         const githubId = req.params.apikey;
         const { makeBoolean } = req.body;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
@@ -1134,7 +1140,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/make/unlink/:apikey', async (req, res) => {
+    app.post('/make/unlink/:apikey', cors(strictCorsOptions), async (req, res) => {
         const githubId = req.params.apikey;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
         if (!user) {
@@ -1147,7 +1153,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/make/webhook/:apikey', async (req, res) => {
+    app.post('/make/webhook/:apikey', cors(strictCorsOptions), async (req, res) => {
         const githubId = req.params.apikey;
         const { makeWebhook } = req.body;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
@@ -1161,7 +1167,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/n8n/send/:apikey', async (req, res) => {
+    app.post('/n8n/send/:apikey', cors(strictCorsOptions), async (req, res) => {
         const githubId = req.params.apikey;
         const message = req.body;
         const user = await AppDataSource.manager.findOne(User, { where: { apiKey: githubId } });
@@ -1182,7 +1188,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
     });
 
-    app.post('/n8n/toogle/:apikey', async (req, res) => {
+    app.post('/n8n/toogle/:apikey', cors(strictCorsOptions), async (req, res) => {
         const githubId = req.params.apikey;
         const { n8nBoolean } = req.body;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
@@ -1210,7 +1216,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/n8n/unlink/:apikey', async (req, res) => {
+    app.post('/n8n/unlink/:apikey', cors(strictCorsOptions), async (req, res) => {
         const githubId = req.params.apikey;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
         if (!user) {
@@ -1223,7 +1229,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/n8n/webhook/:apikey', async (req, res) => {
+    app.post('/n8n/webhook/:apikey', cors(strictCorsOptions), async (req, res) => {
         const githubId = req.params.apikey;
         const { n8nWebhook } = req.body;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
@@ -1237,7 +1243,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/webhook/toogle/:githubId', async (req, res) => {
+    app.post('/webhook/toogle/:githubId', cors(strictCorsOptions), async (req, res) => {
         const githubId = parseInt(req.params.githubId);
         const { webhookBoolean } = req.body;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
@@ -1265,7 +1271,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/webhook/unlink/:githubId', async (req, res) => {
+    app.post('/webhook/unlink/:githubId', cors(strictCorsOptions), async (req, res) => {
         const githubId = parseInt(req.params.githubId);
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
         if (!user) {
@@ -1278,7 +1284,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/webhook/webhook/:githubId', async (req, res) => {
+    app.post('/webhook/webhook/:githubId', cors(strictCorsOptions), async (req, res) => {
         const githubId = parseInt(req.params.githubId);
         const { webhookWebhook } = req.body;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
@@ -1292,7 +1298,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/webhook/send/:githubId', async (req, res) => {
+    app.post('/webhook/send/:githubId', cors(strictCorsOptions), async (req, res) => {
         const githubId = req.params.githubId;
         const message = req.body;
         const user = await AppDataSource.manager.findOne(User, { where: { apiKey: githubId } });
@@ -1312,7 +1318,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
     });
 
-    app.post('/add-domain/:githubId', async (req, res) => {
+    app.post('/add-domain/:githubId', cors(strictCorsOptions), async (req, res) => {
         const githubId = parseInt(req.params.githubId, 10);
         const domain = req.body.domain;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
@@ -1330,7 +1336,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/remove-domain/:githubId', async (req, res) => {
+    app.post('/remove-domain/:githubId', cors(strictCorsOptions), async (req, res) => {
         const githubId = parseInt(req.params.githubId, 10);
         const domain = req.body.domain;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
@@ -1345,7 +1351,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     });
 
     // Stipe integration
-    app.post('/create-setup-intent/:githubId', async (req, res) => {
+    app.post('/create-setup-intent/:githubId', cors(strictCorsOptions), async (req, res) => {
         const githubId = parseInt(req.params.githubId, 10);
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
         if (!user) {
@@ -1364,7 +1370,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/save-card/:githubId', async (req, res) => {
+    app.post('/save-card/:githubId', cors(strictCorsOptions), async (req, res) => {
         const githubId = parseInt(req.params.githubId, 10);
         const { paymentMethodId } = req.body;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
@@ -1391,7 +1397,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     });
 
 
-    app.get('/get-default-payment-method/:githubId', async (req, res) => {
+    app.get('/get-default-payment-method/:githubId', cors(strictCorsOptions), async (req, res) => {
         const githubId = parseInt(req.params.githubId, 10);
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
         if (!user) {
@@ -1413,7 +1419,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/update-billing-email/:githubId', async (req, res) => {
+    app.post('/update-billing-email/:githubId', cors(strictCorsOptions), async (req, res) => {
         const githubId = parseInt(req.params.githubId);
         const { email } = req.body;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
@@ -1429,7 +1435,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         res.json({ message: 'Email updated' });
     });
 
-    app.post('/manage-plan/:githubId', async (req, res) => {
+    app.post('/manage-plan/:githubId', cors(strictCorsOptions), async (req, res) => {
         console.log("in manage plan");
         const githubId = parseInt(req.params.githubId);
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
@@ -1459,7 +1465,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/stripe/growth-plan/:githubId', async (req, res) => {
+    app.post('/stripe/growth-plan/:githubId', cors(strictCorsOptions), async (req, res) => {
         const githubId = parseInt(req.params.githubId);
         console.log("in growth plan: ", githubId);
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId }, });
@@ -1537,7 +1543,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/stripe/premium-plan/:githubId', async (req, res) => {
+    app.post('/stripe/premium-plan/:githubId', cors(strictCorsOptions), async (req, res) => {
         const githubId = parseInt(req.params.githubId);
         console.log("in growth plan: ", githubId);
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId }, });
