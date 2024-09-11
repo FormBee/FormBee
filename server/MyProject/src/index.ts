@@ -401,8 +401,22 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.get('/challenge', (req, res) => {
-        createChallenge(req, res);
+    app.get('/challenge/:apikey', async (req, res) => {
+        console.log("in challenge");
+        const apiKey  = req.params.apikey; 
+        console.log("apikey: ", apiKey);
+        const user = await AppDataSource.manager.findOne(User, { where: { apiKey: apiKey } });
+        if (!user) {
+            res.status(400).send('User not found');
+            return;
+        } else {
+            if (user.subscriptionTier == "Starter") {
+                res.status(400).send('You can only use the challenge with a subscription tier of Growth or Premium.');
+                return;
+            } else {
+                createChallenge(req, res);
+            }
+        }
     });
 
 
