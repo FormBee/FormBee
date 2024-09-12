@@ -71,7 +71,7 @@ export class AppComponent implements OnInit {
 
   onSubmit(): void {
     console.log(this.contactForm.value);
-    this.http.post('https://formbee.dev/formbee/[APIKEY]', this.contactForm.value).subscribe(response => {
+    this.http.post('https://api.formbee.dev/formbee/[APIKEY]', this.contactForm.value).subscribe(response => {
       console.log(response);
     });
   }
@@ -107,7 +107,7 @@ function App() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // send form data to FormBee
-    fetch('https://formbee.dev/formbee/\${apiKey}', {
+    fetch('https://api.formbee.dev/formbee/\${apiKey}', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -173,13 +173,13 @@ export default App;
     vanilla: {
 'form.html': { content: 
   `<!-- Simple form markup -->
-<form id="form" action="https://formbee.dev/[APIKEY]" method="post" enctype="multipart/form-data">
+<form id="form" action="https://api.formbee.dev/[APIKEY]" method="post" enctype="multipart/form-data">
     <input type="email" name="email">
     <textarea name="message"></textarea>
     <input type="submit" value="Submit">
 </form>
 <!-- Just provide your API key
-with a post request to https://formbee.dev/
+with a post request to https://api.formbee.dev/
 FormBee sends the form data to your email address. -->
  `, language: 'markup' },
       'main.js': { content: 
