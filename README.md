@@ -5,7 +5,10 @@
 The open-source form solution for data privacy conscious developers.
 
 
+
+
 ### Get FormBee running locally
+```git clone <repository-url>```
 
 # TODO
 
