@@ -4,7 +4,7 @@
         <img (click)="goHome()" style="cursor: pointer;" src="../../assets/FormBee__1_-removebg.png"/>
       </div>
       <ul class="nav-links">
-        <li><a href="/docs">Docs</a></li>
+        <li (click)="goToDocs()"><a>Docs</a></li>
         <li (click)="pricingJump()"><a>Pricing</a></li>
         <li><button (click)="signIn()" class="sign-in-btn">Sign In</button></li>
       </ul>
@@ -15,7 +15,7 @@
       </div>
     </div>
     <ul class="mobile-menu" [class.open]="menuOpen">
-      <li><a href="/docs" (click)="toggleMenu()">Docs</a></li>
+      <li (click)="goToDocs()"><a>Docs</a></li>
       <li><a (click)="pricingJump()">Pricing</a></li>
       <li><button class="sign-in-btn" (click)="signIn()">Sign In</button></li>
     </ul>

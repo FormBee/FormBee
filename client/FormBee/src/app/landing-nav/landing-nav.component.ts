@@ -17,6 +17,9 @@ export class LandingNavComponent {
     this.menuOpen = !this.menuOpen;
   }
 
+  goToDocs() {
+    window.open("https://docs.formbee.dev/docs");
+  }
   goHome() {
     this.router.navigate(['/home']);
   }

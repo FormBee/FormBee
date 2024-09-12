@@ -16,4 +16,10 @@ export class LandingFeaturesComponent {
   goToGithub() {
     window.open("https://github.com/FormBee");
   }
+  goToDocs() {
+    window.open("https://docs.formbee.dev/docs");
+  }
+  goToDocsCaptcha() {
+    window.open("https://docs.formbee.dev/docs/captchas/proof-of-work");
+  }
 }

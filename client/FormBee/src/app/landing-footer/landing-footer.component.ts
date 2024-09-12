@@ -22,6 +22,9 @@ export class LandingFooterComponent {
   openCookies() {
     this.router.navigate(['/cookies-policy']);
   }
+  goToDocs() {
+    window.open("https://docs.formbee.dev/docs");
+  }
   openContact() {
     this.router.navigate(['/contact']);
     window.scrollTo(0, 0);

@@ -77,7 +77,9 @@ export class DashboardNavComponent implements OnInit {
     };
     getUser(this.githubId);
   }
-
+  goToDocs() {
+    window.open("https://docs.formbee.dev/docs");
+  }
   goToBilling() {
     this.router.navigate(['/billing']);
   }

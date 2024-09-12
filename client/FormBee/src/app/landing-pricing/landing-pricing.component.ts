@@ -20,4 +20,7 @@ export class LandingPricingComponent {
   openBilling() {
     this.router.navigate(['/billing']);
   }
+  goToDocsSelfHost() {
+    window.open("https://docs.formbee.dev/docs/self-hosting");
+  }
 }
