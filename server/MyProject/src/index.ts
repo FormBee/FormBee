@@ -143,14 +143,14 @@ AppDataSource.initialize().then(async () => {
                         await sendMail(recEmail, name, email, message, null, res);
                         if (user.returnBoolean === true) {
                             const returnEmail = email;
-                            axios.post('http://localhost:3000/formbee/return/' + apikey, {
+                            axios.post('https://api.formbee.dev/formbee/return/' + apikey, {
                                 emailToSendTo: returnEmail,
                             });
 
                         }
                         if (user.telegramChatId != null && user.telegramBoolean) {
                             console.log("Sendding to telegram");
-                            axios.post('http://localhost:3000/telegram/send/' + user.githubId, {
+                            axios.post('https://api.formbee.dev/telegram/send/' + user.githubId, {
                                 message: req.body,
                             });
                         }
@@ -170,7 +170,7 @@ AppDataSource.initialize().then(async () => {
                                 console.log("Sendding to slack");
                                 const sendMessage = async (message) => {
                                     console.log("Sendding to slack");
-                                    await axios.post(`http://localhost:3000/slack/send-message`, {
+                                    await axios.post(`https://api.formbee.dev/slack/send-message`, {
                                         message,
                                         slackChannelId: user.slackChannelId,
                                         slackAccessToken: user.slackAccessToken,
@@ -180,17 +180,17 @@ AppDataSource.initialize().then(async () => {
                             }
                             if (user.makeBoolean === true && user.makeWebhook != null) {
                                 console.log("Sendding to make");
-                                axios.post('http://localhost:3000/make/' + apikey, {
+                                axios.post('https://api.formbee.dev/make/' + apikey, {
                                     message: req.body,
                                 });
                             }
                             if (user.n8nBoolean === true && user.n8nWebhook != null)
-                            axios.post('http://localhost:3000/n8n/send/' + apikey, {
+                            axios.post('https://api.formbee.dev/n8n/send/' + apikey, {
                                 message: req.body,
                             });
 
                             if (user.webhookBoolean === true && user.webhookWebhook != null)
-                            axios.post('http://localhost:3000/webhook/send/' + apikey, {
+                            axios.post('https://api.formbee.dev/webhook/send/' + apikey, {
                                 message: req.body,
                             });
 
@@ -204,14 +204,14 @@ AppDataSource.initialize().then(async () => {
                         await sendMail(recEmail, name, email, message, null, res);
                         if (user.returnBoolean === true) {
                             const returnEmail = email;
-                            axios.post('http://localhost:3000/formbee/return/' + apikey, {
+                            axios.post('https://api.formbee.dev/formbee/return/' + apikey, {
                                 emailToSendTo: returnEmail,
                             });
 
                         }
                         if (user.telegramChatId != null && user.telegramBoolean) {
                             console.log("Sendding to telegram");
-                            axios.post('http://localhost:3000/telegram/send/' + user.githubId, {
+                            axios.post('https://api.formbee.dev/telegram/send/' + user.githubId, {
                                 message: req.body,
                             });
                         }
@@ -232,7 +232,7 @@ AppDataSource.initialize().then(async () => {
                             console.log("Sendding to slack");
                             const sendMessage = async (message) => {
                                 console.log("Sendding to slack");
-                                await axios.post(`http://localhost:3000/slack/send-message`, {
+                                await axios.post(`https://api.formbee.dev/slack/send-message`, {
                                     message,
                                     slackChannelId: user.slackChannelId,
                                     slackAccessToken: user.slackAccessToken,
@@ -827,7 +827,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             const oauth2Client = new google.auth.OAuth2(
                 process.env.GOOGLE_CLIENT_ID,
                 process.env.GOOGLE_CLIENT_SECRET,
-                "http://localhost:3000/google/callback"
+                "https://api.formbee.dev/google/callback"
             );
             
             const scopes = [
@@ -883,7 +883,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                 code,
                 client_id: process.env.GOOGLE_CLIENT_ID,
                 client_secret: process.env.GOOGLE_CLIENT_SECRET,
-                redirect_uri: "http://localhost:3000/google/callback",
+                redirect_uri: "https://api.formbee.dev/google/callback",
                 grant_type: "authorization_code",
             };
         
@@ -1473,7 +1473,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             const session = await stripe.billingPortal.sessions.create({
                 customer: user.stripeCustomerId,
                 configuration: configuration.id,
-                return_url: 'http://localhost:4200/billing',
+                return_url: 'https://formbee.dev/billing',
               });
               res.json({url: session.url})
         }
@@ -1709,5 +1709,5 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     // delete all users remove after we enter prod.
     // await AppDataSource.manager.clear(User);
 
-    console.log("Express server has started on port 3000. Open http://localhost:3000/users to see results");
+    console.log("Express server has started on port 3000.");
 }).catch(error => console.log(error));
