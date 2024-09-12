@@ -117,3 +117,56 @@ button:hover {
   font-size: 0.8rem;
   margin-top: 0.5rem;
 }
+
+.form-complete {
+  position:fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0; /* Reset any margins to avoid extra offset */
+  width: 100vw;
+    height: 100vh;
+  background-color: #474747ba;
+  z-index: 1000;
+}
+
+.form-complete h2 {
+  color: var(--text-color);
+  font-size: 2rem;
+  margin-bottom: 0px;
+    text-align: center;
+}
+
+.form-complete p {
+  color: var(--text-color2);
+  padding: .5rem;
+  text-align: center;
+  font-size: 1.2rem;
+  width: fit-content;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: var(--shadow-color) 0px 8px 16px;
+  max-width: 30vw;
+  height: fit-content;
+  align-self: center;
+  justify-self: center;
+  margin-top: 1rem;
+  background-color: var(--background-color1);
+  color: var(--text-color);
+}
+
+@media screen and (max-width: 768px) {
+  .form-complete p {
+    font-size: 1rem;
+    margin: 1rem;
+    text-align: center;
+    max-width: 100%;
+    width: 90vw;
+    box-sizing: border-box;
+   }
+}
