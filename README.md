@@ -8,7 +8,7 @@ The open-source form solution for data privacy conscious developers.
 
 
 ### Get FormBee running locally
-```git clone <repository-url>```
+```git clone https://github.com/FormBee/FormBee.git```
 
 # TODO
 
