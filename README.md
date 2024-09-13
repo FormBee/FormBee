@@ -27,6 +27,8 @@ Enter server directory: ```cd FormBee/server/MyProject```
 
 Intall Dependencies ```npm install```
 
+Copy .env.example ```cp .env.example .env```
+
 
 - [] Make sure to change prod oauth Redirect URL's in
     - [] Slack
