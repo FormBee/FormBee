@@ -20,6 +20,7 @@ const stripe = Stripe(process.env.STRIPE_TEST_KEY);
 // const redirectUrl = "https://ibex-causal-painfully.ngrok-free.app";
 // const redirectUrl = "http://localhost:4200";
 const redirectUrl = "https://formbee.dev";
+const emailPort = 465; // Change this to match your email provider's port
 
 dotenv.config();
 AppDataSource.initialize().then(async () => {
@@ -69,12 +70,12 @@ AppDataSource.initialize().then(async () => {
     
 
     const transporter = nodemailer.createTransport({
-        host: 'smtp.zoho.com',
-        port: 465, // or 587 for TLS
+        host: process.env.EMAIL_HOST,
+        port: emailPort, // Change global port var to match your email provider's port, at the top of the file.
         secure: true, // true for 465, false for other ports
         auth: {
-            user: process.env.ZOHO_USER, // your Zoho email address
-            pass: process.env.ZOHO_PASSWORD // your Zoho email password
+            user: process.env.EMAIL_USER, // your email address
+            pass: process.env.EMAIL_PASSWORD // your email password
         },
     });
     
@@ -255,7 +256,7 @@ AppDataSource.initialize().then(async () => {
                 return;
             }
             const mailMessage = {
-                from: process.env.ZOHO_USER,
+                from: process.env.EMAIL_USER,
                 to: [recEmail,],
                 subject: 'New Form Submission',
                 text: `${niceMessage}`,
@@ -295,7 +296,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                     const emailSubject = user.emailSubject;
                     const emailBody = user.emailBody;
                     const mailMessage = {
-                        from: process.env.ZOHO_USER,
+                        from: process.env.EMAIL_USER,
                         to: emailToSendTo,
                         subject: emailSubject,
                         text: emailBody,
@@ -378,7 +379,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                         const emailSubject = user.emailSubject;
                         const emailBody = user.emailBody;
                         const mailMessage = {
-                            from: process.env.ZOHO_USER,
+                            from: process.env.EMAIL_USER,
                             to: emailToSendTo,
                             subject: emailSubject,
                             text: emailBody,
