@@ -14,13 +14,19 @@ FormBee is a monorepo, here are instructions for both the frontend and the backe
 
 ### Client Side
 
-Enter client directory: ```cd client/formbee```
+Enter client directory: ```cd FormBee\client\FormBee```
 
 Install dependencies: ```npm install```
 
 Run client side: ```ng serve```
 
-# TODO
+
+### Server Side
+
+Enter server directory: ```cd FormBee/server/MyProject```
+
+Intall Dependencies ```npm install```
+
 
 - [] Make sure to change prod oauth Redirect URL's in
     - [] Slack
