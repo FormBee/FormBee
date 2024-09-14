@@ -5,7 +5,7 @@ import { DashboardReturnModalComponent } from '../dashboard-return-modal/dashboa
 import { ViewChild, ElementRef } from '@angular/core';
 import { DashboardTelegramWidgetComponent } from '../dashboard-telegram-widget/dashboard-telegram-widget.component';
 import { FormsModule } from '@angular/forms';
-
+import { fetchUrl } from '../global-vars';
 @Component({
   selector: 'app-dashboard-user-info',
   standalone: true,
@@ -66,16 +66,15 @@ export class DashboardUserInfoComponent implements OnInit {
   domains: string[] = [];
   // fetchUrl: string = "http://localhost:3000/";
   // fetchUrl: string = "https://pleasing-love-production.up.railway.app/";
-  fetchUrl: string = "https://api.formbee.dev/";
 
 
   fetchApiKey = async (githubId: string) => {
     console.log("Fetching API key");
-    const response = await fetch(this.fetchUrl + 'api/user/' + githubId);
+    const response = await fetch(fetchUrl + '/api/user/' + githubId);
     const data = await response.json();
     console.log(data);
     if (!data.apiKey) {
-      fetch( this.fetchUrl + 'create-api-key/' + githubId, {
+      fetch(fetchUrl + '/create-api-key/' + githubId, {
         method: 'POST',
       })
         .then((response) => response.json())
@@ -145,7 +144,7 @@ export class DashboardUserInfoComponent implements OnInit {
   }
 
   newApiKey = () => {
-    fetch(this.fetchUrl + 'regenerate-api-key/' + this.githubId, {
+    fetch(fetchUrl + '/regenerate-api-key/' + this.githubId, {
       method: 'post',
     })
     .then((response) => response.json())
@@ -180,7 +179,7 @@ export class DashboardUserInfoComponent implements OnInit {
       if (this.isValidEmail(email)) {
       this.emailValid = false;
 
-      fetch( this.fetchUrl + 'update-email/' + this.githubId, {
+      fetch(fetchUrl + '/update-email/' + this.githubId, {
         method: 'post',
         headers: {
           'Content-Type': 'application/json'
@@ -212,7 +211,7 @@ export class DashboardUserInfoComponent implements OnInit {
       const password = passwordInput.value;
       const message = messageInput.value;
       const returnMessage = returnMessageYes.checked ? 'yes' : 'no';
-      fetch( this.fetchUrl + 'update-return-email/' + this.githubId, {
+      fetch(fetchUrl + '/update-return-email/' + this.githubId, {
         method: 'post',
         headers: {
           'Content-Type': 'application/json'
@@ -265,7 +264,7 @@ export class DashboardUserInfoComponent implements OnInit {
     } else if (!this.telegramEnabled && this.currentPlugins !== null) {
       this.currentPlugins -= 1;
     }
-    await fetch(this.fetchUrl + 'telegram/toogle/' + this.githubId, {
+    await fetch(fetchUrl + '/telegram/toogle/' + this.githubId, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -279,7 +278,7 @@ export class DashboardUserInfoComponent implements OnInit {
 
   async unlinkTelegram() {
     this.telegramChat = undefined;
-    await fetch(this.fetchUrl + 'telegram/unlink/' + this.githubId, {
+    await fetch(fetchUrl + '/telegram/unlink/' + this.githubId, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -299,7 +298,7 @@ export class DashboardUserInfoComponent implements OnInit {
     } else if (!this.discordEnabled && this.currentPlugins !== null) {
       this.currentPlugins -= 1;
     }
-    await fetch(this.fetchUrl + 'discord/toogle/' + this.githubId, {
+    await fetch(fetchUrl + '/discord/toogle/' + this.githubId, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -313,7 +312,7 @@ export class DashboardUserInfoComponent implements OnInit {
 
   async unlinkDiscord() {
     this.discordWebhook = undefined;
-    await fetch(this.fetchUrl + 'discord/unlink/' + this.githubId, {
+    await fetch(fetchUrl + '/discord/unlink/' + this.githubId, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -326,7 +325,7 @@ export class DashboardUserInfoComponent implements OnInit {
     const discordInput = document.getElementById('discord-input');
     if (discordInput) {
       this.discordWebhook = (<HTMLInputElement>discordInput).value;
-      await fetch(this.fetchUrl + 'discord/webhook/' + this.githubId, {
+      await fetch(fetchUrl + '/discord/webhook/' + this.githubId, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -356,7 +355,7 @@ export class DashboardUserInfoComponent implements OnInit {
     } else if (!this.slackEnabled && this.currentPlugins !== null) {
       this.currentPlugins -= 1;
     }
-    await fetch(this.fetchUrl + 'slack/toogle/' + this.githubId, {
+    await fetch(fetchUrl + '/slack/toogle/' + this.githubId, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -380,7 +379,7 @@ export class DashboardUserInfoComponent implements OnInit {
 
   unlinkSlack = async () => {
     this.slackChannelName = undefined;
-    await fetch(this.fetchUrl + 'slack/unlink/' + this.githubId, {
+    await fetch(fetchUrl + '/slack/unlink/' + this.githubId, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -400,7 +399,7 @@ export class DashboardUserInfoComponent implements OnInit {
     } else if (!this.makeEnabled && this.currentPlugins !== null) {
       this.currentPlugins -= 1;
     }
-    await fetch(this.fetchUrl + 'make/toogle/' + this.githubId, {
+    await fetch(fetchUrl + '/make/toogle/' + this.githubId, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -414,7 +413,7 @@ export class DashboardUserInfoComponent implements OnInit {
 
   async unlinkMake() {
     this.makeWebhook = undefined;
-    await fetch(this.fetchUrl + 'make/unlink/' + this.githubId, {
+    await fetch(fetchUrl + '/make/unlink/' + this.githubId, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -427,7 +426,7 @@ export class DashboardUserInfoComponent implements OnInit {
     const discordInput = document.getElementById('discord-input');
     if (discordInput) {
       this.makeWebhook = (<HTMLInputElement>discordInput).value;
-      await fetch(this.fetchUrl + 'make/webhook/' + this.githubId, {
+      await fetch(fetchUrl + '/make/webhook/' + this.githubId, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -457,7 +456,7 @@ export class DashboardUserInfoComponent implements OnInit {
     } else if (!this.n8nEnabled && this.currentPlugins !== null) {
       this.currentPlugins -= 1;
     }
-    await fetch(this.fetchUrl + 'n8n/toogle/' + this.githubId, {
+    await fetch(fetchUrl + '/n8n/toogle/' + this.githubId, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -471,7 +470,7 @@ export class DashboardUserInfoComponent implements OnInit {
 
   async unlinkN8n() {
     this.n8nWebhook = undefined;
-    await fetch(this.fetchUrl + 'n8n/unlink/' + this.githubId, {
+    await fetch(fetchUrl + '/n8n/unlink/' + this.githubId, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -484,7 +483,7 @@ export class DashboardUserInfoComponent implements OnInit {
     const discordInput = document.getElementById('discord-input');
     if (discordInput) {
       this.n8nWebhook = (<HTMLInputElement>discordInput).value;
-      await fetch(this.fetchUrl + 'n8n/webhook/' + this.githubId, {
+      await fetch(fetchUrl + '/n8n/webhook/' + this.githubId, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -514,7 +513,7 @@ export class DashboardUserInfoComponent implements OnInit {
     } else if (!this.webhookEnabled && this.currentPlugins !== null) {
       this.currentPlugins -= 1;
     }
-    await fetch(this.fetchUrl + 'webhook/toogle/' + this.githubId, {
+    await fetch(fetchUrl + '/webhook/toogle/' + this.githubId, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -528,7 +527,7 @@ export class DashboardUserInfoComponent implements OnInit {
 
   async unlinkWebhook() {
     this.webhookWebhook = undefined;
-    await fetch(this.fetchUrl + 'webhook/unlink/' + this.githubId, {
+    await fetch(fetchUrl + '/webhook/unlink/' + this.githubId, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -541,7 +540,7 @@ export class DashboardUserInfoComponent implements OnInit {
     const discordInput = document.getElementById('discord-input');
     if (discordInput) {
       this.webhookWebhook = (<HTMLInputElement>discordInput).value;
-      await fetch(this.fetchUrl + 'webhook/webhook/' + this.githubId, {
+      await fetch(fetchUrl + '/webhook/webhook/' + this.githubId, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -566,7 +565,7 @@ export class DashboardUserInfoComponent implements OnInit {
         const domain = input.value;
         const domains2 = domain.split(',');
         if (domain) {
-          fetch(this.fetchUrl + 'add-domain/' + this.githubId, {
+          fetch(fetchUrl + '/add-domain/' + this.githubId, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -596,7 +595,7 @@ export class DashboardUserInfoComponent implements OnInit {
     if (index > -1) {
       this.domains.splice(index, 1);
     }
-  fetch(this.fetchUrl + 'remove-domain/' + this.githubId, {
+  fetch(fetchUrl + '/remove-domain/' + this.githubId, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

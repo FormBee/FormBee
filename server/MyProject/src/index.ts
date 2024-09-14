@@ -968,6 +968,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                 if (user.subscriptionTier !== "Starter") {
                     console.log("not allowed in Starter plan.");
                     user.returnBoolean = returnMessage;
+                    await AppDataSource.manager.save(user);
                 }
                 user.emailSubject = emailSubject;
                 user.emailBody = emailBody;

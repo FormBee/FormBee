@@ -2,6 +2,7 @@ import { Component, input, output } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Input } from '@angular/core';
+import { fetchUrl } from '../global-vars';
 @Component({
   selector: 'app-dashboard-return-modal',
   standalone: true,
@@ -69,7 +70,7 @@ export class DashboardReturnModalComponent implements OnInit {
 
   gmailLogin = () => {
     // window.location.href = "http://localhost:3000/oauth/google/" + this.githubId;
-    window.location.href = "https://api.formbee.dev/oauth/google/" + this.githubId;
+    window.location.href = +fetchUrl + "/oauth/google/" + this.githubId;
   }
 
   saveChanges = async () => {
@@ -93,7 +94,7 @@ export class DashboardReturnModalComponent implements OnInit {
     this.emailSubjectOutput.emit(this.emailSubject);
     this.emailBodyOutput.emit(this.emailBody);
     this.returnEmailBooleanOutput.emit(this.returnEmailBoolean);
-    await fetch('https://api.formbee.dev/update-return-settings/' + this.githubId, {
+    await fetch(fetchUrl +'/update-return-settings/' + this.githubId, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
