@@ -3,6 +3,7 @@ import { OnInit } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { Router } from '@angular/router';
 import { max } from 'rxjs';
+import { fetchUrl } from '../global-vars';
 @Component({
   selector: 'app-dashboard-nav',
   standalone: true,
@@ -22,9 +23,6 @@ export class DashboardNavComponent implements OnInit {
   themes: string[] = ['dark', 'neutral', 'light-theme'];
   currentTheme: string = 'neutral';
   isThemeMenuOpen: boolean = false;
-  // fetchUrl: string = "https://pleasing-love-production.up.railway.app/api/user/";
-  // fetchUrl: string = "http://localhost:3000/api/user/";
-  fetchUrl: string = "https://api.formbee.dev/api/user/";
   ngOnInit(): void {
     if (!this.githubId) {
     const token = localStorage.getItem('Fb-pA4lBUfsqVAWFN78eWDF');
@@ -63,7 +61,7 @@ export class DashboardNavComponent implements OnInit {
     } 
     const getUser = async (githubId: string | undefined) => {
       if (githubId) {
-        const response = await fetch(this.fetchUrl + githubId);
+        const response = await fetch(fetchUrl + '/api/user/' + githubId);
         const data = await response.json();
         console.log(data);
         if (data.maxSubmissions) {

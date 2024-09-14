@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { LandingThreeBgComponent } from '../landing-three-bg/landing-three-bg.component';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
+import { fetchUrl } from '../global-vars';
 import { OnInit } from '@angular/core';
 @Component({
   selector: 'app-login',
@@ -40,8 +41,8 @@ export class LoginComponent  implements OnInit {
 
   login() {
     // window.location.href = 'https://pleasing-love-production.up.railway.app/auth/github';
-    // window.location.href = 'http://localhost:3000/auth/github';
-    window.location.href = 'https://api.formbee.dev/auth/github';
+    window.location.href = fetchUrl + '/auth/github';
+    // window.location.href = 'https://api.formbee.dev/auth/github';
   }
 
   termsOfService() {

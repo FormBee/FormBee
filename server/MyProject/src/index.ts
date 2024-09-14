@@ -18,8 +18,8 @@ import { Auth } from "googleapis";
 const { Stripe } = require('stripe');
 const stripe = Stripe(process.env.STRIPE_TEST_KEY);
 // const redirectUrl = "https://ibex-causal-painfully.ngrok-free.app";
-// const redirectUrl = "http://localhost:4200";
-const redirectUrl = "https://formbee.dev";
+const redirectUrl = "http://localhost:4200";
+// const redirectUrl = "https://formbee.dev";
 const emailPort = 465; // Change this to match your email provider's port
 
 dotenv.config();
@@ -36,7 +36,7 @@ AppDataSource.initialize().then(async () => {
     app.use(cors(corsOptions));
 
     const strictCorsOptions = {
-        origin: "https://formbee.dev",
+        origin: redirectUrl,
         methods: ['GET', 'POST'],
         allowedHeaders: ['Content-Type', 'x-altcha-spam-filter', 'x-api-key'],
     };
