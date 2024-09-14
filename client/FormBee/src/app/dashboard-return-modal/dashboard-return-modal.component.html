@@ -27,7 +27,7 @@
                     <span class="slider round"></span>
                 </label>
             </div>
-            <button class="gsi-material-button" (click)="gmailLogin()">
+            <button class="gsi-material-button" (click)="gmailLogin(RedirectUrlService)">
                 <div class="gsi-material-button-state"></div>
                 <div class="gsi-material-button-content-wrapper">
                 <div class="gsi-material-button-icon">
@@ -90,7 +90,7 @@
                 
             <div class="modal-footer">
                 <button class="modal-button cancel-button" (click)="closeModal()">Cancel</button>
-                <button class="modal-button" (click)="saveChanges()">Save</button>
+                <button class="modal-button" (click)="saveChanges(RedirectUrlService)">Save</button>
             </div>
         </div>
         <div class="spacing-modal-2"></div>
