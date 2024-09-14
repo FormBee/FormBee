@@ -2,7 +2,6 @@ import { Component, input, output } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { Input } from '@angular/core';
-import { RedirectUrlService } from '../redirect-url.service';
 @Component({
   selector: 'app-dashboard-return-modal',
   standalone: true,
@@ -29,7 +28,7 @@ export class DashboardReturnModalComponent implements OnInit {
     console.log(this.smtpHost, this.smtpPort, this.smtpUsername, this.smtpPassword, this.emailSubject, this.emailBody, this.returnEmailBoolean);
   }
 
-  constructor(elRef: ElementRef<HTMLElement>, public RedirectUrlService: RedirectUrlService) {
+  constructor(elRef: ElementRef<HTMLElement>) {
     this.elRef = elRef;
   }
 
@@ -68,12 +67,12 @@ export class DashboardReturnModalComponent implements OnInit {
     console.log(this.returnEmailBoolean);
   }
 
-  gmailLogin = ( RedirectUrlService: RedirectUrlService) => {
+  gmailLogin = () => {
     // window.location.href = "http://localhost:3000/oauth/google/" + this.githubId;
-    window.location.href = RedirectUrlService.redirectUrl + "/oauth/google/" + this.githubId;
+    window.location.href = "https://api.formbee.dev/oauth/google/" + this.githubId;
   }
 
-  saveChanges = async (RedirectUrlService: RedirectUrlService) => {
+  saveChanges = async () => {
     const smtpHost = document.getElementById('smtp-host-input-host') as HTMLInputElement;
     const smtpPort = document.getElementById('smtp-port-input-port') as HTMLInputElement;
     const smtpUsername = document.getElementById('smtp-username-input-username') as HTMLInputElement;
@@ -94,7 +93,7 @@ export class DashboardReturnModalComponent implements OnInit {
     this.emailSubjectOutput.emit(this.emailSubject);
     this.emailBodyOutput.emit(this.emailBody);
     this.returnEmailBooleanOutput.emit(this.returnEmailBoolean);
-    await fetch(RedirectUrlService.redirectUrl +' /update-return-settings/' + this.githubId, {
+    await fetch('https://api.formbee.dev/update-return-settings/' + this.githubId, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
