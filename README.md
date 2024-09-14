@@ -8,7 +8,7 @@ The open-source form solution for data privacy conscious developers.
 
 
 ### Get FormBee running locally
-```git clone https://github.com/FormBee/FormBee.git```
+Clone the repo: ```git clone https://github.com/FormBee/FormBee.git```
 
 FormBee is a monorepo, here are instructions for both the frontend and the backend.
 
@@ -32,7 +32,7 @@ Copy .env.example ```cp .env.example .env```
 Configure your .env with your test database credentials (modify the ```DEV_DB``` env variables.)
 The EMAIL env variables you see are for configuring the email which sends submission emails.
 
-Make your way to ```src/data-source.ts``` and comment out the second AppDataSource (Prod env vars), and uncomment the first (Dev env vars).
+Make your way to ```src/data-source.ts``` and comment out the second AppDataSource (Prod env vars), and uncomment the first AppDataSource (Dev env vars).
 
 **With that the server should be running.**
 
