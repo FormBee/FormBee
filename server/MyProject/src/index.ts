@@ -550,11 +550,23 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
 
             if (!user) {
-                const customer = await stripe.customers.create({
-                    name: githubdata.data.login,
-                    email: githubdata.data.email,
-                });
-                console.log("customer: ", await customer);
+                if (process.env.STRIPE_TEST_KEY) {
+                    const customer = await stripe.customers.create({
+                        name: githubdata.data.login,
+                        email: githubdata.data.email,
+                    });
+                    console.log("customer: ", await customer);
+                    await AppDataSource.manager.save(
+                        AppDataSource.manager.create(User, {
+                            name: githubdata.data.login,
+                            githubId: githubdata.data.id,
+                            returnEmail: githubdata.data.email,
+                            billingEmail: githubdata.data.email,
+                            apiResetDate: sameDayNextMonth,
+                            stripeCustomerId: customer.id,
+                        })
+                    );
+            } else {
                 await AppDataSource.manager.save(
                     AppDataSource.manager.create(User, {
                         name: githubdata.data.login,
@@ -562,9 +574,9 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                         returnEmail: githubdata.data.email,
                         billingEmail: githubdata.data.email,
                         apiResetDate: sameDayNextMonth,
-                        stripeCustomerId: customer.id,
                     })
                 );
+            }
             console.log(redirectUrl + "/login?token=" + tokenData.access_token);
             res.redirect( redirectUrl + "/login?token=" + tokenData.access_token);
             } else {
