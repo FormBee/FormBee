@@ -4,6 +4,8 @@ import { User } from "./entity/User"
 const dotenv = require('dotenv');
 dotenv.config();
 
+
+// Development data source.
 export const AppDataSource = new DataSource({
     type: "postgres",
     host: process.env.DEV_DB_HOST,
@@ -18,6 +20,7 @@ export const AppDataSource = new DataSource({
     subscribers: [],
 })
 
+// Production data source.
 // export const AppDataSource = new DataSource({
 //     type: "postgres",
 //     host: process.env.PROD_DB_HOST,
