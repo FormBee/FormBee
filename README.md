@@ -29,6 +29,12 @@ Intall Dependencies ```npm install```
 
 Copy .env.example ```cp .env.example .env```
 
+Configure your .env with your test database credentials (modify the ```DEV_DB``` env variables.)
+The EMAIL env variables you see are for configuring the email which sends submission emails.
+
+Make your way to ```src/data-source.ts``` and comment out the second AppDataSource (Prod env vars), and uncomment the first (Dev env vars).
+
+**With that the server should be running.**
 
 - [] Make sure to change prod oauth Redirect URL's in
     - [] Slack
