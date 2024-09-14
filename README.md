@@ -1,4 +1,4 @@
-# FormBee
+![#FormBee](https://github.com/FormBee/FormBee/blob/main/client/FormBee/src/assets/FormBee__1_-removebg.png)
 
 ## Form submissions to email made easy.
 
@@ -39,7 +39,4 @@ Lastly, make your way to ```src/index.ts``` and change the redirectUrl variable 
 
 **With that the server should be running.**
 
-- [] Make sure to change prod oauth Redirect URL's in
-    - [] Slack
-    - [] google
 
