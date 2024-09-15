@@ -173,13 +173,13 @@ export default App;
     vanilla: {
 'form.html': { content: 
   `<!-- Simple form markup -->
-<form id="form" action="https://api.formbee.dev/[APIKEY]" method="post" enctype="multipart/form-data">
+<form id="form" action="https://api.formbee.dev/formbee/[APIKEY]" method="post" enctype="multipart/form-data">
     <input type="email" name="email">
     <textarea name="message"></textarea>
     <input type="submit" value="Submit">
 </form>
 <!-- Just provide your API key
-with a post request to https://api.formbee.dev/
+with a post request to https://api.formbee.dev/formbee/
 FormBee sends the form data to your email address. -->
  `, language: 'markup' },
       'main.js': { content: 

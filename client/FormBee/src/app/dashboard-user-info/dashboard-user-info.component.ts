@@ -558,6 +558,25 @@ export class DashboardUserInfoComponent implements OnInit {
     window.open("https://whatisawebhook.com/");
   }
 
+  discordDocs = () => {
+    window.open("https://docs.formbee.dev/docs/integrations/Discord");
+  }
+
+  telegramDocs = () => {
+    window.open("https://docs.formbee.dev/docs/integrations/Telegram");
+  }
+
+  n8nDocs = () => {
+    window.open("https://docs.formbee.dev/docs/integrations/n8n");
+  }
+
+  makeDocs = () => {
+    window.open("https://docs.formbee.dev/docs/integrations/make");
+  }
+
+  webhookDocs = () => {
+    window.open("https://docs.formbee.dev/docs/integrations/Webhooks");
+  }
   addDomain = () => {
     if (this.domains.length <= 50) {
       const input = document.getElementById('allowed-domains-input') as HTMLInputElement;

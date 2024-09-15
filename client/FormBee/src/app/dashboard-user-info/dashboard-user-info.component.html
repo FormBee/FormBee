@@ -134,7 +134,7 @@
   <div class="telegram-modal">
     <button class="close-button" (click)="openTelegramModal()">&times;</button>
     <p class="plugin-title">Connect to <u (click)="teleLink()" class="clickable" style="cursor: pointer; color:rgb(225, 178, 60)">Telegram</u></p>
-    <p class="read-docs"><u style="text-decoration: none;">read docs</u></p>
+    <p class="read-docs"><u style="text-decoration: none;" (click)="telegramDocs()">read docs</u></p>
     <p class="plugin-product-description"><u (click)="teleLink()" style="cursor: pointer; color:rgb(225, 178, 60)">Telegram</u> is a popular instant messaging app known for its speed and security. It offers cross-platform availability, end-to-end encryption for secret chats, and encrypted cloud storage for regular messages.</p>
     <p class="plugin-description">When you connect your Telegram account, you will be able to recieve form data via messages on Telegram. </p>
     <div class="flex-row">
@@ -170,7 +170,7 @@
   <div class="telegram-modal">
     <button class="close-button" (click)="openDiscordModal()">&times;</button>
     <p class="plugin-title">Connect to <u (click)="discordLink()" class="clickable" style="cursor: pointer; color:rgb(225, 178, 60)">Discord</u></p>
-    <p class="read-docs"><u style="text-decoration: none;">read docs</u></p>
+    <p class="read-docs"><u style="text-decoration: none;" (click)="discordDocs()">read docs</u></p>
     <p class="plugin-product-description"><u (click)="discordLink()" style="cursor: pointer; color:rgb(225, 178, 60)">Discord</u> is a free, voice, video, and text chat platform designed primarily for gamers but has since expanded to various communities and uses. Discord allows users to create and join servers, which are organized into channels</p>
     <p class="plugin-description">When you connect your Discord channel with a webhook, you will be able to recieve form data via messages in your Discord channel.</p>
     <div class="flex-row">
@@ -235,7 +235,7 @@
   <div class="telegram-modal">
     <button class="close-button" (click)="openMakeModal()">&times;</button>
     <p class="plugin-title">Connect to <u (click)="makeLink()" class="clickable" style="cursor: pointer; color:rgb(225, 178, 60)">Make</u></p>
-    <p class="read-docs"><u style="text-decoration: none;">read docs</u></p>
+    <p class="read-docs"><u style="text-decoration: none;" (click)="makeDocs()">read docs</u></p>
     <p class="plugin-product-description"><u (click)="makeLink()" style="cursor: pointer; color:rgb(225, 178, 60)">Make</u> is a visual automation platform that allows users to connect apps and automate workflows without coding. It supports integrations with a wide range of applications, enabling users to create complex multi-step workflows.</p>
     <p class="plugin-description">When you connect your make scenario to formbee with a webhook, you will be able to create workflows with your form data.</p>
     <div class="flex-row">
@@ -267,7 +267,7 @@
   <div class="telegram-modal">
     <button class="close-button" (click)="openN8nModal()">&times;</button>
     <p class="plugin-title">Connect to <u (click)="n8nLink()" class="clickable" style="cursor: pointer; color:rgb(225, 178, 60); ">n8n</u></p>
-    <p class="read-docs"><u style="text-decoration: none;">read docs</u></p>
+    <p class="read-docs"><u style="text-decoration: none;" (click)="n8nDocs()">read docs</u></p>
     <p class="plugin-product-description"><u (click)="n8nLink()" style="cursor: pointer; color:rgb(225, 178, 60)">n8n</u> is an open-source workflow automation tool that allows users to connect different applications and automate tasks through a visual interface. It supports a wide range of integrations and enables the creation of complex workflows with minimal coding.</p>
     <p class="plugin-description">When you connect your n8n workflow with a webhook, you will be able to create n8n workflows with your form data.</p>
     <div class="flex-row">
@@ -299,7 +299,7 @@
     <div class="telegram-modal">
       <button class="close-button" (click)="openWebhookModal()">&times;</button>
       <p class="plugin-title">Connect a <u (click)="webhookLink()" class="clickable" style="cursor: pointer; color:rgb(225, 178, 60); ">webhook</u></p>
-      <p class="read-docs"><u style="text-decoration: none;">read docs</u></p>
+      <p class="read-docs"><u style="text-decoration: none;" (click)="webhookDocs()">read docs</u></p>
       <p class="plugin-product-description">A webhook is a method used to deliver data from one application to another, typically by making an HTTP POST request to a specified URL. Webhooks are often used for real-time data transfer and automation, allowing systems to communicate efficiently.</p>
       <p class="plugin-description">When you enter a valid webhook URL below, formbee will send your form data to the webhook URL you provide.</p>
       <div class="flex-row">
