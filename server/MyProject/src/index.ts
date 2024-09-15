@@ -243,8 +243,8 @@ AppDataSource.initialize().then(async () => {
                         //     return AppDataSource.manager.save(user);
 
                         // }
-                        // user.currentSubmissions++;
-                        // return AppDataSource.manager.save(user);
+                        user.currentSubmissions++;
+                        return AppDataSource.manager.save(user);
                     }
                 }
             })
