@@ -13,7 +13,7 @@ export class LandingWhatComponent implements OnInit {
   plugins = [
     { icon: 'https://gliscfokeivkvdrwzlsv.supabase.co/storage/v1/object/public/Plugin%20images/previous-return.svg', name: 'Return logo', description: 'Send an automatic reply email from your email address.' },
     { icon: 'https://gliscfokeivkvdrwzlsv.supabase.co/storage/v1/object/public/Plugin%20images/n8n%20logo.png', name: 'n8n logo', description: 'Create automations on n8n.io with your form data.' },
-    { icon: 'https://gliscfokeivkvdrwzlsv.supabase.co/storage/v1/object/public/Plugin%20images/slack%20logo.png', name: 'Slack logo', description: 'Receive your form submissions in your Slack channel.' },
+    // { icon: 'https://gliscfokeivkvdrwzlsv.supabase.co/storage/v1/object/public/Plugin%20images/slack%20logo.png', name: 'Slack logo', description: 'Receive your form submissions in your Slack channel.' },
     { icon: 'https://gliscfokeivkvdrwzlsv.supabase.co/storage/v1/object/public/Plugin%20images/discord%20logo.webp', name: 'Discord logo', description: 'Receive your form submissions in your discord channel.' },
     { icon: 'https://gliscfokeivkvdrwzlsv.supabase.co/storage/v1/object/public/Plugin%20images/make%20logo.png', name: 'Make logo', description: 'Create automations on make.com with your form data.' },
     { icon: 'https://gliscfokeivkvdrwzlsv.supabase.co/storage/v1/object/public/Plugin%20images/Telegram-Logo.png', name: 'Telegram logo', description: 'Receive your form submissions via Telegram.' },
