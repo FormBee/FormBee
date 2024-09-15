@@ -27,9 +27,9 @@ Run client side: ```ng serve```
 
 Enter server directory: ```cd FormBee/server/MyProject```
 
-Intall Dependencies ```npm install```
+Intall Dependencies: ```npm install```
 
-Copy .env.example ```cp .env.example .env```
+Copy .env.example: ```cp .env.example .env```
 
 Configure your .env with your test database credentials (modify the ```DEV_DB``` env variables.)
 The EMAIL env variables you see are for configuring the email which sends submission emails.
