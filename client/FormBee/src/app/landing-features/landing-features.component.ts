@@ -20,6 +20,6 @@ export class LandingFeaturesComponent {
     window.open("https://docs.formbee.dev/docs");
   }
   goToDocsCaptcha() {
-    window.open("https://docs.formbee.dev/docs/captchas/proof-of-work");
+    window.open("https://docs.formbee.dev/docs/features/captchas/pow-captcha");
   }
 }

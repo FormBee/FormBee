@@ -21,6 +21,6 @@ export class LandingPricingComponent {
     this.router.navigate(['/billing']);
   }
   goToDocsSelfHost() {
-    window.open("https://docs.formbee.dev/docs/self-hosting");
+    window.open("https://docs.formbee.dev/docs/self%20hosting/Github");
   }
 }
