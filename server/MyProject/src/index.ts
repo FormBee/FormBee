@@ -18,8 +18,8 @@ import { Auth } from "googleapis";
 const { Stripe } = require('stripe');
 const stripe = Stripe(process.env.STRIPE_TEST_KEY);
 // const redirectUrl = "https://ibex-causal-painfully.ngrok-free.app";
-const redirectUrl = "http://localhost:4200";
-// const redirectUrl = "https://formbee.dev";
+// const redirectUrl = "http://localhost:4200";
+const redirectUrl = "https://formbee.dev";
 const emailPort = 465; // Change this to match your email provider's port
 
 dotenv.config();
@@ -167,18 +167,18 @@ AppDataSource.initialize().then(async () => {
                             await sendMessage(niceMessageDiscord);
                             }
     
-                            if (user.slackChannelId != null && user.slackAccessToken != null && user.slackBoolean) {
-                                console.log("Sendding to slack");
-                                const sendMessage = async (message) => {
-                                    console.log("Sendding to slack");
-                                    await axios.post(`https://api.formbee.dev/slack/send-message`, {
-                                        message,
-                                        slackChannelId: user.slackChannelId,
-                                        slackAccessToken: user.slackAccessToken,
-                                    });
-                                };
-                                await sendMessage(niceMessageDiscord);
-                            }
+                            // if (user.slackChannelId != null && user.slackAccessToken != null && user.slackBoolean) {
+                            //     console.log("Sendding to slack");
+                            //     const sendMessage = async (message) => {
+                            //         console.log("Sendding to slack");
+                            //         await axios.post(`https://api.formbee.dev/slack/send-message`, {
+                            //             message,
+                            //             slackChannelId: user.slackChannelId,
+                            //             slackAccessToken: user.slackAccessToken,
+                            //         });
+                            //     };
+                            //     await sendMessage(niceMessage);
+                            // }
                             if (user.makeBoolean === true && user.makeWebhook != null) {
                                 console.log("Sendding to make");
                                 axios.post('https://api.formbee.dev/make/' + apikey, {
@@ -229,20 +229,22 @@ AppDataSource.initialize().then(async () => {
                         await sendMessage(niceMessageDiscord);
                         }
 
-                        if (user.slackChannelId != null && user.slackAccessToken != null && user.slackBoolean) {
-                            console.log("Sendding to slack");
-                            const sendMessage = async (message) => {
-                                console.log("Sendding to slack");
-                                await axios.post(`https://api.formbee.dev/slack/send-message`, {
-                                    message,
-                                    slackChannelId: user.slackChannelId,
-                                    slackAccessToken: user.slackAccessToken,
-                                });
-                            };
-                            await sendMessage(niceMessageDiscord);
-                        }
-                        user.currentSubmissions++;
-                        return AppDataSource.manager.save(user);
+                        // if (user.slackChannelId != null && user.slackAccessToken != null && user.slackBoolean) {
+                        //     const sendMessage = async (message) => {
+                        //         console.log("Sendding to slack");
+                        //         await axios.post(`https://api.formbee.dev/slack/send-message`, {
+                        //             message,
+                        //             slackChannelId: user.slackChannelId,
+                        //             slackAccessToken: user.slackAccessToken,
+                        //         });
+                        //     };
+                        //     await sendMessage(niceMessageDiscord);
+                        //     user.currentSubmissions++;
+                        //     return AppDataSource.manager.save(user);
+
+                        // }
+                        // user.currentSubmissions++;
+                        // return AppDataSource.manager.save(user);
                     }
                 }
             })
@@ -1035,7 +1037,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                     code,
                     client_id: process.env.SLACK_CLIENT_ID,
                     client_secret: process.env.SLACK_CLIENT_SECRET,
-                    redirect_uri:  "https://ibex-causal-painfully.ngrok-free.app/slack/callback",
+                    redirect_uri:  "https://api.formbee.dev/slack/callback",
                 },
             });
             const { access_token } = response.data;
@@ -1081,6 +1083,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     });
     
     app.post('/slack/send-message', cors(strictCorsOptions), async (req, res) => {
+        console.log("in slack send message");
         const { message, slackChannelId, slackAccessToken } = req.body;
             try {
                 const response = await axios.post(
@@ -1096,6 +1099,8 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                     });
                 if (response.data.ok) {
                     console.log('Message sent successfully');
+                } else {
+                    console.log("Message not sent");
                 }
             } catch (error) {
                 console.error('Request failed:', error);
