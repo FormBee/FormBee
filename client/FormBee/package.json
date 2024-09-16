@@ -19,6 +19,7 @@
     "@angular/platform-browser-dynamic": "^18.2.1",
     "@angular/router": "^18.2.1",
     "@stripe/stripe-js": "^4.3.0",
+    "altcha": "^1.0.0",
     "glob": "^11.0.0",
     "prismjs": "^1.29.0",
     "rimraf": "^6.0.1",
