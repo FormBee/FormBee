@@ -1,7 +1,7 @@
 <div align="center">
   <img src="https://github.com/FormBee/FormBee/blob/main/client/FormBee/src/assets/FormBee%20(1).png" alt="FormBee" width="200" style="margin-left:200px;"/>
 <h1>Form submissions to email made easy.</h1>
-<h3>The open-source form solution for data privacy conscious developers.</h3>
+<h3>The open-source form backend for data privacy conscious developers.</h3>
 </div>
 
 
