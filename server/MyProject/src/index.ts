@@ -4,17 +4,12 @@ import * as nodemailer from "nodemailer";
 import * as cors from "cors";
 import * as dotenv from "dotenv";
 import * as cron from 'node-cron';
-import * as session from "express-session";
-const { google } = require('googleapis');
 import * as crypto from "crypto";
 import { Request, Response } from "express";
 import { AppDataSource } from "./data-source";
-import { Routes } from "./routes";
 import { User } from "./entity/User";
 import createChallenge = require("./Alcha/Challenge.js");
 import axios from 'axios';
-import * as multer from 'multer';
-import { Auth } from "googleapis";
 const { Stripe } = require('stripe');
 const stripe = Stripe(process.env.STRIPE_TEST_KEY);
 // const redirectUrl = "https://ibex-causal-painfully.ngrok-free.app";
@@ -40,7 +35,6 @@ AppDataSource.initialize().then(async () => {
         methods: ['GET', 'POST'],
         allowedHeaders: ['Content-Type', 'x-altcha-spam-filter', 'x-api-key'],
     };
-    const upload = multer();
 
     app.post('/stripe/webhook', express.raw({type: 'application/json'}), async (request, res) => {
         const sig = request.headers['stripe-signature'];
@@ -48,7 +42,6 @@ AppDataSource.initialize().then(async () => {
         try {
             event = stripe.webhooks.constructEvent(request.body, sig, process.env.STRIPE_WHSEC);
         } catch (err) {
-            console.log('⚠️  Webhook signature verification failed.');
         }
     
         if (event.type === 'customer.subscription.deleted') {
@@ -81,22 +74,20 @@ AppDataSource.initialize().then(async () => {
     
 
 
-    app.use(session({
-        secret: process.env.SECRET_KEY,
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-        },
-    }));
+    // app.use(session({
+    //     secret: process.env.SECRET_KEY,
+    //     resave: false,
+    //     saveUninitialized: false,
+    //     cookie: {
+    //         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    //     },
+    // }));
 
 
     // Basic post route, sends form data to the users email.
-    app.post('/formbee/:apikey', upload.none(), (req, res) => {
-        console.log("sending email.")
+    app.post('/formbee/:apikey', async (req, res) => {
         const { apikey } = req.params;
         const { name, email, message } = req.body;
-        console.log("req.body: ", req.body);
         let messageList = [];
             for (const [key, value] of Object.entries(req.body)) {
                 if (typeof value === 'string' && value !== "") {
@@ -211,17 +202,13 @@ AppDataSource.initialize().then(async () => {
 
                         }
                         if (user.telegramChatId != null && user.telegramBoolean) {
-                            console.log("Sendding to telegram");
                             axios.post('https://api.formbee.dev/telegram/send/' + user.githubId, {
                                 message: req.body,
                             });
                         }
 
                         if (user.discordWebhook != null && user.discordBoolean) {
-                        console.log("Discord webhook");
                         const sendMessage = async (message) => {
-                            console.log("Sendding to discord");
-                            console.log(user.discordWebhook, message);
                             await axios.post(user.discordWebhook, {
                                 content: message,
                             });
@@ -253,7 +240,6 @@ AppDataSource.initialize().then(async () => {
             });
 
         async function sendMail(recEmail, name, email, message, file, res) {      
-            console.log("in sendMail.")  
             if (niceMessage === "") {
                 return;
             }
@@ -266,7 +252,6 @@ AppDataSource.initialize().then(async () => {
             };
             transporter.sendMail(mailMessage, (error) => {
                 if (error) {
-                    console.error(error);
                     res.status(500).json('Error sending email');
                 } else {
                     res.json('Email sent successfully');
@@ -278,10 +263,8 @@ AppDataSource.initialize().then(async () => {
 
     // Sends the return email to the user's client's.
 app.post('/formbee/return/:apikey', async (req, res) => {
-    console.log("return email");
     const isValidEmail = async (email: string): Promise<boolean> => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        console.log(emailRegex.test(email))
         return emailRegex.test(email);
     }
     try {
@@ -305,7 +288,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                     }
                     transporter.sendMail(mailMessage, (error) => {
                         if (error) {
-                            console.error(error);
                             res.status(500).send('Error sending email');
                         } else {
                             res.json({ message: 'Email sent successfully' });
@@ -388,7 +370,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                         };
                         transporter.sendMail(mailMessage, (error) => {
                             if (error) {
-                                console.error(error);
                                 res.status(500).json('Error sending email');
                             } else {
                                 res.json({ message: 'Email sent successfully' });
@@ -405,9 +386,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     });
 
     app.get('/challenge/:apikey', async (req, res) => {
-        console.log("in challenge");
         const apiKey  = req.params.apikey; 
-        console.log("apikey: ", apiKey);
         const user = await AppDataSource.manager.findOne(User, { where: { apiKey: apiKey } });
         if (!user) {
             res.status(400).send('User not found');
@@ -424,10 +403,8 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
 
     app.get('/auth/github', cors(strictCorsOptions), (req, res) => {
-        console.log("in auth github");
         const githubAuthUrl = 'https://github.com/login/oauth/authorize';
         const clientId = process.env.GITHUB_CLIENT_ID;
-        console.log("client id: ", clientId);
         res.redirect(`${githubAuthUrl}?client_id=${clientId}`);
     });
 
@@ -440,11 +417,9 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             return;
         } else {
             if (telegramBoolean == true && user.currentPlugins + 1 > user.maxPlugins && user.maxPlugins !== null) {
-                console.log("Can't toggle telegram, max plugins reached");
                 res.status(400).send('You have reached your plugin limit');
                 return;
             } else {
-                console.log("update allowed")
                 user.telegramBoolean = telegramBoolean;
                 if (telegramBoolean == true) {
                     user.currentPlugins += 1;
@@ -457,8 +432,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                     user.currentPlugins = user.maxPlugins;
                 }
                 await AppDataSource.manager.save(user);
-                console.log("current plugins: ", user.currentPlugins);
-                console.log("max plugins: ", user.maxPlugins);
                 res.json({ message: 'Telegram settings updated successfully' });
             }
         }
@@ -473,11 +446,9 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             return;
         } else {
             if (discordBoolean == true && user.currentPlugins + 1 > user.maxPlugins && user.maxPlugins !== null) {
-                console.log("Can't toggle discord, max plugins reached");
                 res.status(400).send('You have reached your plugin limit');
                 return;
             } else {
-                console.log("update allowed")
                 user.discordBoolean = discordBoolean;
                 if (discordBoolean == true) {
                     user.currentPlugins += 1;
@@ -485,8 +456,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                     user.currentPlugins -= 1;
                 }
                 await AppDataSource.manager.save(user);
-                console.log("current plugins: ", user.currentPlugins);
-                console.log("max plugins: ", user.maxPlugins);
                 res.json({ message: 'Discord settings updated successfully' });
             }
         }
@@ -543,8 +512,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                 const year = nextMonth.getFullYear();
                 const month = String(nextMonth.getMonth() + 1).padStart(2, '0'); // Months are 0-based
                 const day = String(nextMonth.getDate()).padStart(2, '0');
-                console.log(nextMonth);
-                console.log(year, month, day);
                 return `${year}-${month}-${day}`;
             }
             let currentDate = new Date();
@@ -579,13 +546,11 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                     })
                 );
             }
-            console.log(redirectUrl + "/login?token=" + tokenData.access_token);
             res.redirect( redirectUrl + "/login?token=" + tokenData.access_token);
             } else {
                 res.redirect( redirectUrl + "/login?token=" + tokenData.access_token);
             }
         } catch (error) {
-            console.error('Error fetching access token:', error);
             res.status(500).send('Internal Server Error');
         }
     });
@@ -594,7 +559,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     //Route for creating a new API key for the user
     app.post('/create-api-key/:githubId', cors(strictCorsOptions), (req, res) => {
         const githubId = parseInt(req.params.githubId);
-        console.log("in create-api-key: ", githubId)
         const userPromise = AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
         userPromise.then(user => {
             if (!user) {
@@ -607,7 +571,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             //     res.status(401).json('Cannot create a new API key, if you wish to change your API key, press the regenerate button');
             //     return;
             // }
-            console.log("Creating new API key");
             const { v4: uuidv4 } = require('uuid');
             // real
             user.apiKey = uuidv4();
@@ -627,15 +590,12 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     // Delete old API key, create new one
     app.post('/regenerate-api-key/:githubId', cors(strictCorsOptions), (req, res) => {
         const githubId = parseInt(req.params.githubId);
-        console.log("in regenerate-api-key: ", githubId)
         const userPromise = AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
         userPromise.then(user => {
-            console.log("Regenerating API key: ", user);
             if (!User) {
                 res.status(401).json('Unauthorized');
                 return;
             }
-            console.log("Creating new API key");
             const { v4: uuidv4 } = require('uuid');
             // real
             user.apiKey = uuidv4();
@@ -655,7 +615,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
         const githubId = parseInt(req.params.githubId, 10);
         if (isNaN(githubId)) {
-            console.log("isNaN I'm in here doggo");
             res.status(400).json('Invalid GitHub ID');
             return;
         }
@@ -663,9 +622,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             .then(user => {
                 if (User) {
                     res.json(user);
-                    console.log("User: ", user);
                 } else {
-                    console.log("user: ", user);
                     res.status(404).json('User not found');
                 }
             })
@@ -695,7 +652,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
     app.get('/oauth/telegram/:githubId', cors(strictCorsOptions), async (req, res) => {
         const githubId = parseInt(req.params.githubId);
-        console.log("in telegram oauth: ", githubId);
         const verifyTelegramHash = (authData, botToken) => {
             const secretKey = crypto.createHash('sha256').update(botToken).digest();
             const dataCheckString = Object.keys(authData)
@@ -712,7 +668,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         };
         
         const { id, first_name, last_name, username, photo_url, auth_date, hash } = req.query;
-        console.log(req.query);
         const botToken = process.env.TELEGRAM_API_TOKEN;
     
         try {
@@ -723,13 +678,11 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                     const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
                 
                     try {
-                        console.log
                         await axios.post(url, {
                             chat_id: chatId,
                             text: message,
                         });
                     } catch (error) {
-                        console.error('Error sending message:', error);
                     }
                 };
                 await sendTelegramMessage(id, `Hi ${first_name}! Formbee will now be sending your form submission data to this chat!`);
@@ -750,7 +703,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                 res.status(400).send('Invalid request');
             }
         } catch (error) {
-            console.error('Error verifying Telegram hash:', error);
             res.status(500).send('Internal Server Error');
         }
     });
@@ -763,7 +715,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             res.status(400).send('User not found');
             return;
         } else {
-            console.log("in the else...");
             const message = req.body.message;
             let messageList = [];
             // Loop through the message object and format it to be sent to Telegram
@@ -779,8 +730,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             // Join the formatted message list into a single string
             const formattedMessage = messageList.join('\n\n');
 
-            console.log("formatted message: ", formattedMessage);
-            console.log("message: ", message);
 
             message
             const sendTelegramMessage = async (chatId, message) => {
@@ -820,155 +769,16 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-
-    // Google OAuth
-    app.get('/oauth/google/:githubId', cors(strictCorsOptions), async(req, res) => {
-        console.log("in google oauth");
-        const githubId = parseInt(req.params.githubId);  // Convert githubId to integer
-        const user = await AppDataSource.manager.findOne(User, { where: { githubId } });
-        if (!user) {
-            res.status(400).send('User not found');
-            return;
-        } else if (user.fromEmailAccessToken) {
-            user.smtpHost = null;
-            user.smtpPort = null;
-            user.smtpUsername = null;
-            user.smtpPassword = null;
-            console.log("User: ", user);
-            await AppDataSource.manager.save(user);
-            res.redirect(redirectUrl + "/dashboard");
-            return;
-        } else {
-            const oauth2Client = new google.auth.OAuth2(
-                process.env.GOOGLE_CLIENT_ID,
-                process.env.GOOGLE_CLIENT_SECRET,
-                "https://api.formbee.dev/google/callback"
-            );
-            
-            const scopes = [
-                'https://www.googleapis.com/auth/gmail.addons.current.action.compose',
-                'https://www.googleapis.com/auth/userinfo.email',
-                'https://www.googleapis.com/auth/gmail.compose',
-                "https://mail.google.com/"
-            ];
-            
-            const stateValue = {
-                state: crypto.randomBytes(32).toString('hex'),
-                githubId
-            };
-            const state = Buffer.from(JSON.stringify(stateValue)).toString('base64');
-            
-            // Store state in the session (assumes session middleware is set up)
-            const session = (req as any).session; // Cast to any to bypass TypeScript error
-            if (session) {
-                session.state = state;
-            } else {
-                res.status(500).json('Session not available');
-            }
-            
-            // Generate a url that asks permissions for the Drive activity scope
-            const authorizationUrl = oauth2Client.generateAuthUrl({
-                access_type: 'offline',
-                scope: scopes,
-                include_granted_scopes: true,
-                state: state
-            });
-            res.redirect(authorizationUrl);
-        }
-    });
-
-    // Google OAuth callback
-    app.get("/google/callback", async (req, res) => {
-        try {
-        
-            const { code, state } = req.query;
-            
-            if (typeof state !== 'string') {
-                res.status(400).send('Invalid state parameter');
-                return;
-            }
-            
-            // Decode state to retrieve the githubId
-            const stateValue = JSON.parse(Buffer.from(state, 'base64').toString('utf8'));
-            const { githubId } = stateValue;
-
-            // Get the user with the githubId
-    
-            const data = {
-                code,
-                client_id: process.env.GOOGLE_CLIENT_ID,
-                client_secret: process.env.GOOGLE_CLIENT_SECRET,
-                redirect_uri: "https://api.formbee.dev/google/callback",
-                grant_type: "authorization_code",
-            };
-        
-        
-            // Exchange authorization code for access token & id_token
-            const response = await axios({
-                url: "https://oauth2.googleapis.com/token",
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
-                },
-                data: JSON.stringify(data),
-            });
-    
-            const access_token_data = response.data;
-            const { access_token, refresh_token } = access_token_data;
-            // Fetch user profile with the access token
-            const userInfoResponse = await axios({
-                url: "https://www.googleapis.com/oauth2/v1/userinfo",
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${access_token}`,
-                },
-            });
-        
-            const userInfo = userInfoResponse.data;
-        
-            // Extract email and other desired info
-            const userEmail = userInfo.email;
-
-            const user = await AppDataSource.manager.findOne(User, { where: { githubId } });
-            if (!user) {
-                res.status(400).send('User not found');
-                return;
-            } else {
-                // Add google credentials to user
-                user.fromEmailAccessToken = access_token;
-                user.fromEmailRefreshToken = refresh_token;
-                user.fromEmail = userEmail;
-                // Remove smtp credentials
-                user.smtpHost = null;
-                user.smtpPort = null;
-                user.smtpUsername = null;
-                user.smtpPassword = null;
-                console.log("User: ", user);
-                await AppDataSource.manager.save(user);
-                
-                res.redirect(redirectUrl + "/dashboard");
-            }
-        
-            // Redirect to your application's dashboard or handle information as needed
-        } catch (error) {
-            console.error('Error during OAuth callback:', error);
-            res.status(500).json({ error: 'An error occurred during the authentication process' });
-        }
-    });
-
     app.post('/update-return-settings/:githubId', cors(strictCorsOptions), async (req: Request, res: Response) => {
         const githubId = parseInt(req.params.githubId);
         const { smtpHost, smtpPort, smtpUsername, smtpPassword, emailSubject, emailBody, returnMessage } = req.body;
         try {
-            console.log(req.body)
             const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
             if (!user) {
                 res.status(400).send('User not found');
                 return;
             } else {
                 if (user.subscriptionTier !== "Starter") {
-                    console.log("not allowed in Starter plan.");
                     user.returnBoolean = returnMessage;
                     await AppDataSource.manager.save(user);
                 }
@@ -991,135 +801,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         } catch (error) {
             console.error('Error during update return settings:', error);
             res.status(500).json({ error: 'An error occurred during the update process' });
-        }
-    });
-
-    app.post('/slack/toogle/:githubId', cors(strictCorsOptions), async (req, res) => {
-        const githubId = parseInt(req.params.githubId);
-        const { slackBoolean } = req.body;
-        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
-        if (!user) {
-            res.status(400).send('User not found');
-            return;
-        } else {
-            if (slackBoolean == true && user.currentPlugins + 1 > user.maxPlugins && user.maxPlugins !== null) {
-                console.log("Can't toggle slack, max plugins reached");
-                res.status(400).send('You have reached your plugin limit');
-                return;
-            } else {
-                console.log("update allowed")
-                user.slackBoolean = slackBoolean;
-                if (slackBoolean == true) {
-                    user.currentPlugins += 1;
-                } else {
-                    user.currentPlugins -= 1;
-                }
-                await AppDataSource.manager.save(user);
-                console.log("current plugins: ", user.currentPlugins);
-                console.log("max plugins: ", user.maxPlugins);
-                res.json({ message: 'Slack settings updated successfully' });
-            }
-        }
-    });
-
-    app.get('/slack/callback', async (req, res) => {
-        console.log("in slack callback");
-        try {
-            const { code, state } = req.query;
-            let githubId = state;
-            if (typeof state !== 'string') {
-                res.status(400).send('Invalid state parameter');
-                return;
-            }
-            // Decode state to retrieve the githubId
-            const response = await axios.post('https://slack.com/api/oauth.v2.access', null, {
-                params: {
-                    code,
-                    client_id: process.env.SLACK_CLIENT_ID,
-                    client_secret: process.env.SLACK_CLIENT_SECRET,
-                    redirect_uri:  "https://api.formbee.dev/slack/callback",
-                },
-            });
-            const { access_token } = response.data;
-            let { channel_id, channel }= response.data.incoming_webhook;
-            console.log(response.data)
-
-            try {
-                const response = await axios.post(
-                    'https://slack.com/api/chat.postMessage', 
-                    {
-                        channel: channel_id,
-                        text: "Hello Formbee will be sending form data in this channel!",
-                    },
-                    { 
-                        headers: { 
-                            'Authorization': `Bearer ${access_token}`,
-                        } 
-                    }
-                );
-                if (response.data.ok) {
-                    console.log('Message sent successfully');
-                }
-            } catch (error) {
-                console.error('Request failed:', error);
-            }
-
-            // Get the user with the githubId
-            const user = await AppDataSource.manager.findOne(User, { where: { githubId: Number(githubId) } });
-                if (!user) {
-                    res.status(400).send('User not found');
-                    return;
-                } else {
-                    user.slackChannelId = channel_id;
-                    user.slackAccessToken = access_token;
-                    user.slackChannelName = channel
-                    await AppDataSource.manager.save(user);
-                    res.redirect(redirectUrl + "/dashboard");
-                }
-        } catch (error) {
-            console.error('Error during OAuth callback:', error);
-            res.status(500).json({ error: 'An error occurred during the authentication process' });
-        }
-    });
-    
-    app.post('/slack/send-message', cors(strictCorsOptions), async (req, res) => {
-        console.log("in slack send message");
-        const { message, slackChannelId, slackAccessToken } = req.body;
-            try {
-                const response = await axios.post(
-                    'https://slack.com/api/chat.postMessage', 
-                    {
-                        channel: slackChannelId,
-                        text: message,
-                    },
-                    { 
-                        headers: { 
-                            'Authorization': `Bearer ${slackAccessToken}`,
-                        } 
-                    });
-                if (response.data.ok) {
-                    console.log('Message sent successfully');
-                } else {
-                    console.log("Message not sent");
-                }
-            } catch (error) {
-                console.error('Request failed:', error);
-            }
-        }
-    );
-        
-    app.post('/slack/unlink/:githubId', cors(strictCorsOptions), async (req, res) => {
-        const githubId = parseInt(req.params.githubId);
-        const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
-        if (!user) {
-            res.status(400).send('User not found');
-            return;
-        } else {
-            user.slackChannelId = null;
-            user.slackAccessToken = null;
-            user.slackChannelName = null;
-            await AppDataSource.manager.save(user);
-            res.json({ message: 'Slack unlinked successfully' });
         }
     });
 
@@ -1242,8 +923,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                     user.currentPlugins -= 1;
                 }
                 await AppDataSource.manager.save(user);
-                console.log("current plugins: ", user.currentPlugins);
-                console.log("max plugins: ", user.maxPlugins);
                 res.json({ message: 'N8n settings updated successfully' });
             }
         }
@@ -1297,8 +976,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                     user.currentPlugins -= 1;
                 }
                 await AppDataSource.manager.save(user);
-                console.log("current plugins: ", user.currentPlugins);
-                console.log("max plugins: ", user.maxPlugins);
                 res.json({ message: 'Webhook settings updated successfully' });
             }
         }
@@ -1591,29 +1268,20 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                 res.status(400).send('User already on premium plan');
                 return;
             } else {
-                console.log("in else, user found.");
                 let paymentMethod: string | undefined;
                 if (user.subscriptionId) {
                     try {
                         const cancellation = await stripe.subscriptions.cancel(user.subscriptionId);
                         console.log("Subscription cancelled successfully:", cancellation);
                     } catch (error) {
-                        console.log("Error cancelling subscription: ", error);
                     }
                 }
                 try {
-                    console.log("in try");
                     const customer = await stripe.customers.retrieve(user.stripeCustomerId);
-                    console.log("customer: ", customer);
                     const defaultPaymentMethodId = customer.invoice_settings.default_payment_method;
-                    console.log("defaultPaymentMethodId: ", defaultPaymentMethodId);
                     if (defaultPaymentMethodId) {
                         paymentMethod = await stripe.paymentMethods.retrieve(defaultPaymentMethodId);
-                        console.log("Default payment method found: ", paymentMethod);
-                        console.log("creating subscription");
                         try {
-                            console.log("in try for subscription");
-                            console.log(user.stripeCustomerId);
                             const subscription = await stripe.subscriptions.create({
                                 customer: user.stripeCustomerId,
                                 items: [{
@@ -1622,7 +1290,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                                 default_payment_method: defaultPaymentMethodId.id,
                             });
                             if (subscription.status === 'active') {
-                                console.log("Subscription created successfully");
                                 user.subscriptionTier = "Premium";
                                 user.maxSubmissions = 10000;
                                 user.maxPlugins = null;
@@ -1641,7 +1308,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                         
 
                     } else {
-                        console.log("No default payment method found, need to create one");
                     }
                 } catch (error) {
                     res.status(500).send({ error: error.message });
@@ -1649,23 +1315,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
             }
         }
     });
-
-
-
-
-
-    // register express routes from defined application routes
-    Routes.forEach(route => {
-        (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
-            const result = (new (route.controller as any))[route.action](req, res, next);
-            if (result instanceof Promise) {
-                result.then(result => result !== null && result !== undefined ? res.send(result) : undefined);
-            } else if (result !== null && result !== undefined) {
-                res.json(result);
-            }
-        });
-    });
-
 
     cron.schedule('0 0 * * *', async () => { // Run the cron job every day at midnight
     // cron.schedule('* * * * *', async () => { // Run the cron job once a minute.
@@ -1683,7 +1332,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                     user.localHostCurrentSubmissions = 0;
                     user.apiResetDate = addMonths(today, 1); // Set the next reset date to 1 month from now
                     if (user.subscriptionTier != user.nextMonthTier && user.nextMonthTier != null) {
-                        console.log("Changing subscription tier to ", user.nextMonthTier);
                         user.subscriptionTier = user.nextMonthTier;
                         user.nextMonthTier = null;
                         if (user.subscriptionTier == "Premium") {
@@ -1707,13 +1355,10 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                         }
                     }
                     await AppDataSource.manager.save(user); // Save the updated user
-                    console.log(`Reset API usage for user with ID ${user.id}`);
                 } else {
-                    console.log("Not resetting API usage for user with ID ", user.id);
                 }
             }
         } catch (error) {
-            console.error('Error resetting API usage:', error);
         }
     });
     // Helper function to add months to a date

@@ -68,11 +68,6 @@ export class DashboardReturnModalComponent implements OnInit {
     console.log(this.returnEmailBoolean);
   }
 
-  gmailLogin = () => {
-    // window.location.href = "http://localhost:3000/oauth/google/" + this.githubId;
-    window.location.href = +fetchUrl + "/oauth/google/" + this.githubId;
-  }
-
   saveChanges = async () => {
     const smtpHost = document.getElementById('smtp-host-input-host') as HTMLInputElement;
     const smtpPort = document.getElementById('smtp-port-input-port') as HTMLInputElement;
