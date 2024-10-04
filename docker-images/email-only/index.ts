@@ -60,6 +60,10 @@ app.post('/formbee/email-only', upload.none(), async (req: Request, res: Respons
     await sendMail();
 });
 
+app.get("/", (req: Request, res: Response) => {
+    res.send("Formbee Email-Only is running");
+});
+
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
     console.log("ctrl+c x2 to exit");

@@ -62,4 +62,4 @@ npm run dev
 
 **With that the server should be running.**
 
-
+Official RailWay Template for email-only self-hosting: https://railway.app/template/NR9kSH
