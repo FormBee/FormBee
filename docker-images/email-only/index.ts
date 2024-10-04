@@ -1,7 +1,8 @@
-const nodemailer = require("nodemailer");
-const express = require('express');
-const dotenv = require('dotenv');
-const cors = require('cors');
+import express from 'express';
+import multer from 'multer';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import nodemailer from 'nodemailer';
 import type { Request, Response } from "express";
 dotenv.config();
 
@@ -16,20 +17,21 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.use(express.json());
+// Use multer to handle form data
+const upload = multer();
 
 const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_PROVIDER,
-    port: 465, // Change global port var to match your email provider's port, at the top of the file.
-    secure: true, // true for 465, false for other ports
+    port: 465,
+    secure: true,
     auth: {
-        user: process.env.EMAIL_USER, // your email address
-        pass: process.env.EMAIL_PASSWORD // your email password
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
     },
 });
 
-app.post('/formbee/email-only', async (req: Request, res: Response) => { // Typed req and res
-    console.log("in email-only");
+app.post('/formbee/email-only', upload.none(), async (req: Request, res: Response) => {
+    console.log("in email-only: ", req.body);
     let messageList = [];
     for (const [key, value] of Object.entries(req.body)) {
         if (typeof value === 'string' && value !== "") {
@@ -42,7 +44,7 @@ app.post('/formbee/email-only', async (req: Request, res: Response) => { // Type
     async function sendMail() {      
         const mailMessage = {
             from: process.env.EMAIL_USER,
-            to: [process.env.EMAIL_TO],
+            to: [process.env.EMAIL_TO!],
             subject: 'New Form Submission',
             text: `${niceMessage}`,
         };
@@ -60,4 +62,5 @@ app.post('/formbee/email-only', async (req: Request, res: Response) => { // Type
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
+    console.log("ctrl+c x2 to exit");
 });

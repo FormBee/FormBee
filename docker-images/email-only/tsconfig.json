@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "ESNext", // Change to ESNext or ES6
+    "module": "CommonJS",
     "outDir": "./dist",
     "rootDir": "./",   
     "strict": true,
@@ -9,5 +9,5 @@
     "skipLibCheck": true
   },
   "include": ["./**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
 }

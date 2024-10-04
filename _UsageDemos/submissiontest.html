@@ -1,7 +1,7 @@
 <!-- Simple form markup 
  hiya -->
 
-<form action="http://localhost:3000/formbee/b27ed43d-5d46-469e-a99b-d656991e0c05" id="myForm" method="post" enctype="multipart/form-data">
+<form action="http://localhost:3000/formbee/email-only" id="myForm" method="post" enctype="multipart/form-data">
     <input type="text" name="name" value="test">
     <input type="email" name="email" value="test@test.com">
     <input type="text" name="name2" value="test2">
@@ -15,12 +15,15 @@
 
 <script>
 const submitForm = async (event) => {
+    console.log("in submit form: ", event);
     event.preventDefault();
     const form = document.querySelector('#myForm');
     const response = await fetch(form.action, {
         method: form.method,
         body: new FormData(form)
     });
+    console.log("form: ", form);
+    console.log("response: ", response);
 };
 document.querySelector('#myForm').addEventListener('submit', submitForm);
 </script>

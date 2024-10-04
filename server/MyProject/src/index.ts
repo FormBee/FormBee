@@ -71,18 +71,6 @@ AppDataSource.initialize().then(async () => {
             pass: process.env.EMAIL_PASSWORD // your email password
         },
     });
-    
-
-
-    // app.use(session({
-    //     secret: process.env.SECRET_KEY,
-    //     resave: false,
-    //     saveUninitialized: false,
-    //     cookie: {
-    //         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-    //     },
-    // }));
-
 
     // Basic post route, sends form data to the users email.
     app.post('/formbee/:apikey', async (req, res) => {
