@@ -39,7 +39,7 @@ Enter server directory:
 cd FormBee/server/MyProject
 ```
 
-Intall Dependencies: 
+Install Dependencies: 
 ```bash
 npm install
 ```
