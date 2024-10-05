@@ -6,8 +6,8 @@
 
 ---
 # Table of Contents
-- [Features]()
-- [Run Locally](#get-formbee-running-locally)
+[<h2>Features</h2>]()
+- [<h2>Run Locally</h2>](#get-formbee-running-locally)
   - [Client Side](#client-side)
   - [Server Side](#server-side)
 - [Self Hosting]()
