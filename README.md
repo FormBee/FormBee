@@ -15,6 +15,18 @@
 
 ---
 
+## Table of Contents
+- [✨ Features](#-features)
+- [🔧 Installation/Run Locally](#-installationrun-locally)
+   - [Client Side](#client-side)
+   - [Server Side](#server-side)
+- [🌱 Contributing](#-contributing)
+- [🛠 Tech Stack](#-tech-stack)
+- [🏆 Credits](#-credits)
+- [📜 License](#-license)
+
+---
+
 <h2>✨ Features</h2>
 
 <ul>
