@@ -4,10 +4,18 @@
 <h3>The open-source form backend for data privacy conscious developers.</h3>
 </div>
 
+---
+# Table of Contents
+- [Features]()
+- [Run Locally](#get-formbee-running-locally)
+  - [Client Side](#client-side)
+  - [Server Side](#server-side)
+- [Self Hosting]()
+- [Contributing](#installation)
+- [License](#license)
 
-
-
-## Get FormBee running locally
+---
+# Get FormBee running locally
 Clone the repo: ```git clone https://github.com/FormBee/FormBee.git```
 
 FormBee is a monorepo, here are instructions for both the frontend and the backend.
