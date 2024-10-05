@@ -1,3 +1,6 @@
+
+
+
 <div align="center">
   <img src="https://github.com/FormBee/FormBee/blob/main/client/FormBee/src/assets/FormBee%20(1).png" alt="FormBee" width="200" style="margin-left:200px;"/>
 <h1>Form submissions to email made easy.</h1>
@@ -5,18 +8,32 @@
 </div>
 
 ---
-# Table of Contents
-[<h2>Features</h2>]()
-- [<h2>Run Locally</h2>](#get-formbee-running-locally)
-  - [Client Side](#client-side)
-  - [Server Side](#server-side)
-- [Self Hosting]()
-- [Contributing](#installation)
-- [License](#license)
+
+<h2>🚀 Overview</h2>
+
+<p>FormBee is an easy way to send form data that is submitted on your website to your email, Telegram, Webhooks, Etc. It is a "Form Backend" which means it allows you to have functional forms that send places without having to write any server side code yourself! We have a hosted option available here: <a href="https://formbee.dev">FormBee Website</a> or you can self-host it!</p>
 
 ---
-# Get FormBee running locally
-Clone the repo: ```git clone https://github.com/FormBee/FormBee.git```
+
+<h2>✨ Features</h2>
+
+<ul>
+  <li>🌍 <b>Open Source</b>: Free to use, modify, and contribute.</li>
+  <li>🔌 <b>Plugins</b>: Easily send your form data to email, <a>Make.com</a>, <a>Telegram</a>, <a>n8n</a>, <a>Discord</a>, or <a>Webhooks</a></li>
+  <li>🔒 <b>Captcha</b>: Protect your forms from spam with our (PoW) Proof Of Work captchas.</li>
+  <li>🔑 <b>White List Domains</b>: Prevent others from using your form backend with whitelisted domain.</li>
+  <li>↩️ <b>Automatic return emails </b>: Automatically send return emails to people who submit your forms.</li>
+  <li>➕ <b>More Features </b>: FormBee has more to offer than we can fit in here! This is a work in progress passion project!</li>
+</ul>
+
+---
+
+<h2>🔧 Installation/Run Locally</h2>
+
+Clone the repo: 
+```bash
+git clone https://github.com/FormBee/FormBee.git
+```
 
 FormBee is a monorepo, here are instructions for both the frontend and the backend.
 
@@ -70,4 +87,31 @@ npm run dev
 
 **With that the server should be running.**
 
+
+<h2>🌱 Contributing</h2> <p>We welcome contributions! Feel free to open an issue or submit a pull request if you'd like to help improve Pop A Lock.</p> <ul> <li>Fork the repository</li> <li>Create a new branch (<code>git checkout -b feature-branch</code>)</li> <li>Make your changes</li> <li>Commit your changes (<code>git commit -m 'Add some feature'</code>)</li> <li>Push to the branch (<code>git push origin feature-branch</code>)</li> <li>Open a pull request</li> </ul>
+<h2>🛠 Tech Stack</h2>
+<table> 
+  <tr> 
+    <td>
+      <b>Frontend</b>
+    </td> 
+    <td>Angular</td> 
+  </tr> <tr> <td><b>Backend</b></td> 
+    <td>Node.js/Express</td> </tr> <tr> 
+      <td><b>Database</b></td> 
+      <td>Postgres/TypeORM</td> </tr> <tr> 
+        <td><b>Styling</b></td> 
+        <td>SCSS/CSS</td> </tr> 
+</table>
+<h2>🏆 Credits</h2> 
+(When you contribute feel free to sign and plug yourself here in your PR)
+
+- <p>Built and maintained by <a href="https://github.com/Oia20">Jacob Dement</a>.</p>
+<h2>📜 License</h2> <p>This project is licensed under the MIT License.</p>
+
+---
+
+<div align="center"> <a href="https://github.com/Formbee/Formbee/issues"> <img alt="Issues" src="https://img.shields.io/github/issues/Formbee/Formbee?color=brightgreen"/> </a> <a href="https://github.com/Formbee/Formbee"> <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/Formbee/Formbee?style=social"/> </a> </div>
+<p align="center"><i>Give it a go and recieve your form submissions easier than you ever have before.</i></p>
 Official RailWay Template for email-only self-hosting: https://railway.app/template/NR9kSH
+
