@@ -16,14 +16,14 @@
 ---
 
 ## Table of Contents
-- [✨ Features](#-features)
-- [🔧 Installation/Run Locally](#-installationrun-locally)
-   - [Client Side](#client-side)
-   - [Server Side](#server-side)
-- [🌱 Contributing](#-contributing)
-- [🛠 Tech Stack](#-tech-stack)
-- [🏆 Credits](#-credits)
-- [📜 License](#-license)
+- ✨ [Features](#-features)
+- 🔧 [Installation/Run Locally](#-installationrun-locally)
+   - 👨‍💻 [Client Side](#-client-side)
+   - 🖥 [Server Side](#-server-side)
+- 🌱 [Contributing](#-contributing)
+- 🛠 [Tech Stack](#-tech-stack)
+- 🏆 [Credits](#-credits)
+- 📜 [License](#-license)
 
 ---
 
@@ -49,7 +49,7 @@ git clone https://github.com/FormBee/FormBee.git
 
 FormBee is a monorepo, here are instructions for both the frontend and the backend.
 
-## Client Side
+## 👨‍💻 Client Side
 
 Enter client directory: 
 ```bash
@@ -69,7 +69,7 @@ ng serve
 ```
 
 **With that, the client side should be running, go to [localhost:4200](http://localhost:4200).**
-## Server Side
+## 🖥 Server Side
 
 Enter server directory: 
 ```bash
@@ -99,6 +99,18 @@ npm run dev
 
 **With that the server should be running.**
 
+---
+
+<h2>🏠 Self Hosting</h2>
+<p>We want to make it as easy as possible to self host! In the <code>docker-images</code> folder of the project you will find many variations of the backend you can host, so you can host just what you want, without the bloat of the things you don't want. This is a work in progress, and we're constantly working on adding more. You can read more about self hosting in the <a href="https://docs.formbee.dev">Official Formbee self-hosting docs</a>. The docs will walk you through pulling the docker images, and running them with the correct environmental variables, then you can host them wherever you like to host your containers!</p>
+
+<h3>🚆 Railway</h3>
+<p>Railway has official templates to make self hosting as easy as possible. Formbee has templates on Railway to make self hosting different Formbee backends as simple as clicking deploy and typing in a few environmental variables.</p>
+<ul>
+  <li>📧 <b><a href="https://railway.app/template/NR9kSH">Email Only Template</a></b>: Host just a backend for recieving form data to your email.</li>
+</ul>
+
+---
 
 <h2>🌱 Contributing</h2> <p>We welcome contributions! Feel free to open an issue or submit a pull request if you'd like to help improve Pop A Lock.</p> <ul> <li>Fork the repository</li> <li>Create a new branch (<code>git checkout -b feature-branch</code>)</li> <li>Make your changes</li> <li>Commit your changes (<code>git commit -m 'Add some feature'</code>)</li> <li>Push to the branch (<code>git push origin feature-branch</code>)</li> <li>Open a pull request</li> </ul>
 <h2>🛠 Tech Stack</h2>
