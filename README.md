@@ -149,5 +149,3 @@ npm run dev
 
 <div align="center"> <a href="https://github.com/Formbee/Formbee/issues"> <img alt="Issues" src="https://img.shields.io/github/issues/Formbee/Formbee?color=brightgreen"/> </a> <a href="https://github.com/Formbee/Formbee"> <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/Formbee/Formbee?style=social"/> </a> </div>
 <p align="center"><i>Give it a go and recieve your form submissions easier than you ever have before.</i></p>
-Official RailWay Template for email-only self-hosting: https://railway.app/template/NR9kSH
-
