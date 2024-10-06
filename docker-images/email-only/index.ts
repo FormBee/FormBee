@@ -22,7 +22,7 @@ const upload = multer();
 
 const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_PROVIDER,
-    port: 465,
+    port: parseInt(process.env.SMTP_PORT || "465"),
     secure: true,
     auth: {
         user: process.env.EMAIL_USER,
