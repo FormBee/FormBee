@@ -42,7 +42,7 @@
 ---
 
 <h2>🏠 Self Hosting</h2>
-<p>We want to make it as easy as possible to self host! In the <code>docker-images</code> folder of the project you will find many variations of the backend you can host, so you can host just what you want, without the bloat of the things you don't want. This is a work in progress, and we're constantly working on adding more. You can read more about self hosting in the <a href="https://docs.formbee.dev">Official Formbee self-hosting docs</a>. The docs will walk you through pulling the docker images, and running them with the correct environmental variables, then you can host them wherever you like to host your containers!</p>
+<p>We want to make it as easy as possible to self host! In the <code>docker-images</code> folder of the project you will find many variations of the backend you can host, so you can host just what you want, without the bloat of the things you don't want. This is a work in progress, and we're constantly working on adding more. You can read more about self hosting in the <a href="https://docs.formbee.dev/docs/category/self-hosting">Official Formbee self-hosting docs</a>. The docs will walk you through pulling the docker images, and running them with the correct environmental variables, then you can host them wherever you like to host your containers!</p>
 
 <h3>🚆 Railway</h3>
 <p>Formbee has official templates on Railway to make self hosting different Formbee backends as simple as clicking deploy and typing in a few environmental variables.</p>
