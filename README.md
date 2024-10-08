@@ -9,7 +9,7 @@
 
 ---
 
-<h2>🚀 Overview</h2>
+<h2>🐝 Overview</h2>
 
 <p>FormBee is an easy way to send form data that is submitted on your website to your email, Telegram, Webhooks, Etc. It is a "Form Backend" which means it allows you to have functional forms that send places without having to write any server side code yourself! We have a hosted option available here: <a href="https://formbee.dev">FormBee Website</a> or you can self-host it!</p>
 
