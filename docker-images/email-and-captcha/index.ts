@@ -5,7 +5,9 @@ import multer from 'multer';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import nodemailer from 'nodemailer';
+const createChallenge = require("./challenge.js");
 import type { Request, Response } from "express";
+
 dotenv.config();
 
 const app = express();
@@ -60,6 +62,10 @@ app.post('/formbee/email-only', upload.none(), async (req: Request, res: Respons
     }
 
     await sendMail();
+});
+
+app.get('/challenge/:apikey', async (req, res) => {
+    createChallenge(req, res);
 });
 
 
