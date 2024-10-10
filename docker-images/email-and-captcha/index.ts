@@ -1,4 +1,4 @@
-// This image is a work in progress. It is not yet ready for production use.
+// Image is functional and ready for production use. Consult the docs for how to use it.
 
 import express from 'express';
 import multer from 'multer';
@@ -64,7 +64,7 @@ app.post('/formbee/email-only', upload.none(), async (req: Request, res: Respons
     await sendMail();
 });
 
-app.get('/challenge/:apikey', async (req, res) => {
+app.get('/challenge', async (req, res) => {
     createChallenge(req, res);
 });
 

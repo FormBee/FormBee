@@ -1,7 +1,5 @@
 // import crypto from 'crypto';
 const crypto = require('crypto');
-const dotenv = require('dotenv');
-dotenv.config();
 const generateRandomString = () => crypto.randomBytes(10).toString('hex');
 const generateRandomInt = () => Math.floor(Math.random() * 1000000);
 
