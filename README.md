@@ -34,7 +34,7 @@
   <li>🌍 <b>Open Source</b>: Free to use, modify, and contribute.</li>
   <li>🔌 <b>Plugins</b>: Easily send your form data to email, <a>Make.com</a>, <a>Telegram</a>, <a>n8n</a>, <a>Discord</a>, or <a>Webhooks</a></li>
   <li>🔒 <b>Captcha</b>: Protect your forms from spam with our (PoW) Proof Of Work captchas.</li>
-  <li>🔑 <b>White List Domains</b>: Prevent others from using your form backend with whitelisted domain.</li>
+  <li>🔑 <b>White List Domains</b>: Prevent others from using your form backend by whitelisting domains.</li>
   <li>↩️ <b>Automatic return emails </b>: Automatically send return emails to people who submit your forms.</li>
   <li>➕ <b>More Features </b>: FormBee has more to offer than we can fit in here! This is a work in progress passion project!</li>
 </ul>
