@@ -1,9 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { LandingThreeBgComponent } from '../landing-three-bg/landing-three-bg.component';
-import { Router } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { fetchUrl } from '../global-vars';
-import { OnInit } from '@angular/core';
+
+interface GithubUser {
+  name: string | null;
+  email: string | null;
+}
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -11,41 +15,76 @@ import { OnInit } from '@angular/core';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent  implements OnInit {
-  name: string | undefined;
-  email: string | undefined;
-  constructor(private router: Router, route: ActivatedRoute,) {
+export class LoginComponent {
+  private readonly router = inject(Router);
+  
+  private readonly user = signal<GithubUser>({ name: null, email: null });
+  
+  readonly userName = signal<string | null>(null);
+  readonly userEmail = signal<string | null>(null);
+
+  private readonly TOKEN_STORAGE_KEY = 'Fb-pA4lBUfsqVAWFN78eWDF';
+
+  constructor() {
+    this.initializeAuth();
   }
-  landingPage() {
-    this.router.navigate(['/home']);
+
+  private async initializeAuth(): Promise<void> {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get('token');
+
+      if (!token) return;
+
+      await this.fetchUserData(token);
+      this.handleSuccessfulAuth(token);
+    } catch (error) {
+      console.error('Authentication failed:', error);
+    }
   }
-  ngOnInit(): void {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-      fetch('https://api.github.com/user', {
+
+  private async fetchUserData(token: string): Promise<void> {
+    try {
+      const response = await fetch('https://api.github.com/user', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          // console.log(data);
-          this.name = data.name;
-          this.email = data.email;
-        });
-        if (token) {
-          localStorage.setItem('Fb-pA4lBUfsqVAWFN78eWDF', token);
-          this.router.navigate(['/dashboard']);
-        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data: GithubUser = await response.json();
+      
+      this.userName.set(data.name);
+      this.userEmail.set(data.email);
+      
+      this.user.set({
+        name: data.name,
+        email: data.email
+      });
+    } catch (error) {
+      console.error('Failed to fetch user data:', error);
+      throw error;
+    }
   }
 
-  login() {
-    // window.location.href = 'https://pleasing-love-production.up.railway.app/auth/github';
-    window.location.href = fetchUrl + '/auth/github';
-    // window.location.href = 'https://api.formbee.dev/auth/github';
+  private handleSuccessfulAuth(token: string): void {
+    localStorage.setItem(this.TOKEN_STORAGE_KEY, token);
+    void this.router.navigate(['/dashboard']);
   }
 
-  termsOfService() {
-    this.router.navigate(['/terms-of-service']);
+  login(): void {
+    const authUrl = `${fetchUrl}/auth/github`;
+    window.location.href = authUrl;
+  }
+
+  landingPage(): void {
+    void this.router.navigate(['/home']);
+  }
+
+  termsOfService(): void {
+    void this.router.navigate(['/terms-of-service']);
   }
 }
