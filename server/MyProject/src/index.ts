@@ -63,12 +63,16 @@ AppDataSource.initialize().then(async () => {
     
 
     const transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: emailPort, // Change global port var to match your email provider's port, at the top of the file.
-        secure: true, // true for 465, false for other ports
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
         auth: {
-            user: process.env.EMAIL_USER, // your email address
-            pass: process.env.EMAIL_PASSWORD // your email password
+            type: 'OAuth2',
+            user: process.env.GMAIL_EMAIL,
+            accessToken: process.env.GMAIL_ACCESS,
+            refreshToken: process.env.GMAIL_REFRESH,
+            clientId: process.env.GMAIL_CLIENT,
+            clientSecret: process.env.GMAIL_SECRET,
         },
     });
 
@@ -100,7 +104,7 @@ AppDataSource.initialize().then(async () => {
                     console.log("User not found!");
                     res.status(401).json('Unauthorized');
                     return;
-                } else if (user.maxSubmissions && user.currentSubmissions >= user.maxSubmissions || user.localHostMaxSubmissions && user.localHostCurrentSubmissions >= user.localHostMaxSubmissions) {
+                } else if (user.maxSubmissions && user.currentSubmissions >= user.maxSubmissions) {
                     console.log("Reached submission limit");
                     res.status(403).json('You have reached your submission limit');
                     return;
@@ -240,7 +244,7 @@ AppDataSource.initialize().then(async () => {
             };
             transporter.sendMail(mailMessage, (error) => {
                 if (error) {
-                    res.status(500).json('Error sending email');
+                    res.status(500).json(`Error sending email: ${error}`);
                 } else {
                     res.json('Email sent successfully');
                 }
