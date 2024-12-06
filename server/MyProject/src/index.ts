@@ -18,11 +18,13 @@ const redirectUrl = "https://formbee.dev";
 const emailPort = 465; // Change this to match your email provider's port
 
 dotenv.config();
-AppDataSource.initialize().then(async () => {
+const app = express();
+
+
+async function initializeServer() {
+    await AppDataSource.initialize();
     // await AppDataSource.manager.clear(User);
 
-    // create express app
-    const app = express();
     const corsOptions = {
         origin: "*",
         methods: ['GET', 'POST', 'OPTIONS'],
@@ -36,6 +38,11 @@ AppDataSource.initialize().then(async () => {
         allowedHeaders: ['Content-Type', 'x-altcha-spam-filter', 'x-api-key'],
     };
 
+    app.get('/', (req, res) => {
+        res.send('Hello, world!');
+      });
+  
+      
     app.post('/stripe/webhook', express.raw({type: 'application/json'}), async (request, res) => {
         const sig = request.headers['stripe-signature'];
         let event;
@@ -1365,5 +1372,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     // delete all users remove after we enter prod.
     // await AppDataSource.manager.clear(User);
 
-    console.log("Express server has started on port 3000.");
-}).catch(error => console.log(error));
+    // console.log("Express server has started on port 3000.");
+}
+
+export { app, initializeServer };
