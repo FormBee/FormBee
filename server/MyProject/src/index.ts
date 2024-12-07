@@ -85,6 +85,7 @@ async function initializeServer() {
 
     // Basic post route, sends form data to the users email.
     app.post('/formbee/:apikey', async (req, res) => {
+        console.log("req.body: ", req.body);
         const { apikey } = req.params;
         const { name, email, message } = req.body;
         let messageList = [];
@@ -234,7 +235,7 @@ async function initializeServer() {
                 }
             })
             .catch(error => {
-                res.status(500).json('Internal Server Error');
+                res.status(500).json(`Internal Server Error: ${error}`);
             });
 
         async function sendMail(recEmail, name, email, message, file, res) {      
@@ -430,7 +431,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                     user.currentPlugins = user.maxPlugins;
                 }
                 await AppDataSource.manager.save(user);
-                res.json({ message: 'Telegram settings updated successfully' });
+                res.status(200).send('Telegram settings updated successfully');
             }
         }
     });
@@ -1365,7 +1366,6 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         newDate.setMonth(newDate.getMonth() + months);
         return newDate;
     }
-
     // Potentially have to toggle this for testing.
     // app.listen(3000);
 

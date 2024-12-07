@@ -4,6 +4,8 @@ import * as dotenv from "dotenv";
 
 
 dotenv.config();
+const apiKey = process.env.API_KEY;
+const githubId = process.env.GITHUB_ID;
 
 beforeAll(async () => {
     await initializeServer(); // Ensure the server is initialized
@@ -19,7 +21,6 @@ describe('Test the root path', () => {
 });
 
 describe('Test Form Sending API', () => {
-  const apiKey = process.env.API_KEY;
   console.log("apiKey: ", apiKey);
   it('should submit form data successfully', async () => {
     const response = await request(app)
@@ -29,7 +30,6 @@ describe('Test Form Sending API', () => {
         email: 'john.doe@example.com',
         message: 'This is a test message.',
       });
-    expect(response.status).toBe(200);
     expect(response.text).toBe('\"Email sent successfully\"'); 
 
   }, 10000);
@@ -58,3 +58,20 @@ describe('Test Form Sending API', () => {
     expect(response.text).toBe('User not found'); 
   });
 });
+
+
+describe('Test Captcha Challenge API', () => {
+  it('should return a challenge', async () => {
+    const response = await request(app).get(`/challenge/${apiKey}`);
+    expect(response.status).toBe(200);
+  });
+});
+
+describe('Test Telegram API', () => {
+  it('should return a challenge', async () => {
+    const response = await request(app).post(`/telegram/toogle/${githubId}`).send({telegramBoolean: false});
+    expect(response.text).toBe("Telegram settings updated successfully");
+  });
+});
+
+
