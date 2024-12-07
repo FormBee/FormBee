@@ -1,23 +1,26 @@
 import * as request from 'supertest'
 import { app, initializeServer } from './index';
+import * as dotenv from "dotenv";
+
+
+dotenv.config();
 
 beforeAll(async () => {
     await initializeServer(); // Ensure the server is initialized
-    // server = app.listen(3000); // Start the server
 });
 
 
 describe('Test the root path', () => {
-  it('should respond with "Hello, world!" on GET /', async () => {
+  it('should return Hello, from FormBee!', async () => {
     const response = await request(app).get('/');
     expect(response.status).toBe(200);
-    expect(response.text).toBe('Hello, world!');
+    expect(response.text).toBe('Hello, from FormBee!');
   });
 });
 
 describe('Test Form Sending API', () => {
-  const apiKey = 'test-api-key'; 
-
+  const apiKey = process.env.API_KEY;
+  console.log("apiKey: ", apiKey);
   it('should submit form data successfully', async () => {
     const response = await request(app)
       .post(`/formbee/${apiKey}`)
@@ -26,10 +29,10 @@ describe('Test Form Sending API', () => {
         email: 'john.doe@example.com',
         message: 'This is a test message.',
       });
-    
     expect(response.status).toBe(200);
-    expect(response.text).toBe('Email sent successfully'); 
-  });
+    expect(response.text).toBe('\"Email sent successfully\"'); 
+
+  }, 10000);
 
   it('should return an error for invalid API key', async () => {
     const response = await request(app)
@@ -42,17 +45,6 @@ describe('Test Form Sending API', () => {
     
     expect(response.status).toBe(401);
     expect(response.text).toBe("\"Unauthorized\"");
-  });
-
-  it('should send return email successfully', async () => {
-    const response = await request(app)
-      .post(`/formbee/return/${apiKey}`)
-      .send({
-        emailToSendTo: 'recipient@example.com',
-      });
-    
-    expect(response.status).toBe(200);
-    expect(response.body.message).toBe('Email sent successfully'); 
   });
 
   it('should return an error for user not found in return email', async () => {

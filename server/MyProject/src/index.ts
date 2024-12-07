@@ -39,7 +39,7 @@ async function initializeServer() {
     };
 
     app.get('/', (req, res) => {
-        res.send('Hello, world!');
+        res.send('Hello, from FormBee!');
       });
   
       
@@ -126,8 +126,7 @@ async function initializeServer() {
                     }
                     const recEmail = user.email;
                     // check if the users origin was from the local host
-                    if (req.headers.origin.includes("localhost")) {
-
+                    if (req.headers.origin && req.headers.origin.includes("localhost")) {
                         // Add 1 to localhost submissions.
                         user.localHostCurrentSubmissions++;
 
@@ -1367,12 +1366,14 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         return newDate;
     }
 
-    app.listen(3000);
+    // Potentially have to toggle this for testing.
+    // app.listen(3000);
 
     // delete all users remove after we enter prod.
     // await AppDataSource.manager.clear(User);
 
-    // console.log("Express server has started on port 3000.");
+    console.log("Express server has started on port 3000.");
 }
+initializeServer();
 
 export { app, initializeServer };
