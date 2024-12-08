@@ -69,19 +69,31 @@ async function initializeServer() {
     app.use(bodyParser.json());
     
 
+    // const transporter = nodemailer.createTransport({
+    //     host: 'smtp.gmail.com',
+    //     port: 465,
+    //     secure: true,
+    //     auth: {
+    //         type: 'OAuth2',
+    //         user: process.env.GMAIL_EMAIL,
+    //         accessToken: process.env.GMAIL_ACCESS,
+    //         refreshToken: process.env.GMAIL_REFRESH,
+    //         clientId: process.env.GMAIL_CLIENT,
+    //         clientSecret: process.env.GMAIL_SECRET,
+    //     },
+    // });
+
+
     const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
+        host: process.env.SES_SERVER,
         port: 465,
         secure: true,
         auth: {
-            type: 'OAuth2',
-            user: process.env.GMAIL_EMAIL,
-            accessToken: process.env.GMAIL_ACCESS,
-            refreshToken: process.env.GMAIL_REFRESH,
-            clientId: process.env.GMAIL_CLIENT,
-            clientSecret: process.env.GMAIL_SECRET,
+            user: process.env.SES_USER, // Your SMTP username
+            pass: process.env.SES_PASS, // Your SMTP password
         },
     });
+
 
     // Basic post route, sends form data to the users email.
     app.post('/formbee/:apikey', async (req, res) => {
@@ -243,7 +255,7 @@ async function initializeServer() {
                 return;
             }
             const mailMessage = {
-                from: process.env.EMAIL_USER,
+                from: '"New FormBee Submission" <new-submission@formbee.dev>',
                 to: [recEmail,],
                 subject: 'New Form Submission',
                 text: `${niceMessage}`,

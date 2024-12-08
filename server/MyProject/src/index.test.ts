@@ -67,11 +67,18 @@ describe('Test Captcha Challenge API', () => {
   });
 });
 
-describe('Test Telegram API', () => {
-  it('should return a challenge', async () => {
+describe('Test Integration Toggles', () => {
+
+  it('should update telegram integration boolean', async () => {
     const response = await request(app).post(`/telegram/toogle/${githubId}`).send({telegramBoolean: false});
+    expect(response.status).toBe(200);
     expect(response.text).toBe("Telegram settings updated successfully");
   });
+
+  it("should update discord integration boolean", async () => {
+    const response = await request(app).post(`/discord/toogle/${githubId}`).send({discordBoolean: false})
+    expect(response.status).toBe(200);
+  })
 });
 
 
