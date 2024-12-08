@@ -82,3 +82,14 @@ describe('Test Integration Toggles', () => {
 });
 
 
+describe("Test User API", () => {
+  it("Should return a user", async () => {
+    const response = await request(app).get(`/api/user/${githubId}`);
+    expect(response.status).toBe(200);
+  })
+
+  it("Should return null user", async () => {
+    const response = await request(app).get(`/api/user/1234567890`);
+    expect(response.text).toBe("null");
+  })
+})
