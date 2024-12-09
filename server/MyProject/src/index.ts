@@ -69,30 +69,30 @@ async function initializeServer() {
     app.use(bodyParser.json());
     
 
-    // const transporter = nodemailer.createTransport({
-    //     host: 'smtp.gmail.com',
-    //     port: 465,
-    //     secure: true,
-    //     auth: {
-    //         type: 'OAuth2',
-    //         user: process.env.GMAIL_EMAIL,
-    //         accessToken: process.env.GMAIL_ACCESS,
-    //         refreshToken: process.env.GMAIL_REFRESH,
-    //         clientId: process.env.GMAIL_CLIENT,
-    //         clientSecret: process.env.GMAIL_SECRET,
-    //     },
-    // });
-
-
     const transporter = nodemailer.createTransport({
-        host: process.env.SES_SERVER,
+        host: 'smtp.gmail.com',
         port: 465,
         secure: true,
         auth: {
-            user: process.env.SES_USER, // Your SMTP username
-            pass: process.env.SES_PASS, // Your SMTP password
+            type: 'OAuth2',
+            clientId: process.env.GMAIL_CLIENT,
+            clientSecret: process.env.GMAIL_SECRET,
+            refreshToken: process.env.GMAIL_REFRESH,
+            accessToken: process.env.GMAIL_ACCESS,
+            user: process.env.GMAIL_EMAIL,
         },
     });
+
+
+    // const transporter = nodemailer.createTransport({
+    //     host: process.env.SES_SERVER,
+    //     port: 465,
+    //     secure: true,
+    //     auth: {
+    //         user: process.env.SES_USER, // Your SMTP username
+    //         pass: process.env.SES_PASS, // Your SMTP password
+    //     },
+    // });
 
 
     // Basic post route, sends form data to the users email.
@@ -467,7 +467,8 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                     user.currentPlugins -= 1;
                 }
                 await AppDataSource.manager.save(user);
-                res.json({ message: 'Discord settings updated successfully' });
+                res.status(200).send('Discord settings updated successfully');
+
             }
         }
     });
@@ -1378,7 +1379,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         newDate.setMonth(newDate.getMonth() + months);
         return newDate;
     }
-    // Potentially have to toggle this for testing.
+    // Comment this out for testing, uncomment for prod.
     // app.listen(3000);
 
     // delete all users remove after we enter prod.
