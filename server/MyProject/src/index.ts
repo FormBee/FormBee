@@ -77,9 +77,6 @@ async function initializeServer() {
             type: 'OAuth2',
             clientId: process.env.GMAIL_CLIENT,
             clientSecret: process.env.GMAIL_SECRET,
-            refreshToken: process.env.GMAIL_REFRESH,
-            accessToken: process.env.GMAIL_ACCESS,
-            user: process.env.GMAIL_EMAIL,
         },
     });
 
@@ -260,6 +257,12 @@ async function initializeServer() {
                 subject: 'New Form Submission',
                 text: `${niceMessage}`,
                 attachments: file ? [{ filename: file.originalname, content: file.buffer }] : [],
+                auth: {
+                    user: process.env.GMAIL_EMAIL,
+                    refreshToken: process.env.GMAIL_REFRESH,
+                    accessToken: process.env.GMAIL_ACCESS,
+                    expires: 1484314697598,
+                },
             };
             transporter.sendMail(mailMessage, (error) => {
                 if (error) {
@@ -1380,7 +1383,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         return newDate;
     }
     // Comment this out for testing, uncomment for prod.
-    // app.listen(3000);
+    app.listen(3000);
 
     // delete all users remove after we enter prod.
     // await AppDataSource.manager.clear(User);
