@@ -1269,6 +1269,16 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
+    app.get('/fetch-ical', async (req, res) => {
+        try {
+            const response = await axios.get(process.env.VRBO_ICAL_URL);
+            res.setHeader('Content-Type', 'text/calendar');
+            res.send(response.data);
+        } catch (error) {
+            res.status(500).send('Error fetching iCal');
+        }
+    });
+
     app.post('/stripe/premium-plan/:githubId', cors(strictCorsOptions), async (req, res) => {
         const githubId = parseInt(req.params.githubId);
         console.log("in growth plan: ", githubId);
@@ -1385,8 +1395,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     // Comment this out for testing, uncomment for prod.
     app.listen(3000);
 
-    // delete all users remove after we enter prod.
-    // await AppDataSource.manager.clear(User);
+
 
     console.log("Express server has started on port 3000.");
 }
