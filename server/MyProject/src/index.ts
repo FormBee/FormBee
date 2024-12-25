@@ -127,7 +127,7 @@ async function initializeServer() {
                     return;
                 } else {
                     console.log("origin: ", req.headers.origin);
-                    if (user.allowedDomains.length === 0 || user.allowedDomains.some(domain => req.headers.origin.includes(domain)) || req.headers.origin.includes("localhost")) {
+                    if (user.allowedDomains.length === 0 || req.headers.origin === undefined || user.allowedDomains.some(domain => req.headers.origin.includes(domain)) || req.headers.origin.includes("localhost")) {
                         console.log("allowed domain");
                     } else {
                         console.log("not allowed domain");
