@@ -85,7 +85,7 @@ ng serve
 
 Enter server directory: 
 ```bash
-cd FormBee/server/MyProject
+cd FormBee/server/formbee
 ```
 
 Install Dependencies: 
