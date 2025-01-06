@@ -139,7 +139,7 @@ npm run dev
 <h2>🏆 Credits</h2> 
 (When you contribute feel free to sign and plug yourself here in your PR)
 
-- <p>Built and maintained by <a href="https://github.com/Oia20">Jacob Dement</a>.</p>
+- <p>Built and maintained by <a href="https://github.com/Oia20">Jacob Dement</a>.</p> <a href="https://buymeacoffee.com/jacobdemenl" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 
 ---
 
