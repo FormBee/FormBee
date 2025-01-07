@@ -119,6 +119,17 @@ npm run dev
 
 ---
 
+<h2>🏆 Credits</h2> 
+
+
+
+<p>👋 Hey! I'm <a href="https://github.com/Oia20">Jacob Dement</a>, I created and currently maintain Formbee. Beyond this project I'm currently job hunting, for software engineering roles, so if you know of any openings, shoot me a message! My email is jacob.dement2002 @ gmail dot com US citizen able to relocate to anywhere in the US.</p> 
+<a href="https://buymeacoffee.com/jacobdemenl" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+
+(When you contribute feel free to sign and plug yourself here in your PR)
+
+---
+
 <h2>🛠 Tech Stack</h2>
 <table> 
   <tr> 
@@ -136,12 +147,7 @@ npm run dev
 
 ---
 
-<h2>🏆 Credits</h2> 
-(When you contribute feel free to sign and plug yourself here in your PR)
 
-- <p>Built and maintained by <a href="https://github.com/Oia20">Jacob Dement</a>.</p> <a href="https://buymeacoffee.com/jacobdemenl" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
-
----
 
 <h2>📜 License</h2> <p>This project is licensed under the MIT License.</p>
 
