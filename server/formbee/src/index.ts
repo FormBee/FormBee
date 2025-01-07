@@ -16,6 +16,8 @@ const stripe = Stripe(process.env.STRIPE_TEST_KEY);
 // const redirectUrl = "http://localhost:4200";
 const redirectUrl = "https://formbee.dev";
 const emailPort = 465; // Change this to match your email provider's port
+import { verifyToken, AuthRequest } from "./middleware/auth";
+import * as jwt from "jsonwebtoken";
 
 dotenv.config();
 const app = express();
@@ -28,14 +30,15 @@ async function initializeServer() {
     const corsOptions = {
         origin: "*",
         methods: ['GET', 'POST', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'x-altcha-spam-filter', 'x-api-key'],
+        allowedHeaders: ['Content-Type', 'x-altcha-spam-filter', 'x-api-key', 'Authorization'],
     };
     app.use(cors(corsOptions));
 
     const strictCorsOptions = {
         origin: redirectUrl,
-        methods: ['GET', 'POST'],
-        allowedHeaders: ['Content-Type', 'x-altcha-spam-filter', 'x-api-key'],
+        methods: ['GET', 'POST', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'x-altcha-spam-filter', 'x-api-key', 'Authorization'],
+        credentials: true
     };
 
     app.get('/', (req, res) => {
@@ -176,7 +179,7 @@ async function initializeServer() {
                             //             slackAccessToken: user.slackAccessToken,
                             //         });
                             //     };
-                            //     await sendMessage(niceMessage);
+                            //     await sendMessage(niceMessageDiscord);
                             // }
                             if (user.makeBoolean === true && user.makeWebhook != null) {
                                 console.log("Sendding to make");
@@ -422,7 +425,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         res.redirect(`${githubAuthUrl}?client_id=${clientId}`);
     });
 
-    app.post('/telegram/toogle/:githubId', cors(strictCorsOptions), async (req, res) => {
+    app.post('/telegram/toogle/:githubId', cors(strictCorsOptions), verifyToken, async (req: AuthRequest, res: Response) => {
         const { githubId } = req.params;
         const { telegramBoolean } = req.body;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
@@ -451,7 +454,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/discord/toogle/:githubId', cors(strictCorsOptions), async (req, res) => {
+    app.post('/discord/toogle/:githubId', cors(strictCorsOptions), verifyToken, async (req: AuthRequest, res: Response) => {
         const { githubId } = req.params;
         const { discordBoolean } = req.body;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
@@ -476,7 +479,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/discord/webhook/:githubId', cors(strictCorsOptions), async (req, res) => {
+    app.post('/discord/webhook/:githubId', cors(strictCorsOptions), verifyToken, async (req: AuthRequest, res: Response) => {
         const { githubId } = req.params;
         const { discordWebhook } = req.body;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: parseInt(githubId) } });
@@ -490,7 +493,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
     
-    app.get('/auth/github/callback', cors(strictCorsOptions), async (req, res) => {
+    app.get('/auth/github/callback', cors(strictCorsOptions), async (req: Request, res: Response) => {
         const code = req.query.code;
     
         try {
@@ -561,9 +564,22 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                     })
                 );
             }
-            res.redirect( redirectUrl + "/login?token=" + tokenData.access_token);
+            // After successful GitHub authentication, generate JWT token
+            const token = jwt.sign(
+                { githubId: githubdata.data.id },
+                process.env.JWT_SECRET!,
+                { expiresIn: '24h' }
+            );
+
+            // Redirect with both GitHub token and JWT token
+            res.redirect(`${redirectUrl}/login?token=${tokenData.access_token}&jwt=${token}`);
             } else {
-                res.redirect( redirectUrl + "/login?token=" + tokenData.access_token);
+                const token = jwt.sign(
+                    { githubId: githubdata.data.id },
+                    process.env.JWT_SECRET!,
+                    { expiresIn: '24h' }
+                );
+                res.redirect(`${redirectUrl}/login?token=${tokenData.access_token}&jwt=${token}`);
             }
         } catch (error) {
             res.status(500).send('Internal Server Error');
@@ -626,22 +642,29 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
 
     // Fetch the user by their github id
-    app.get('/api/user/:githubId', cors(strictCorsOptions), (req: Request, res: Response) => {
-
+    app.get('/api/user/:githubId', cors(strictCorsOptions), verifyToken, (req: AuthRequest, res: Response) => {
         const githubId = parseInt(req.params.githubId, 10);
-        if (isNaN(githubId)) {
-            res.status(400).json('Invalid GitHub ID');
-            return;
+        // Verify that the requesting user is accessing their own data
+        if (req.user?.githubId !== githubId) {
+            console.log("no github id")
+            return res.status(403).json('Unauthorized access to user data');
         }
+
+        if (isNaN(githubId)) {
+            console.log("invalid github id")
+            return res.status(400).json('Invalid GitHub ID');
+        }
+
         AppDataSource.manager.findOne(User, { where: { githubId } })
             .then(user => {
-                if (User) {
-                    res.json(user);
-                } else {
-                    res.status(404).json('User not found');
+                if (!user) {
+                    console.log("user not found")
+                    return res.status(404).json('User not found');
                 }
+                res.json(user);
             })
             .catch(error => {
+                console.log("error: ", error)
                 res.status(500).json('Internal Server Error');
             });
     });
@@ -766,7 +789,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/telegram/unlink/:githubId', cors(strictCorsOptions), async (req, res) => {
+    app.post('/telegram/unlink/:githubId', cors(strictCorsOptions), verifyToken, async (req: AuthRequest, res: Response) => {
         const githubId = parseInt(req.params.githubId);
         const user = await AppDataSource.manager.findOne(User, { where: { githubId } });
         if (!user) {
@@ -1043,7 +1066,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
 
     });
 
-    app.post('/add-domain/:githubId', cors(strictCorsOptions), async (req, res) => {
+    app.post('/add-domain/:githubId', cors(strictCorsOptions), verifyToken, async (req: AuthRequest, res: Response) => {
         const githubId = parseInt(req.params.githubId, 10);
         const domain = req.body.domain;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
@@ -1061,7 +1084,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/remove-domain/:githubId', cors(strictCorsOptions), async (req, res) => {
+    app.post('/remove-domain/:githubId', cors(strictCorsOptions), verifyToken, async (req: AuthRequest, res: Response) => {
         const githubId = parseInt(req.params.githubId, 10);
         const domain = req.body.domain;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
@@ -1076,7 +1099,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     });
 
     // Stipe integration
-    app.post('/create-setup-intent/:githubId', cors(strictCorsOptions), async (req, res) => {
+    app.post('/create-setup-intent/:githubId', cors(strictCorsOptions), verifyToken, async (req: AuthRequest, res: Response) => {
         const githubId = parseInt(req.params.githubId, 10);
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
         if (!user) {
@@ -1095,7 +1118,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/save-card/:githubId', cors(strictCorsOptions), async (req, res) => {
+    app.post('/save-card/:githubId', cors(strictCorsOptions), verifyToken, async (req: AuthRequest, res: Response) => {
         const githubId = parseInt(req.params.githubId, 10);
         const { paymentMethodId } = req.body;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
@@ -1122,7 +1145,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
     });
 
 
-    app.get('/get-default-payment-method/:githubId', cors(strictCorsOptions), async (req, res) => {
+    app.get('/get-default-payment-method/:githubId', cors(strictCorsOptions), verifyToken, async (req: AuthRequest, res: Response) => {
         const githubId = parseInt(req.params.githubId, 10);
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
         if (!user) {
@@ -1144,7 +1167,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/update-billing-email/:githubId', cors(strictCorsOptions), async (req, res) => {
+    app.post('/update-billing-email/:githubId', cors(strictCorsOptions), verifyToken, async (req: AuthRequest, res: Response) => {
         const githubId = parseInt(req.params.githubId);
         const { email } = req.body;
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
@@ -1160,7 +1183,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         res.json({ message: 'Email updated' });
     });
 
-    app.post('/manage-plan/:githubId', cors(strictCorsOptions), async (req, res) => {
+    app.post('/manage-plan/:githubId', cors(strictCorsOptions), verifyToken, async (req: AuthRequest, res: Response) => {
         console.log("in manage plan");
         const githubId = parseInt(req.params.githubId);
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId } });
@@ -1190,7 +1213,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/stripe/growth-plan/:githubId', cors(strictCorsOptions), async (req, res) => {
+    app.post('/stripe/growth-plan/:githubId', cors(strictCorsOptions), verifyToken, async (req: AuthRequest, res: Response) => {
         const githubId = parseInt(req.params.githubId);
         console.log("in growth plan: ", githubId);
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId }, });
@@ -1279,7 +1302,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
         }
     });
 
-    app.post('/stripe/premium-plan/:githubId', cors(strictCorsOptions), async (req, res) => {
+    app.post('/stripe/premium-plan/:githubId', cors(strictCorsOptions), verifyToken, async (req: AuthRequest, res: Response) => {
         const githubId = parseInt(req.params.githubId);
         console.log("in growth plan: ", githubId);
         const user = await AppDataSource.manager.findOne(User, { where: { githubId: githubId }, });

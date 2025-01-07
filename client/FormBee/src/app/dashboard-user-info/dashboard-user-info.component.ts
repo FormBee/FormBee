@@ -69,8 +69,12 @@ export class DashboardUserInfoComponent implements OnInit {
 
 
   fetchApiKey = async (githubId: string) => {
-    console.log("Fetching API key");
-    const response = await fetch(fetchUrl + '/api/user/' + githubId);
+    const jwtToken = localStorage.getItem('FB_jwt_token');
+    const response = await fetch(fetchUrl + '/api/user/' + githubId, {
+        headers: {
+            'Authorization': `Bearer ${jwtToken}`
+        }
+    });
     const data = await response.json();
     console.log(data);
     if (!data.apiKey) {
@@ -144,8 +148,12 @@ export class DashboardUserInfoComponent implements OnInit {
   }
 
   newApiKey = () => {
+    const jwtToken = localStorage.getItem('FB_jwt_token');
     fetch(fetchUrl + '/regenerate-api-key/' + this.githubId, {
       method: 'post',
+      headers: {
+        'Authorization': `Bearer ${jwtToken}`
+      }
     })
     .then((response) => response.json())
     .then((dataman) => {
@@ -258,6 +266,7 @@ export class DashboardUserInfoComponent implements OnInit {
   }
 
   async teleSwitch() {
+    const jwtToken = localStorage.getItem('FB_jwt_token');
     this.telegramEnabled = !this.telegramEnabled;
     if (this.telegramEnabled && this.currentPlugins !== null) {
       this.currentPlugins += 1;
@@ -267,7 +276,8 @@ export class DashboardUserInfoComponent implements OnInit {
     await fetch(fetchUrl + '/telegram/toogle/' + this.githubId, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}`
       },
       body: JSON.stringify({
         telegramBoolean: this.telegramEnabled,
@@ -277,11 +287,14 @@ export class DashboardUserInfoComponent implements OnInit {
   }
 
   async unlinkTelegram() {
+    const jwtToken = localStorage.getItem('FB_jwt_token');
     this.telegramChat = undefined;
     await fetch(fetchUrl + '/telegram/unlink/' + this.githubId, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}`
+
       },
     });
     console.log("Telegram unlinked");
@@ -292,6 +305,7 @@ export class DashboardUserInfoComponent implements OnInit {
   }
 
   async discordSwitch() {
+    const jwtToken = localStorage.getItem('FB_jwt_token');
     this.discordEnabled = !this.discordEnabled;
     if (this.discordEnabled && this.currentPlugins !== null) {
       this.currentPlugins += 1;
@@ -301,7 +315,9 @@ export class DashboardUserInfoComponent implements OnInit {
     await fetch(fetchUrl + '/discord/toogle/' + this.githubId, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}`
+
       },
       body: JSON.stringify({
         discordBoolean: this.discordEnabled,
@@ -311,24 +327,28 @@ export class DashboardUserInfoComponent implements OnInit {
   }
 
   async unlinkDiscord() {
+    const jwtToken = localStorage.getItem('FB_jwt_token');
     this.discordWebhook = undefined;
     await fetch(fetchUrl + '/discord/unlink/' + this.githubId, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}`
       },
     });
     console.log("Discord unlinked");
   }
 
   async saveDiscordWebhook() {
+    const jwtToken = localStorage.getItem('FB_jwt_token');
     const discordInput = document.getElementById('discord-input');
     if (discordInput) {
       this.discordWebhook = (<HTMLInputElement>discordInput).value;
       await fetch(fetchUrl + '/discord/webhook/' + this.githubId, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwtToken}`
         },
         body: JSON.stringify({
           discordWebhook: this.discordWebhook,
@@ -349,6 +369,7 @@ export class DashboardUserInfoComponent implements OnInit {
   }
 
   async slackSwitch() {
+    const jwtToken = localStorage.getItem('FB_jwt_token');
     this.slackEnabled = !this.slackEnabled;
     if (this.slackEnabled && this.currentPlugins !== null) {
       this.currentPlugins += 1;
@@ -358,7 +379,8 @@ export class DashboardUserInfoComponent implements OnInit {
     await fetch(fetchUrl + '/slack/toogle/' + this.githubId, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}`
       },
       body: JSON.stringify({
         slackBoolean: this.slackEnabled,
@@ -378,11 +400,13 @@ export class DashboardUserInfoComponent implements OnInit {
   }
 
   unlinkSlack = async () => {
+    const jwtToken = localStorage.getItem('FB_jwt_token');
     this.slackChannelName = undefined;
     await fetch(fetchUrl + '/slack/unlink/' + this.githubId, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}`
       },
     });
     console.log("Slack unlinked");
@@ -393,6 +417,7 @@ export class DashboardUserInfoComponent implements OnInit {
   }
 
   async makeSwitch() {
+    const jwtToken = localStorage.getItem('FB_jwt_token');
     this.makeEnabled = !this.makeEnabled;
     if (this.makeEnabled && this.currentPlugins !== null) {
       this.currentPlugins += 1;
@@ -402,7 +427,8 @@ export class DashboardUserInfoComponent implements OnInit {
     await fetch(fetchUrl + '/make/toogle/' + this.githubId, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}`
       },
       body: JSON.stringify({
         makeBoolean: this.makeEnabled,
@@ -412,24 +438,28 @@ export class DashboardUserInfoComponent implements OnInit {
   }
 
   async unlinkMake() {
+    const jwtToken = localStorage.getItem('FB_jwt_token');
     this.makeWebhook = undefined;
     await fetch(fetchUrl + '/make/unlink/' + this.githubId, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}`
       },
     });
     console.log("Make unlinked");
   }
 
   async saveMakeWebhook() {
+    const jwtToken = localStorage.getItem('FB_jwt_token');
     const discordInput = document.getElementById('discord-input');
     if (discordInput) {
       this.makeWebhook = (<HTMLInputElement>discordInput).value;
       await fetch(fetchUrl + '/make/webhook/' + this.githubId, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwtToken}`
         },
         body: JSON.stringify({
           makeWebhook: this.makeWebhook,
@@ -450,6 +480,7 @@ export class DashboardUserInfoComponent implements OnInit {
   }
 
   async n8nSwitch() {
+    const jwtToken = localStorage.getItem('FB_jwt_token');
     this.n8nEnabled = !this.n8nEnabled;
     if (this.n8nEnabled && this.currentPlugins !== null) {
       this.currentPlugins += 1;
@@ -459,7 +490,8 @@ export class DashboardUserInfoComponent implements OnInit {
     await fetch(fetchUrl + '/n8n/toogle/' + this.githubId, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}`
       },
       body: JSON.stringify({
         n8nBoolean: this.n8nEnabled,
@@ -469,24 +501,28 @@ export class DashboardUserInfoComponent implements OnInit {
   }
 
   async unlinkN8n() {
+    const jwtToken = localStorage.getItem('FB_jwt_token');
     this.n8nWebhook = undefined;
     await fetch(fetchUrl + '/n8n/unlink/' + this.githubId, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}`
       },
     });
     console.log("N8n unlinked");
   }
 
   async saveN8nWebhook() {
+    const jwtToken = localStorage.getItem('FB_jwt_token');
     const discordInput = document.getElementById('discord-input');
     if (discordInput) {
       this.n8nWebhook = (<HTMLInputElement>discordInput).value;
       await fetch(fetchUrl + '/n8n/webhook/' + this.githubId, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwtToken}`
         },
         body: JSON.stringify({
           n8nWebhook: this.n8nWebhook,
@@ -507,6 +543,7 @@ export class DashboardUserInfoComponent implements OnInit {
   }
 
   async webhookSwitch() {
+    const jwtToken = localStorage.getItem('FB_jwt_token');
     this.webhookEnabled = !this.webhookEnabled;
     if (this.webhookEnabled && this.currentPlugins !== null) {
       this.currentPlugins += 1;
@@ -516,7 +553,8 @@ export class DashboardUserInfoComponent implements OnInit {
     await fetch(fetchUrl + '/webhook/toogle/' + this.githubId, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}`
       },
       body: JSON.stringify({
         webhookBoolean: this.webhookEnabled,
@@ -526,24 +564,28 @@ export class DashboardUserInfoComponent implements OnInit {
   }
 
   async unlinkWebhook() {
+    const jwtToken = localStorage.getItem('FB_jwt_token');
     this.webhookWebhook = undefined;
     await fetch(fetchUrl + '/webhook/unlink/' + this.githubId, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}`
       },
     });
     console.log("Webhook unlinked");
   }
 
   async saveWebhookWebhook() {
+    const jwtToken = localStorage.getItem('FB_jwt_token');
     const discordInput = document.getElementById('discord-input');
     if (discordInput) {
       this.webhookWebhook = (<HTMLInputElement>discordInput).value;
       await fetch(fetchUrl + '/webhook/webhook/' + this.githubId, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${jwtToken}`
         },
         body: JSON.stringify({
           webhookWebhook: this.webhookWebhook,
@@ -578,6 +620,7 @@ export class DashboardUserInfoComponent implements OnInit {
     window.open("https://docs.formbee.dev/docs/integrations/Webhooks");
   }
   addDomain = () => {
+    const jwtToken = localStorage.getItem('FB_jwt_token');
     if (this.domains.length <= 50) {
       const input = document.getElementById('allowed-domains-input') as HTMLInputElement;
       if (input) {
@@ -587,7 +630,9 @@ export class DashboardUserInfoComponent implements OnInit {
           fetch(fetchUrl + '/add-domain/' + this.githubId, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${jwtToken}`
+
             },
             body: JSON.stringify({
               domain: domain,
@@ -610,6 +655,7 @@ export class DashboardUserInfoComponent implements OnInit {
     }
   }
   removeDomain = async (domain: string) => {
+    const jwtToken = localStorage.getItem('FB_jwt_token');
     const index = this.domains.indexOf(domain);
     if (index > -1) {
       this.domains.splice(index, 1);
@@ -617,7 +663,8 @@ export class DashboardUserInfoComponent implements OnInit {
   fetch(fetchUrl + '/remove-domain/' + this.githubId, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}`
       },
       body: JSON.stringify({
         domain: domain,

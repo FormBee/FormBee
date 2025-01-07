@@ -32,12 +32,16 @@ export class LoginComponent {
   private async initializeAuth(): Promise<void> {
     try {
       const urlParams = new URLSearchParams(window.location.search);
-      const token = urlParams.get('token');
+      const githubToken = urlParams.get('token');
+      const jwtToken = urlParams.get('jwt');
 
-      if (!token) return;
+      if (!githubToken || !jwtToken) {
+        console.log("here")
+        return
+      };
 
-      await this.fetchUserData(token);
-      this.handleSuccessfulAuth(token);
+      await this.fetchUserData(githubToken);
+      this.handleSuccessfulAuth(githubToken, jwtToken);
     } catch (error) {
       console.error('Authentication failed:', error);
     }
@@ -70,8 +74,13 @@ export class LoginComponent {
     }
   }
 
-  private handleSuccessfulAuth(token: string): void {
-    localStorage.setItem(this.TOKEN_STORAGE_KEY, token);
+  private handleSuccessfulAuth(githubToken: string, jwtToken: string): void {
+    localStorage.setItem(this.TOKEN_STORAGE_KEY, githubToken);
+    localStorage.setItem('FB_jwt_token', jwtToken);
+    
+    const headers = new Headers();
+    headers.append('Authorization', `Bearer ${jwtToken}`);
+
     void this.router.navigate(['/dashboard']);
   }
 

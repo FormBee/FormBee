@@ -27,6 +27,7 @@
       "dotenv": "^16.4.5",
       "express": "^4.19.2",
       "express-session": "^1.18.0",
+      "jsonwebtoken": "^9.0.2",
       "mysql": "^2.14.1",
       "node-cron": "^3.0.3",
       "node-fetch": "^3.3.2",

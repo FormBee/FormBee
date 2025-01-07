@@ -25,43 +25,58 @@ export class DashboardNavComponent implements OnInit {
   isThemeMenuOpen: boolean = false;
   ngOnInit(): void {
     if (!this.githubId) {
-    const token = localStorage.getItem('Fb-pA4lBUfsqVAWFN78eWDF');
-    if (!token) {
-      this.router.navigate(['/login']);
-      return;
-    }
-    fetch('https://api.github.com/user', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => {
-        if (response.status === 401) {
-          this.router.navigate(['/login']);
-          return;
-        }
-        return response.json();
+      const token = localStorage.getItem('Fb-pA4lBUfsqVAWFN78eWDF');
+      if (!token) {
+        this.router.navigate(['/login']);
+        return;
+      }
+      fetch('https://api.github.com/user', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .then((data) => {
-        if (data) {
-          console.log("Data: ", data);
-          if (data.name) {
-            this.name = data.name;
-          } else {
-            this.name = data.login;
+        .then((response) => {
+          if (response.status === 401) {
+            this.router.navigate(['/login']);
+            return;
           }
-          this.profilePic = data.avatar_url;
-          this.githubId = data.id;
-        }
-      }).finally(() => {
-        setTimeout(() => {
-          getUser(this.githubId);
-        }, 1000);
-      });
+          return response.json();
+        })
+        .then((data) => {
+          if (data) {
+            console.log("Data: ", data);
+            if (data.name) {
+              this.name = data.name;
+            } else {
+              this.name = data.login;
+            }
+            this.profilePic = data.avatar_url;
+            this.githubId = data.id;
+          }
+        }).finally(() => {
+          setTimeout(() => {
+            this.getUser(this.githubId);
+          }, 1000);
+        });
     } 
-    const getUser = async (githubId: string | undefined) => {
-      if (githubId) {
-        const response = await fetch(fetchUrl + '/api/user/' + githubId);
+
+    this.getUser(this.githubId);
+  }
+
+  private async getUser(githubId: string | undefined) {
+    if (githubId) {
+      const jwtToken = localStorage.getItem('FB_jwt_token');
+      try {
+        const response = await fetch(fetchUrl + '/api/user/' + githubId, {
+          headers: {
+            'Authorization': `Bearer ${jwtToken}`
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+
         const data = await response.json();
         console.log(data);
         if (data.maxSubmissions) {
@@ -71,10 +86,13 @@ export class DashboardNavComponent implements OnInit {
           this.currentTheme = localStorage.getItem("theme") || "neutral";
           document.documentElement.className = this.currentTheme;
         }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        this.router.navigate(['/login']);
       }
-    };
-    getUser(this.githubId);
+    }
   }
+
   goToDocs() {
     window.open("https://docs.formbee.dev/docs");
   }
