@@ -322,7 +322,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                     const emailBody = user.emailBody;
                     const returnMessage = user.returnBoolean;
                     if (smtpHost && smtpPort && smtpUsername && smtpPassword && emailSubject && emailBody && returnMessage && await isValidEmail(emailToSendTo) === true) {
-                        console.log("sending from smtp server.")
+                        // console.log("sending from smtp server.")
                         const transporter = nodemailer.createTransport({
                             host: smtpHost,
                             port: smtpPort,
@@ -340,7 +340,7 @@ app.post('/formbee/return/:apikey', async (req, res) => {
                         }
                         transporter.sendMail(mailMessage, (error) => {
                             if (error) {
-                                console.log("Error sending email: ", error);
+                                // console.log("Error sending email: ", error);
                                 return;
                             } else {
                                 res.json({ message: 'Email sent successfully' });
