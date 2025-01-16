@@ -35,6 +35,17 @@ const transporter = nodemailer.createTransport({
     },
 });
 
+const gmail_transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+        type: 'OAuth2',
+        clientId: process.env.GMAIL_CLIENT,
+        clientSecret: process.env.GMAIL_SECRET,
+    },
+});
+
 app.post('/formbee/email-only', upload.none(), async (req: Request, res: Response) => {
     console.log("in email-only: ", req.body);
     let messageList: string[] = [];
@@ -52,14 +63,32 @@ app.post('/formbee/email-only', upload.none(), async (req: Request, res: Respons
             to: [process.env.EMAIL_TO!],
             subject: 'New Form Submission',
             text: `${niceMessage}`,
+            auth: {
+                user: process.env.EMAIL_USER,
+                refreshToken: process.env.GMAIL_REFRESH,
+                accessToken: process.env.GMAIL_ACCESS,
+                expires: 1484314697598,
+            },
         };
-        transporter.sendMail(mailMessage, (error: any) => {
-            if (error) {
-                res.status(500).json('Error sending email');
-            } else {
-                res.json('Email sent successfully');
-            }
-        });
+        if (process.env.GMAIL_TRUE == "True"){
+            console.log("sending via oauth2.")
+
+            gmail_transporter.sendMail(mailMessage, (error: any) => {
+                if (error) {
+                    res.status(500).json(`Error sending email ${error}`);
+                } else {
+                    res.json('Email sent successfully');
+                }
+            });
+        } else {
+            transporter.sendMail(mailMessage, (error: any) => {
+                if (error) {
+                    res.status(500).json('Error sending email');
+                } else {
+                    res.json('Email sent successfully');
+                }
+            });
+        }
     }
 
     await sendMail();
