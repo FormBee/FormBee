@@ -11,6 +11,7 @@ import type { Request, Response } from "express";
 dotenv.config();
 
 const app = express();
+app.use(express.json());
 const port = process.env.PORT || 3000;
 
 const corsOptions = {
