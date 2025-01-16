@@ -7,6 +7,7 @@ import type { Request, Response } from "express";
 dotenv.config();
 
 const app = express();
+app.use(express.json());
 const port = process.env.PORT || 3000;
 
 const corsOptions = {
@@ -30,6 +31,18 @@ const transporter = nodemailer.createTransport({
     },
 });
 
+const gmail_transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+        type: 'OAuth2',
+        clientId: process.env.GMAIL_CLIENT,
+        clientSecret: process.env.GMAIL_SECRET,
+    },
+});
+
+
 app.post('/formbee/email-only', upload.none(), async (req: Request, res: Response) => {
     console.log("in email-only: ", req.body);
     let messageList = [];
@@ -42,19 +55,43 @@ app.post('/formbee/email-only', upload.none(), async (req: Request, res: Respons
     console.log("nice message: ", niceMessage);
 
     async function sendMail() {      
-        const mailMessage = {
-            from: process.env.EMAIL_USER,
-            to: [process.env.EMAIL_TO!],
-            subject: 'New Form Submission',
-            text: `${niceMessage}`,
-        };
-        transporter.sendMail(mailMessage, (error: any) => {
-            if (error) {
-                res.status(500).json('Error sending email');
-            } else {
-                res.json('Email sent successfully');
-            }
-        });
+        if (process.env.GMAIL_TRUE == "True"){
+            console.log("sending via oauth2.")
+            const mailMessage = {
+                from: process.env.EMAIL_USER,
+                to: [process.env.EMAIL_TO!],
+                subject: 'New Form Submission',
+                text: `${niceMessage}`,
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    refreshToken: process.env.GMAIL_REFRESH,
+                    accessToken: process.env.GMAIL_ACCESS,
+                    expires: 1484314697598,
+                },
+            };
+
+            gmail_transporter.sendMail(mailMessage, (error: any) => {
+                if (error) {
+                    res.status(500).json(`Error sending email ${error}`);
+                } else {
+                    res.json('Email sent successfully');
+                }
+            });
+        } else {
+            const mailMessage = {
+                from: process.env.EMAIL_USER,
+                to: [process.env.EMAIL_TO!],
+                subject: 'New Form Submission',
+                text: `${niceMessage}`,
+            };
+            transporter.sendMail(mailMessage, (error: any) => {
+                if (error) {
+                    res.status(500).json('Error sending email');
+                } else {
+                    res.json('Email sent successfully');
+                }
+            });
+        }
     }
 
     await sendMail();
