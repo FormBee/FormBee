@@ -123,7 +123,7 @@ npm run dev
 
 
 
-<p>👋 Hey! I'm <a href="https://github.com/Oia20">Jacob Dement</a>, I created and currently maintain Formbee. Beyond this project I'm currently job hunting, for software engineering roles, so if you know of any openings, shoot me a message! My email is jacob.dement2002 @ gmail dot com, and here's my <a href="https://www.linkedin.com/in/jacob-dement-35658b275/">LinkedIn</a></p> 
+<p>👋 Hey! I'm <a href="https://github.com/Oia20">Jacob Dement</a>, I created and currently maintain Formbee. 
 <a href="https://buymeacoffee.com/jacobdemenl" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 
 (When you contribute feel free to sign and plug yourself here in your PR)
